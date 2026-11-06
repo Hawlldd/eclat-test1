@@ -112,11 +112,8 @@ LittlerootTown_BrendansHouse_1F_EclatRobbery:
 	msgbox EclatHouse_Text_Mom, MSGBOX_DEFAULT
 	msgbox EclatHouse_Text_Player, MSGBOX_DEFAULT
 	closemessage
-	applymovement LOCALID_PLAYER, EclatHouse_Movement_WalkToDoor
-	waitmovement LOCALID_PLAYER
 	setvar VAR_LITTLEROOT_INTRO_STATE, 7
-	warp MAP_LITTLEROOT_TOWN, 22, 26
-	waitstate
+	releaseall
 	end
 
 EclatHouse_Movement_PanToTable:
@@ -161,19 +158,17 @@ EclatHouse_Movement_ApproachMom:
 	face_left
 	step_end
 
-EclatHouse_Movement_WalkToDoor:
-	walk_right
-	walk_down
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_down
-	step_end
+LittlerootTown_BrendansHouse_1F_EventScript_EclatMom::
+	msgbox EclatHouse_Text_MomAfterRobbery, MSGBOX_NPC
+	end
+
+EclatHouse_Text_MomAfterRobbery:
+	.string "MOM: I'm sorry you had to go\n"
+	.string "through all this, my darling,\l"
+	.string "but I'm glad you're safe.\l"
+	.string "Stay close to home\l"
+	.string "and rest now.$"
+
 
 EclatHouse_Text_RocketThreat:
 	.string "???: Shut up damn it!\p"

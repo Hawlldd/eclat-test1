@@ -5802,28 +5802,43 @@ static const union AnimCmd *const sIviereFlybyAnims[] =
     sIviereFlybyAnim,
 };
 
+static const struct
+{
+    u8 x;
+    u8 y;
+    u8 range;
+} sIviereFlybyRoutes[] =
+{
+    {16, 20, 9},
+    {23, 23, 9},
+    {15, 21, 7},
+    {33, 5, 9},
+    {29, 12, 9},
+    {34, 4, 9},
+};
+
 static void SpriteCB_IviereFlyby(struct Sprite *sprite)
 {
-    enum { IVIERE_FLYBY_DISTANCE = 144 };
+    u8 route = sprite->data[0];
+    s16 distance = sIviereFlybyRoutes[route].range * 16;
 
-    if (sprite->data[0] > 0)
-        sprite->data[0]--;
-    else
+    sprite->data[2] += sprite->data[1] ? -1 : 1;
+    if (sprite->data[2] == 0 || sprite->data[2] == distance)
     {
-        sprite->data[2] += sprite->data[1] ? -1 : 1;
-        if (sprite->data[2] == 0 || sprite->data[2] == IVIERE_FLYBY_DISTANCE)
-        {
-            sprite->data[1] ^= 1;
-            StartSpriteAnim(sprite, sprite->data[1]);
-        }
+        sprite->data[1] ^= 1;
+        StartSpriteAnim(sprite, sprite->data[1]);
     }
 
-    SetSpritePosToMapCoords(14 + MAP_OFFSET, 22 + MAP_OFFSET, &sprite->x, &sprite->y);
+    GetMapCoordsFromSpritePos(sIviereFlybyRoutes[route].x + MAP_OFFSET - sIviereFlybyRoutes[route].range,
+                              sIviereFlybyRoutes[route].y + MAP_OFFSET, &sprite->x, &sprite->y);
     sprite->x += 8 + sprite->data[2];
-    sprite->y += 16;
-    sprite->invisible = sprite->x < -16 || sprite->x > DISPLAY_WIDTH + 16
-                     || sprite->y < -16 || sprite->y > DISPLAY_HEIGHT + 16;
+
+    s16 screenX = sprite->x + gSpriteCoordOffsetX;
+    s16 screenY = sprite->y + gSpriteCoordOffsetY;
+    sprite->invisible = screenX < -16 || screenX > DISPLAY_WIDTH + 16
+                     || screenY < -16 || screenY > DISPLAY_HEIGHT + 16;
 }
+
 
 void StartIviereFlyby(void)
 {
@@ -5838,22 +5853,31 @@ void StartIviereFlyby(void)
         .callback = SpriteCB_IviereFlyby,
     };
 
-    for (u32 i = 0; i < MAX_SPRITES; i++)
-    {
-        if (gSprites[i].inUse && gSprites[i].callback == SpriteCB_IviereFlyby)
-            return;
-    }
-
     if (LoadObjectEventPalette(template.paletteTag) == 0xFF)
         return;
 
-    u8 id = CreateSprite(&template, -16, 24, 0);
-    if (id < MAX_SPRITES)
+    u32 activeRoutes = 0;
+    for (u32 i = 0; i < MAX_SPRITES; i++)
     {
-        gSprites[id].invisible = TRUE;
-        gSprites[id].data[0] = 8;
-        gSprites[id].data[1] = 1;
-        gSprites[id].data[2] = 144;
-        StartSpriteAnim(&gSprites[id], 1);
+        if (gSprites[i].inUse && gSprites[i].callback == SpriteCB_IviereFlyby)
+            activeRoutes |= 1u << gSprites[i].data[0];
+    }
+
+    for (u32 route = 0; route < ARRAY_COUNT(sIviereFlybyRoutes); route++)
+    {
+        if (activeRoutes & (1u << route))
+            continue;
+
+        u8 id = CreateSprite(&template, 0, 0, 0);
+        if (id >= MAX_SPRITES)
+            break;
+
+        struct Sprite *sprite = &gSprites[id];
+        sprite->invisible = TRUE;
+        sprite->coordOffsetEnabled = TRUE;
+        sprite->data[0] = route;
+        sprite->data[1] = 1;
+        sprite->data[2] = sIviereFlybyRoutes[route].range * 16;
+        StartSpriteAnim(sprite, 1);
     }
 }

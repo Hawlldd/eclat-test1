@@ -5789,7 +5789,7 @@ static const union AnimCmd sIviereFlybyAnim[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd sIviereFlybyAnimLeft[] =
+static const union AnimCmd sIviereFlybyAnimMirrored[] =
 {
     ANIMCMD_FRAME(0, 8, .hFlip = TRUE),
     ANIMCMD_FRAME(1, 8, .hFlip = TRUE),
@@ -5798,8 +5798,8 @@ static const union AnimCmd sIviereFlybyAnimLeft[] =
 
 static const union AnimCmd *const sIviereFlybyAnims[] =
 {
+    sIviereFlybyAnimMirrored,
     sIviereFlybyAnim,
-    sIviereFlybyAnimLeft,
 };
 
 static void SpriteCB_IviereFlyby(struct Sprite *sprite)

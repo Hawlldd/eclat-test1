@@ -1032,3 +1032,63 @@ IviereTown_EventScript_TownPokemon::
 
 IviereTown_Text_TownPokemon:
 	.string "Pidgey : Rrrrouuu rrrrouuu !$"
+
+IviereTown_EventScript_NameRater::
+	lock
+	faceplayer
+	msgbox IviereTown_Text_NameRater, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, SlateportCity_NameRatersHouse_EventScript_ChooseMonToRate
+	goto SlateportCity_NameRatersHouse_EventScript_DeclineNameRate
+
+IviereTown_EventScript_Child::
+	msgbox IviereTown_Text_Child, MSGBOX_NPC
+	end
+
+IviereTown_EventScript_RiverNpc::
+	msgbox IviereTown_Text_RiverNpc, MSGBOX_NPC
+	end
+
+IviereTown_EventScript_PlayerSign::
+	msgbox IviereTown_Text_PlayerSign, MSGBOX_SIGN
+	end
+
+IviereTown_EventScript_FilaoHouseSign::
+	msgbox IviereTown_Text_FilaoHouseSign, MSGBOX_SIGN
+	end
+
+IviereTown_EventScript_TownSign::
+	msgbox IviereTown_Text_TownSign, MSGBOX_SIGN
+	end
+
+IviereTown_EventScript_MenuSign::
+	msgbox IviereTown_Text_MenuSign, MSGBOX_SIGN
+	end
+
+IviereTown_Text_NameRater:
+	.string "Hello! I am the NAME RATER!\p"
+	.string "Would you like to give a new name\n"
+	.string "to one of your POKéMON?$"
+
+IviereTown_Text_Child:
+	.string "I'm totally bored! I have no friends\n"
+	.string "to play with. If only I had a POKéMON.$"
+
+IviereTown_Text_RiverNpc:
+	.string "Oh hello. At my age, my only joy is\n"
+	.string "looking at the clear river.\l"
+	.string "So enjoy your youth.$"
+
+IviereTown_Text_PlayerSign:
+	.string "{PLAYER}'s House$"
+
+IviereTown_Text_FilaoHouseSign:
+	.string "Prof. FILAO's House$"
+
+IviereTown_Text_TownSign:
+	.string "IVIERE TOWN\n"
+	.string "A peaceful city lit by its\l"
+	.string "clear water reflections.$"
+
+IviereTown_Text_MenuSign:
+	.string "TIP\p"
+	.string "Use START to open the menu.$"

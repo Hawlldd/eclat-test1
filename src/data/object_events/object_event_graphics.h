@@ -1,3 +1,11 @@
+static const u32 sIviereChildTiles[] = INCBIN_U32("graphics/eclat_intro/npc_ivierechild.bin");
+static const u32 sIviereRiverNpcTiles[] = INCBIN_U32("graphics/eclat_intro/npc_iviererivernpc.bin");
+static const u32 sFilaoWifeTiles[] = INCBIN_U32("graphics/eclat_intro/npc_filaowife.bin");
+static const u32 sFilaoAideTiles[] = INCBIN_U32("graphics/eclat_intro/npc_filaoaide.bin");
+static const u32 sIviereNameRaterTiles[] = INCBIN_U32("graphics/eclat_intro/npc_ivierenamerater.bin");
+static const u32 sFilaoTiles[] = INCBIN_U32("graphics/eclat_intro/npc_filao.bin");
+static const u16 sFilaoWifePalette[] = INCBIN_U16("graphics/eclat_intro/npc_filaowife_palette.bin");
+
 static const u32 sEclatRobberTiles[] = INCBIN_U32("graphics/eclat_intro/robber.bin");
 static const u32 sEclatMotherTiles[] = INCBIN_U32("graphics/eclat_intro/mother.bin");
 static const u32 sEclatStolenMonTiles[] = INCBIN_U32("graphics/eclat_intro/stolen_mon.bin");

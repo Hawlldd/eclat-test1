@@ -1598,3 +1598,31 @@ const struct Tileset gTileset_EclatIviereSecondary =
     .metatiles = sMetatiles_EclatIviereSecondary,
     .metatileAttributes = (const u16 *)sAttributes_EclatIviereSecondary,
 };
+
+static const u32 sTiles_IviereFilaosHouse[] = INCBIN_U32("data/tilesets/secondary/iviere_filao_house/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_IviereFilaosHouse[] = INCBIN_U16("data/tilesets/secondary/iviere_filao_house/palettes.bin");
+static const u16 sMetatiles_IviereFilaosHouse[] = INCBIN_U16("data/tilesets/secondary/iviere_filao_house/metatiles.bin");
+static const u32 sAttributes_IviereFilaosHouse[] = INCBIN_U32("data/tilesets/secondary/iviere_filao_house/metatile_attributes.bin");
+
+const struct Tileset gTileset_IviereFilaosHouse =
+{
+    .isSecondary = TRUE,
+    .tiles = sTiles_IviereFilaosHouse,
+    .palettes = (const u16 (*)[16])sPalettes_IviereFilaosHouse,
+    .metatiles = sMetatiles_IviereFilaosHouse,
+    .metatileAttributes = (const u16 *)sAttributes_IviereFilaosHouse,
+};
+
+static const u32 sTiles_IviereFilaosLab[] = INCBIN_U32("data/tilesets/secondary/iviere_filao_lab/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_IviereFilaosLab[] = INCBIN_U16("data/tilesets/secondary/iviere_filao_lab/palettes.bin");
+static const u16 sMetatiles_IviereFilaosLab[] = INCBIN_U16("data/tilesets/secondary/iviere_filao_lab/metatiles.bin");
+static const u32 sAttributes_IviereFilaosLab[] = INCBIN_U32("data/tilesets/secondary/iviere_filao_lab/metatile_attributes.bin");
+
+const struct Tileset gTileset_IviereFilaosLab =
+{
+    .isSecondary = TRUE,
+    .tiles = sTiles_IviereFilaosLab,
+    .palettes = (const u16 (*)[16])sPalettes_IviereFilaosLab,
+    .metatiles = sMetatiles_IviereFilaosLab,
+    .metatileAttributes = (const u16 *)sAttributes_IviereFilaosLab,
+};

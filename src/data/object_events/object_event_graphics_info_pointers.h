@@ -405,7 +405,19 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRobber
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatMother;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatStolenMon;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatTownMon;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_IviereChild;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_IviereRiverNpc;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FilaoWife;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FilaoAide;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_IviereNameRater;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Filao;
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
+    [OBJ_EVENT_GFX_IVIERE_CHILD] = &gObjectEventGraphicsInfo_IviereChild,
+    [OBJ_EVENT_GFX_IVIERE_RIVER_NPC] = &gObjectEventGraphicsInfo_IviereRiverNpc,
+    [OBJ_EVENT_GFX_FILAO_WIFE] = &gObjectEventGraphicsInfo_FilaoWife,
+    [OBJ_EVENT_GFX_FILAO_AIDE] = &gObjectEventGraphicsInfo_FilaoAide,
+    [OBJ_EVENT_GFX_IVIERE_NAME_RATER] = &gObjectEventGraphicsInfo_IviereNameRater,
+    [OBJ_EVENT_GFX_FILAO] = &gObjectEventGraphicsInfo_Filao,
     [OBJ_EVENT_GFX_ECLAT_TOWN_MON] = &gObjectEventGraphicsInfo_EclatTownMon,
     [OBJ_EVENT_GFX_ECLAT_STOLEN_MON] = &gObjectEventGraphicsInfo_EclatStolenMon,
     [OBJ_EVENT_GFX_ECLAT_MOTHER] = &gObjectEventGraphicsInfo_EclatMother,

@@ -1,3 +1,27 @@
+static const struct SpriteFrameImage sPicTable_IviereChild[] = {
+    overworld_ascending_frames(sIviereChildTiles, 2, 2),
+};
+
+static const struct SpriteFrameImage sPicTable_IviereRiverNpc[] = {
+    overworld_ascending_frames(sIviereRiverNpcTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_FilaoWife[] = {
+    overworld_ascending_frames(sFilaoWifeTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_FilaoAide[] = {
+    overworld_ascending_frames(sFilaoAideTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_IviereNameRater[] = {
+    overworld_ascending_frames(sIviereNameRaterTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_Filao[] = {
+    overworld_ascending_frames(sFilaoTiles, 2, 4),
+};
+
 static const struct SpriteFrameImage sPicTable_EclatRobber[] = {
     overworld_ascending_frames(sEclatRobberTiles, 2, 4),
 };

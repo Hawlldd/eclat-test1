@@ -401,7 +401,15 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_UnusedMauvi
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_UnusedMauvilleOldMan2;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_ApricornTree;
 
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRobber;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatMother;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatStolenMon;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatTownMon;
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
+    [OBJ_EVENT_GFX_ECLAT_TOWN_MON] = &gObjectEventGraphicsInfo_EclatTownMon,
+    [OBJ_EVENT_GFX_ECLAT_STOLEN_MON] = &gObjectEventGraphicsInfo_EclatStolenMon,
+    [OBJ_EVENT_GFX_ECLAT_MOTHER] = &gObjectEventGraphicsInfo_EclatMother,
+    [OBJ_EVENT_GFX_ECLAT_ROBBER] = &gObjectEventGraphicsInfo_EclatRobber,
     [OBJ_EVENT_GFX_BRENDAN_NORMAL] =           &gObjectEventGraphicsInfo_BrendanNormal,
     [OBJ_EVENT_GFX_BRENDAN_MACH_BIKE] =        &gObjectEventGraphicsInfo_BrendanMachBike,
     [OBJ_EVENT_GFX_BRENDAN_SURFING] =          &gObjectEventGraphicsInfo_BrendanSurfing,

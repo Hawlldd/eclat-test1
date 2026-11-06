@@ -1,5 +1,6 @@
 LittlerootTown_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, IviereTown_OnTransition
+	map_script MAP_SCRIPT_ON_RESUME, IviereTown_OnResume
 	.byte 0
 
 	@ State descriptions for VAR_LITTLEROOT_TOWN_STATE
@@ -1016,3 +1017,18 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 IviereTown_OnTransition:
 	setflag FLAG_VISITED_LITTLEROOT_TOWN
 	end
+
+IviereTown_OnResume:
+	special StartIviereFlyby
+	end
+
+IviereTown_EventScript_TownPokemon::
+	lock
+	faceplayer
+	playmoncry SPECIES_PIDGEY, CRY_MODE_NORMAL
+	msgbox IviereTown_Text_TownPokemon, MSGBOX_DEFAULT
+	release
+	end
+
+IviereTown_Text_TownPokemon:
+	.string "Pidgey : Rrrrouuu rrrrouuu !$"

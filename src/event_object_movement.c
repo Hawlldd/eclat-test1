@@ -506,6 +506,8 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Npc4Reflection,        OBJ_EVENT_PAL_TAG_NPC_4_REFLECTION},
     {sEclatPlayerOverworldPalette,         OBJ_EVENT_PAL_TAG_ECLAT_PLAYER},
     {sEclatRivalOverworldPalette,          OBJ_EVENT_PAL_TAG_ECLAT_RIVAL},
+    {sEclatMotherPalette,                  OBJ_EVENT_PAL_TAG_ECLAT_MOTHER},
+    {sEclatStolenMonPalette,               OBJ_EVENT_PAL_TAG_ECLAT_STOLEN_MON},
     {gObjectEventPal_Brendan,               OBJ_EVENT_PAL_TAG_BRENDAN},
     {gObjectEventPal_BrendanReflection,     OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION},
     {gObjectEventPal_BridgeReflection,      OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION},

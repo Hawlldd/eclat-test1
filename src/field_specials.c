@@ -5766,3 +5766,81 @@ bool8 CheckAddCoins(void)
     else
         return TRUE;
 }
+
+static const u32 sIviereFlybyTiles[] = INCBIN_U32("graphics/eclat_intro/iviere_flyby.bin");
+
+static const struct OamData sIviereFlybyOam =
+{
+    .shape = SPRITE_SHAPE(32x32),
+    .size = SPRITE_SIZE(32x32),
+    .priority = 1,
+};
+
+static const struct SpriteFrameImage sIviereFlybyImages[] =
+{
+    {sIviereFlybyTiles, 512},
+    {sIviereFlybyTiles + 128, 512},
+};
+
+static const union AnimCmd sIviereFlybyAnim[] =
+{
+    ANIMCMD_FRAME(0, 8),
+    ANIMCMD_FRAME(1, 8),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd *const sIviereFlybyAnims[] = {sIviereFlybyAnim};
+
+static void SpriteCB_IviereFlyby(struct Sprite *sprite)
+{
+    if (gSaveBlock1Ptr->pos.x < 14 || gSaveBlock1Ptr->pos.x > 33
+     || gSaveBlock1Ptr->pos.y < 19 || gSaveBlock1Ptr->pos.y > 32)
+    {
+        sprite->invisible = TRUE;
+        return;
+    }
+
+    if (sprite->data[0] > 0)
+    {
+        sprite->data[0]--;
+        return;
+    }
+
+    sprite->invisible = FALSE;
+    if (++sprite->x > DISPLAY_WIDTH + 16)
+    {
+        sprite->x = -16;
+        sprite->data[0] = 48;
+        sprite->invisible = TRUE;
+    }
+}
+
+void StartIviereFlyby(void)
+{
+    static const struct SpriteTemplate template =
+    {
+        .tileTag = TAG_NONE,
+        .paletteTag = OBJ_EVENT_PAL_TAG_ECLAT_MOTHER,
+        .oam = &sIviereFlybyOam,
+        .anims = sIviereFlybyAnims,
+        .images = sIviereFlybyImages,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = SpriteCB_IviereFlyby,
+    };
+
+    for (u32 i = 0; i < MAX_SPRITES; i++)
+    {
+        if (gSprites[i].inUse && gSprites[i].callback == SpriteCB_IviereFlyby)
+            return;
+    }
+
+    if (LoadObjectEventPalette(template.paletteTag) == 0xFF)
+        return;
+
+    u8 id = CreateSprite(&template, -16, 24, 0);
+    if (id < MAX_SPRITES)
+    {
+        gSprites[id].invisible = TRUE;
+        gSprites[id].data[0] = 24;
+    }
+}

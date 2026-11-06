@@ -1,3 +1,10 @@
+static const u32 sEclatRobberTiles[] = INCBIN_U32("graphics/eclat_intro/robber.bin");
+static const u32 sEclatMotherTiles[] = INCBIN_U32("graphics/eclat_intro/mother.bin");
+static const u32 sEclatStolenMonTiles[] = INCBIN_U32("graphics/eclat_intro/stolen_mon.bin");
+static const u32 sEclatTownMonTiles[] = INCBIN_U32("graphics/eclat_intro/town_mon.bin");
+static const u16 sEclatMotherPalette[] = INCBIN_U16("graphics/eclat_intro/mother_palette.bin");
+static const u16 sEclatStolenMonPalette[] = INCBIN_U16("graphics/eclat_intro/stolen_mon_palette.bin");
+
 static const u32 sEclatPlayerOverworld[] = INCBIN_U32("graphics/eclat_intro/player_overworld.bin");
 static const u32 sEclatRivalOverworld[] = INCBIN_U32("graphics/eclat_intro/rival_overworld.bin");
 static const u16 sEclatPlayerOverworldPalette[] = INCBIN_U16("graphics/eclat_intro/player_overworld_palette.bin");

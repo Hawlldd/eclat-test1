@@ -615,6 +615,45 @@ static void _InitSecondaryTilesetAnimation(void)
         gMapHeader.mapLayout->secondaryTileset->callback();
 }
 
+#define IVIERE_ANIM_PHASES 64
+#define IVIERE_ANIM_INTERVAL 8
+
+static const u16 sIviereAnimation[] = INCBIN_U16("data/tilesets/primary/eclat_iviere/animation.bin");
+
+static const struct
+{
+    u16 tile;
+    u8 count;
+} sIviereAnimatedRanges[] =
+{
+    {32, 2}, {48, 2}, {364, 2}, {380, 2}, {396, 2}, {412, 2}, {416, 4},
+    {424, 6}, {432, 16}, {450, 12}, {464, 4}, {488, 4}, {504, 8}, {554, 2}, {570, 2},
+};
+
+static void TilesetAnim_Iviere(u16 timer)
+{
+    if (timer % IVIERE_ANIM_INTERVAL != 0)
+        return;
+
+    const u16 *frame = sIviereAnimation
+                     + (timer / IVIERE_ANIM_INTERVAL) * (ARRAY_COUNT(sIviereAnimation) / IVIERE_ANIM_PHASES);
+    for (u32 i = 0; i < ARRAY_COUNT(sIviereAnimatedRanges); i++)
+    {
+        u16 size = sIviereAnimatedRanges[i].count * TILE_SIZE_4BPP;
+        AppendTilesetAnimToBuffer(frame,
+            (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(sIviereAnimatedRanges[i].tile)), size);
+        frame += size / sizeof(*frame);
+    }
+}
+
+void InitTilesetAnim_Iviere(void)
+{
+    sPrimaryTilesetAnimCounter = 0;
+    sPrimaryTilesetAnimCounterMax = IVIERE_ANIM_PHASES * IVIERE_ANIM_INTERVAL;
+    sPrimaryTilesetAnimCallback = TilesetAnim_Iviere;
+}
+
+
 void InitTilesetAnim_General(void)
 {
     sPrimaryTilesetAnimCounter = 0;

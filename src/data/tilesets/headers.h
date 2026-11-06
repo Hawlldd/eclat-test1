@@ -1582,6 +1582,7 @@ const struct Tileset gTileset_EclatIvierePrimary =
     .palettes = (const u16 (*)[16])sPalettes_EclatIvierePrimary,
     .metatiles = sMetatiles_EclatIvierePrimary,
     .metatileAttributes = (const u16 *)sAttributes_EclatIvierePrimary,
+    .callback = InitTilesetAnim_Iviere,
 };
 
 static const u32 sTiles_EclatIviereSecondary[] = INCBIN_U32("data/tilesets/secondary/eclat_iviere/tiles.bin");

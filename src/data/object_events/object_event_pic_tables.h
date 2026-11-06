@@ -1,3 +1,19 @@
+static const struct SpriteFrameImage sPicTable_EclatRobber[] = {
+    overworld_ascending_frames(sEclatRobberTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_EclatMother[] = {
+    overworld_ascending_frames(sEclatMotherTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_EclatStolenMon[] = {
+    overworld_ascending_frames(sEclatStolenMonTiles, 2, 2),
+};
+
+static const struct SpriteFrameImage sPicTable_EclatTownMon[] = {
+    overworld_ascending_frames(sEclatTownMonTiles, 2, 2),
+};
+
 static const struct SpriteFrameImage sPicTable_EclatPlayer[] = {
     overworld_ascending_frames(sEclatPlayerOverworld, 2, 4),
 };

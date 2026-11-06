@@ -79,28 +79,100 @@ LittlerootTown_BrendansHouse_1F_EclatRobbery:
 	playse SE_PIN
 	applymovement LOCALID_PLAYER, Common_Movement_ExclamationMark
 	waitmovement 0
+	special SpawnCameraObject
+	applymovement LOCALID_CAMERA, EclatHouse_Movement_PanToTable
+	waitmovement LOCALID_CAMERA
+	delay 24
 	msgbox EclatHouse_Text_RocketThreat, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, Common_Movement_FaceRight
+	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_F
 	playse SE_PIN
 	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, Common_Movement_ExclamationMark
-	waitmovement 0
+	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_F
 	msgbox EclatHouse_Text_RocketLeaves, MSGBOX_DEFAULT
 	closemessage
-	applymovement LOCALID_ECLAT_HOUSE_ROCKET_M, EclatHouse_Movement_Flee
-	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, EclatHouse_Movement_Flee
-	waitmovement 0
+	applymovement LOCALID_ECLAT_HOUSE_ROCKET_M, Common_Movement_FaceDown
+	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_M
+	removeobject LOCALID_ECLAT_STOLEN_MON
+	applymovement LOCALID_ECLAT_HOUSE_ROCKET_M, EclatHouse_Movement_LeftRocketFlees
+	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, EclatHouse_Movement_RightRocketFlees
+	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_M
 	removeobject LOCALID_ECLAT_HOUSE_ROCKET_M
+	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_F
 	removeobject LOCALID_ECLAT_HOUSE_ROCKET_F
 	setflag FLAG_HIDE_ECLAT_HOUSE_ROCKETS
+	applymovement LOCALID_CAMERA, EclatHouse_Movement_PanToStairs
+	waitmovement LOCALID_CAMERA
+	special RemoveCameraObject
+	applymovement LOCALID_PLAYER, EclatHouse_Movement_ApproachMom
+	waitmovement LOCALID_PLAYER
+	applymovement LOCALID_PLAYERS_HOUSE_1F_MOM, Common_Movement_FaceRight
+	waitmovement LOCALID_PLAYERS_HOUSE_1F_MOM
 	msgbox EclatHouse_Text_Mom, MSGBOX_DEFAULT
 	msgbox EclatHouse_Text_Player, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_PLAYER, EclatHouse_Movement_WalkToDoor
+	waitmovement LOCALID_PLAYER
 	setvar VAR_LITTLEROOT_INTRO_STATE, 7
 	warp MAP_LITTLEROOT_TOWN, 22, 26
 	waitstate
 	end
 
-EclatHouse_Movement_Flee:
+EclatHouse_Movement_PanToTable:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_down
+	walk_down
+	step_end
+
+EclatHouse_Movement_PanToStairs:
+	walk_up
+	walk_up
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	step_end
+
+EclatHouse_Movement_LeftRocketFlees:
 	walk_fast_down
 	walk_fast_down
+	walk_fast_right
+	walk_fast_down
+	step_end
+
+EclatHouse_Movement_RightRocketFlees:
+	delay_16
+	walk_fast_down
+	walk_fast_down
+	walk_fast_left
+	walk_fast_left
+	walk_fast_left
+	walk_fast_left
+	walk_fast_down
+	step_end
+
+EclatHouse_Movement_ApproachMom:
+	walk_down
+	walk_left
+	face_left
+	step_end
+
+EclatHouse_Movement_WalkToDoor:
+	walk_right
+	walk_down
+	walk_down
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_down
 	step_end
 
 EclatHouse_Text_RocketThreat:

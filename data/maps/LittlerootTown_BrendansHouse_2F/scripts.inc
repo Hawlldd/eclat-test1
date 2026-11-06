@@ -1,7 +1,166 @@
 LittlerootTown_BrendansHouse_2F_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_BrendansHouse_2F_OnTransition
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, LittlerootTown_BrendansHouse_2F_OnWarp
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, LittlerootTown_BrendansHouse_2F_EclatIntro
 	.byte 0
+
+LittlerootTown_BrendansHouse_2F_EclatIntro:
+	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 0, LittlerootTown_BrendansHouse_2F_EventScript_EclatStarter
+	.2byte 0
+
+LittlerootTown_BrendansHouse_2F_EventScript_EclatStarter:
+	lockall
+	setrespawn HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_TRUCK
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_TRUCK
+	msgbox EclatIntro_Text_Bedroom, MSGBOX_DEFAULT
+EclatIntro_ChooseType:
+	message EclatIntro_Text_ChooseType
+	waitmessage
+	dynmultichoice 20, 1, TRUE, 3, 0, DYN_MULTICHOICE_CB_NONE, EclatIntro_Text_Fire, EclatIntro_Text_Water, EclatIntro_Text_Grass
+	closemessage
+	goto_if_eq VAR_RESULT, 1, EclatIntro_WaterStarters
+	goto_if_eq VAR_RESULT, 2, EclatIntro_GrassStarters
+
+	dynmultipush EclatIntro_Text_Charmander, SPECIES_CHARMANDER
+	dynmultipush EclatIntro_Text_Cyndaquil, SPECIES_CYNDAQUIL
+	dynmultipush EclatIntro_Text_Torchic, SPECIES_TORCHIC
+	dynmultipush EclatIntro_Text_Chimchar, SPECIES_CHIMCHAR
+	dynmultipush EclatIntro_Text_Tepig, SPECIES_TEPIG
+	dynmultipush EclatIntro_Text_Fennekin, SPECIES_FENNEKIN
+	dynmultipush EclatIntro_Text_Litten, SPECIES_LITTEN
+	goto EclatIntro_ChooseStarter
+
+EclatIntro_WaterStarters:
+	dynmultipush EclatIntro_Text_Squirtle, SPECIES_SQUIRTLE
+	dynmultipush EclatIntro_Text_Totodile, SPECIES_TOTODILE
+	dynmultipush EclatIntro_Text_Mudkip, SPECIES_MUDKIP
+	dynmultipush EclatIntro_Text_Piplup, SPECIES_PIPLUP
+	dynmultipush EclatIntro_Text_Oshawott, SPECIES_OSHAWOTT
+	dynmultipush EclatIntro_Text_Froakie, SPECIES_FROAKIE
+	dynmultipush EclatIntro_Text_Popplio, SPECIES_POPPLIO
+	goto EclatIntro_ChooseStarter
+
+EclatIntro_GrassStarters:
+	dynmultipush EclatIntro_Text_Bulbasaur, SPECIES_BULBASAUR
+	dynmultipush EclatIntro_Text_Chikorita, SPECIES_CHIKORITA
+	dynmultipush EclatIntro_Text_Treecko, SPECIES_TREECKO
+	dynmultipush EclatIntro_Text_Turtwig, SPECIES_TURTWIG
+	dynmultipush EclatIntro_Text_Snivy, SPECIES_SNIVY
+	dynmultipush EclatIntro_Text_Chespin, SPECIES_CHESPIN
+	dynmultipush EclatIntro_Text_Rowlet, SPECIES_ROWLET
+
+EclatIntro_ChooseStarter:
+	dynmultistack 18, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE
+	goto_if_eq VAR_RESULT, MULTI_B_PRESSED, EclatIntro_ChooseType
+	copyvar VAR_TEMP_1, VAR_RESULT
+	bufferspeciesname STR_VAR_1, VAR_TEMP_1
+	showmonpic VAR_TEMP_1, 10, 3
+	msgbox EclatIntro_Text_ConfirmStarter, MSGBOX_YESNO
+	hidemonpic
+	goto_if_eq VAR_RESULT, NO, EclatIntro_ChooseType
+	givemon VAR_TEMP_1, 5, ITEM_NONE
+	setseenmon VAR_TEMP_1
+	setcaughtmon VAR_TEMP_1
+	setflag FLAG_SYS_POKEMON_GET
+	setflag FLAG_SYS_POKEDEX_GET
+	special EnableNationalPokedex
+	setvar VAR_LITTLEROOT_INTRO_STATE, 8
+	playse SE_PIN
+	applymovement LOCALID_PLAYER, Common_Movement_ExclamationMark
+	waitmovement 0
+	msgbox EclatIntro_Text_Mom, MSGBOX_DEFAULT
+	releaseall
+	end
+
+EclatIntro_Text_Bedroom:
+	.string "You're in your room,\n"
+	.string "contemplating the POKéBALL\l"
+	.string "and the new POKéMON,\l"
+	.string "that the professor of IVIERE TOWN\l"
+	.string "gave you.$"
+
+EclatIntro_Text_ChooseType:
+	.string "Which type of POKéMON did you choose?$"
+
+EclatIntro_Text_ConfirmStarter:
+	.string "Did you choose {STR_VAR_1}?$"
+
+EclatIntro_Text_Mom:
+	.string "Mom: Help! Get out you\n"
+	.string "filthy vultures!$"
+
+EclatIntro_Text_Fire:
+	.string "Fire$"
+
+EclatIntro_Text_Water:
+	.string "Water$"
+
+EclatIntro_Text_Grass:
+	.string "Grass$"
+
+EclatIntro_Text_Charmander:
+	.string "Charmander$"
+
+EclatIntro_Text_Cyndaquil:
+	.string "Cyndaquil$"
+
+EclatIntro_Text_Torchic:
+	.string "Torchic$"
+
+EclatIntro_Text_Chimchar:
+	.string "Chimchar$"
+
+EclatIntro_Text_Tepig:
+	.string "Tepig$"
+
+EclatIntro_Text_Fennekin:
+	.string "Fennekin$"
+
+EclatIntro_Text_Litten:
+	.string "Litten$"
+
+EclatIntro_Text_Squirtle:
+	.string "Squirtle$"
+
+EclatIntro_Text_Totodile:
+	.string "Totodile$"
+
+EclatIntro_Text_Mudkip:
+	.string "Mudkip$"
+
+EclatIntro_Text_Piplup:
+	.string "Piplup$"
+
+EclatIntro_Text_Oshawott:
+	.string "Oshawott$"
+
+EclatIntro_Text_Froakie:
+	.string "Froakie$"
+
+EclatIntro_Text_Popplio:
+	.string "Popplio$"
+
+EclatIntro_Text_Bulbasaur:
+	.string "Bulbasaur$"
+
+EclatIntro_Text_Chikorita:
+	.string "Chikorita$"
+
+EclatIntro_Text_Treecko:
+	.string "Treecko$"
+
+EclatIntro_Text_Turtwig:
+	.string "Turtwig$"
+
+EclatIntro_Text_Snivy:
+	.string "Snivy$"
+
+EclatIntro_Text_Chespin:
+	.string "Chespin$"
+
+EclatIntro_Text_Rowlet:
+	.string "Rowlet$"
 
 LittlerootTown_BrendansHouse_2F_OnTransition:
 	call_if_lt VAR_LITTLEROOT_RIVAL_STATE, 2, LittlerootTown_BrendansHouse_2F_EventScript_CheckSetReadyToMeetBrendan

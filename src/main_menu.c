@@ -192,7 +192,7 @@ static void Task_HandleMainMenuInput(u8);
 static void Task_HandleMainMenuAPressed(u8);
 static void Task_HandleMainMenuBPressed(u8);
 static void Task_EclatBroadcast_Init(u8);
-static void Task_NewGameBirchSpeech_Init(u8);
+static void Task_NewGameBirchSpeech_Init(u8) __attribute__((unused));
 static void Task_DisplayMainMenuInvalidActionError(u8);
 static void AddBirchSpeechObjects(u8);
 static void Task_NewGameBirchSpeech_WaitToShowBirch(u8);
@@ -1296,37 +1296,148 @@ static void HighlightSelectedMainMenuItem(enum PartyMenuType menuType, u8 select
 #define tMaySpriteId data[11]
 
 static const u16 sEclatBroadcastTiles[] = INCBIN_U16("graphics/eclat_intro/broadcast_tiles.bin");
-static const u16 sEclatBroadcastMap[] = INCBIN_U16("graphics/eclat_intro/broadcast_map.bin");
+static const u16 sEclatBroadcastMaps[] = INCBIN_U16("graphics/eclat_intro/broadcast_map.bin");
 static const u16 sEclatBroadcastPalette[] = INCBIN_U16("graphics/eclat_intro/broadcast_palette.bin");
 
-static const u8 sText_EclatBroadcast[] = _(
+enum
+{
+    ECLAT_SCENE_REPORTER,
+    ECLAT_SCENE_ALAKAZAM,
+    ECLAT_SCENE_PLAYER,
+    ECLAT_SCENE_RIVAL,
+};
+
+enum
+{
+    ECLAT_BEAT_GREETING,
+    ECLAT_BEAT_RAID,
+    ECLAT_BEAT_INTERVIEW,
+    ECLAT_BEAT_PLAYER,
+    ECLAT_BEAT_RIVAL,
+    ECLAT_BEAT_ADVICE,
+    ECLAT_BEAT_SIGN_OFF,
+};
+
+static EWRAM_DATA u8 sEclatBroadcastBeat = ECLAT_BEAT_GREETING;
+
+static const u8 sText_EclatGreeting[] = _(
     "Hello dear viewers!\n"
     "I am NATHALIE REDOUX, your\l"
     "journalist on CHANNEL 6.\p"
     "This is a emergency news flash,\n"
     "We'll be reporting about the\l"
     "recent crime wave.");
+static const u8 sText_EclatRaid[] = _(
+    "ALAKAZAM!\p"
+    "Thanks to our POKéMON, we have\n"
+    "been able to infiltrate a abandoned\l"
+    "lair, and we have been able\l"
+    "to gather information about\l"
+    "those terrible POKéMON thefts.");
+static const u8 sText_EclatInterview[] = _(
+    "We are currently interviewing a\n"
+    "young POKéMON trainer who has\l"
+    "obtained a POKéMON to protect himself,\l"
+    "in accordance with the new self\l"
+    "defense laws.");
+static const u8 sText_EclatPlayer[] = _(
+    "This young trainer, hailing from\n"
+    "IVIERE TOWN, is called:");
+static const u8 sText_EclatRival[] = _(
+    "A few trainers have already\n"
+    "encountered and defeated some of\l"
+    "these dangerous individuals.\l"
+    "Here we have a young trainer\l"
+    "who has already defeated them\l"
+    "once, her name is:");
+static const u8 sText_EclatAdvice[] = _(
+    "{RIVAL}: I advise every\n"
+    "trainers to stay on their\l"
+    "guard. These thieves are numerous\l"
+    "but individually, they're\l"
+    "not very strong.");
+static const u8 sText_EclatSignOff[] = _(
+    "JOURNALIST: This concludes our\n"
+    "report. Back to your normal program!");
+
+static const struct
+{
+    const u8 *text;
+    u8 scene;
+} sEclatBroadcast[] =
+{
+    [ECLAT_BEAT_GREETING] = {sText_EclatGreeting, ECLAT_SCENE_REPORTER},
+    [ECLAT_BEAT_RAID] = {sText_EclatRaid, ECLAT_SCENE_ALAKAZAM},
+    [ECLAT_BEAT_INTERVIEW] = {sText_EclatInterview, ECLAT_SCENE_REPORTER},
+    [ECLAT_BEAT_PLAYER] = {sText_EclatPlayer, ECLAT_SCENE_PLAYER},
+    [ECLAT_BEAT_RIVAL] = {sText_EclatRival, ECLAT_SCENE_RIVAL},
+    [ECLAT_BEAT_ADVICE] = {sText_EclatAdvice, ECLAT_SCENE_RIVAL},
+    [ECLAT_BEAT_SIGN_OFF] = {sText_EclatSignOff, ECLAT_SCENE_PLAYER},
+};
 
 static const struct BgTemplate sEclatBroadcastBgTemplate =
 {
     .bg = 1,
     .charBaseIndex = 0,
-    .mapBaseIndex = 7,
+    .mapBaseIndex = 8,
     .paletteMode = 1,
     .priority = 3,
 };
 
-static void Task_EclatBroadcast_ReturnToIntro(u8 taskId)
+static void Task_EclatBroadcast_WaitForInput(u8 taskId);
+static void Task_EclatBroadcast_Setup(u8 taskId);
+
+static void EclatBroadcast_ShowBeat(void)
 {
+    const u16 *map = &sEclatBroadcastMaps[sEclatBroadcast[sEclatBroadcastBeat].scene * (32 * 32)];
+    DmaCopy16(3, map, (void *)BG_SCREEN_ADDR(8), 32 * 32 * sizeof(u16));
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, sEclatBroadcast[sEclatBroadcastBeat].text);
+    AddTextPrinterForMessage(TRUE);
+    if (sEclatBroadcastBeat == ECLAT_BEAT_RAID)
+        PlayCry_Normal(SPECIES_ALAKAZAM, 0);
+}
+
+static void CB2_EclatBroadcast_Resume(void)
+{
+    SetVBlankCallback(NULL);
+    ResetBgsAndClearDma3BusyFlags(0);
+    ResetTasks();
+    ResetSpriteData();
+    FreeAllSpritePalettes();
+    ScanlineEffect_Stop();
+    ResetPaletteFade();
+    CreateTask(Task_EclatBroadcast_Setup, 0);
+    SetVBlankCallback(VBlankCB_MainMenu);
+    SetMainCallback2(CB2_MainMenu);
+}
+
+static void Task_EclatBroadcast_LeaveScreen(u8 taskId)
+{
+    u8 beat = sEclatBroadcastBeat;
+
     if (gPaletteFade.active)
         return;
 
     HideBg(0);
     HideBg(1);
     FreeAllWindowBuffers();
-    DmaFill16(3, 0, (void *)BG_SCREEN_ADDR(30), sizeof(sEclatBroadcastMap));
-    InitBgFromTemplate(&sMainMenuBgTemplates[1]);
-    gTasks[taskId].func = Task_NewGameBirchSpeech_Init;
+    DestroyTask(taskId);
+
+    switch (beat)
+    {
+    case ECLAT_BEAT_PLAYER:
+        sEclatBroadcastBeat = ECLAT_BEAT_RIVAL;
+        DoNamingScreen(NAMING_SCREEN_PLAYER, gSaveBlock2Ptr->playerName, MALE, 0, 0, CB2_EclatBroadcast_Resume);
+        break;
+    case ECLAT_BEAT_RIVAL:
+        sEclatBroadcastBeat = ECLAT_BEAT_ADVICE;
+        DoNamingScreen(NAMING_SCREEN_RIVAL, gSaveBlock1Ptr->rivalName, FEMALE, 0, 0, CB2_EclatBroadcast_Resume);
+        break;
+    case ECLAT_BEAT_SIGN_OFF:
+        SetMainCallback2(CB2_NewGame);
+        break;
+    }
 }
 
 static void Task_EclatBroadcast_WaitForInput(u8 taskId)
@@ -1334,24 +1445,36 @@ static void Task_EclatBroadcast_WaitForInput(u8 taskId)
     if (gPaletteFade.active || RunTextPrintersAndIsPrinter0Active() || !JOY_NEW(A_BUTTON))
         return;
 
-    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
-    gTasks[taskId].func = Task_EclatBroadcast_ReturnToIntro;
+    switch (sEclatBroadcastBeat)
+    {
+    case ECLAT_BEAT_PLAYER:
+    case ECLAT_BEAT_RIVAL:
+    case ECLAT_BEAT_SIGN_OFF:
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+        gTasks[taskId].func = Task_EclatBroadcast_LeaveScreen;
+        break;
+    default:
+        sEclatBroadcastBeat++;
+        EclatBroadcast_ShowBeat();
+        break;
+    }
 }
 
-static void Task_EclatBroadcast_Init(u8 taskId)
+static void Task_EclatBroadcast_Setup(u8 taskId)
 {
     HideBg(0);
     HideBg(1);
     ScanlineEffect_Stop();
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
     SetGpuReg(REG_OFFSET_BLDCNT, 0);
+    SetGpuReg(REG_OFFSET_BG0HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG0VOFS, 0);
     SetGpuReg(REG_OFFSET_BG1HOFS, 0);
     SetGpuReg(REG_OFFSET_BG1VOFS, 0);
     InitBgFromTemplate(&sBirchBgTemplate);
     InitBgFromTemplate(&sEclatBroadcastBgTemplate);
     DmaCopy16(3, sEclatBroadcastTiles, VRAM, sizeof(sEclatBroadcastTiles));
-    DmaCopy16(3, sEclatBroadcastMap, (void *)BG_SCREEN_ADDR(7), sizeof(sEclatBroadcastMap));
-    DmaFill16(3, 0, (void *)BG_SCREEN_ADDR(30), sizeof(sEclatBroadcastMap));
+    DmaFill16(3, 0, (void *)BG_SCREEN_ADDR(30), 32 * 32 * sizeof(u16));
     LoadPalette(sEclatBroadcastPalette, 0, sizeof(sEclatBroadcastPalette));
 
     InitWindows(sNewGameBirchSpeechTextWindows);
@@ -1359,13 +1482,18 @@ static void Task_EclatBroadcast_Init(u8 taskId)
     DrawDialogFrameWithCustomTile(0, TRUE, BIRCH_DLG_BASE_TILE_NUM);
     PutWindowTilemap(0);
     CopyWindowToVram(0, COPYWIN_GFX);
-    NewGameBirchSpeech_ClearWindow(0);
-    StringExpandPlaceholders(gStringVar4, sText_EclatBroadcast);
-    AddTextPrinterForMessage(TRUE);
+    EclatBroadcast_ShowBeat();
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
     ShowBg(0);
     ShowBg(1);
     gTasks[taskId].func = Task_EclatBroadcast_WaitForInput;
+}
+
+static void Task_EclatBroadcast_Init(u8 taskId)
+{
+    sEclatBroadcastBeat = ECLAT_BEAT_GREETING;
+    gSaveBlock2Ptr->playerGender = MALE;
+    Task_EclatBroadcast_Setup(taskId);
 }
 
 

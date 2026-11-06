@@ -1355,6 +1355,12 @@ static const struct SpriteFrameImage sPicTable_ApricornTree[] = {
     overworld_frame(gObjectEventPic_ApricornTree, 2, 2, 0),
 };
 
+static const struct SpriteFrameImage sPicTable_RocketF[] = {
+    overworld_ascending_frames(gObjectEventPic_RocketF, 2, 4),
+};
+static const struct SpriteFrameImage sPicTable_RocketM[] = {
+    overworld_ascending_frames(gObjectEventPic_RocketM, 2, 4),
+};
 #if IS_FRLG
 
 static const struct SpriteFrameImage sPicTable_RedNormal[] = {
@@ -1602,9 +1608,6 @@ static const struct SpriteFrameImage sPicTable_Channeler[] = {
     overworld_ascending_frames(gObjectEventPic_Channeler, 2, 4),
 };
 
-static const struct SpriteFrameImage sPicTable_RocketF[] = {
-    overworld_ascending_frames(gObjectEventPic_RocketF, 2, 4),
-};
 
 static const struct SpriteFrameImage sPicTable_SwimmerMWater[] = {
     overworld_ascending_frames(gObjectEventPic_SwimmerMWater, 2, 4),
@@ -1785,9 +1788,6 @@ static const struct SpriteFrameImage sPicTable_PushableBoulderFrlg[] = {
     overworld_frame(gObjectEventPic_PushableBoulderFrlg, 2, 2, 0),
 };
 
-static const struct SpriteFrameImage sPicTable_RocketM[] = {
-    overworld_ascending_frames(gObjectEventPic_RocketM, 2, 4),
-};
 
 static const struct SpriteFrameImage sPicTable_Celio[] = {
     overworld_frame(gObjectEventPic_Celio, 2, 4, 0),

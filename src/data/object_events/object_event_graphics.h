@@ -466,6 +466,9 @@ const u32 gObjectEventPic_ApricornTree[] = INCGFX_U32("graphics/object_events/pi
 
 const u32 gFieldEffectObjectPic_ShinySparkle[] = INCGFX_U32("graphics/field_effects/pics/shiny_sparkle.png", ".4bpp", "-mwidth 2 -mheight 4");
 
+const u16 gObjectEventPal_NpcWhite[] = INCGFX_U16("graphics/object_events/palettes/npc_white.pal", ".gbapal");
+const u16 gObjectEventPic_RocketF[] = INCGFX_U16("graphics/object_events/pics/people/rocket_f.png", ".4bpp", "-mwidth 2 -mheight 4");
+const u16 gObjectEventPic_RocketM[] = INCGFX_U16("graphics/object_events/pics/people/rocket_m.png", ".4bpp", "-mwidth 2 -mheight 4");
 #if IS_FRLG
 
 const u16 gObjectEventPic_RedNormal[] = INCGFX_U16("graphics/object_events/pics/people/red/red_normal.png", ".4bpp", "-mwidth 2 -mheight 4");
@@ -488,7 +491,6 @@ const u16 gObjectEventPal_PlayerReflectionFrlg[] = INCGFX_U16("graphics/object_e
 const u16 gObjectEventPal_NpcBlue[] = INCGFX_U16("graphics/object_events/palettes/npc_blue.pal", ".gbapal");
 const u16 gObjectEventPal_NpcPink[] = INCGFX_U16("graphics/object_events/palettes/npc_pink.pal", ".gbapal");
 const u16 gObjectEventPal_NpcGreen[] = INCGFX_U16("graphics/object_events/palettes/npc_green.pal", ".gbapal");
-const u16 gObjectEventPal_NpcWhite[] = INCGFX_U16("graphics/object_events/palettes/npc_white.pal", ".gbapal");
 const u16 gObjectEventPal_NpcBlueReflection[] = INCGFX_U16("graphics/object_events/palettes/npc_blue_reflection.pal", ".gbapal");
 const u16 gObjectEventPal_NpcPinkReflection[] = INCGFX_U16("graphics/object_events/palettes/npc_pink_reflection.pal", ".gbapal");
 const u16 gObjectEventPal_NpcGreenReflection[] = INCGFX_U16("graphics/object_events/palettes/npc_green_reflection.pal", ".gbapal");
@@ -533,7 +535,6 @@ const u16 gObjectEventPic_CooltrainerM[] = INCGFX_U16("graphics/object_events/pi
 const u16 gObjectEventPic_CooltrainerF[] = INCGFX_U16("graphics/object_events/pics/people/cooltrainer_f.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_PokeManiacFrlg[] = INCGFX_U16("graphics/object_events/pics/people/poke_maniac_frlg.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_Channeler[] = INCGFX_U16("graphics/object_events/pics/people/channeler.png", ".4bpp", "-mwidth 2 -mheight 4");
-const u16 gObjectEventPic_RocketF[] = INCGFX_U16("graphics/object_events/pics/people/rocket_f.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_SwimmerMWater[] = INCGFX_U16("graphics/object_events/pics/people/swimmer_m_water.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_SwimmerFWater[] = INCGFX_U16("graphics/object_events/pics/people/swimmer_f_water.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_SwimmerMLand[] = INCGFX_U16("graphics/object_events/pics/people/swimmer_m_land.png", ".4bpp", "-mwidth 2 -mheight 4");
@@ -563,7 +564,6 @@ const u16 gObjectEventPic_Bruno[] = INCGFX_U16("graphics/object_events/pics/peop
 const u16 gObjectEventPic_Clerk[] = INCGFX_U16("graphics/object_events/pics/people/clerk.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_MGDeliveryman[] = INCGFX_U16("graphics/object_events/pics/people/mg_deliveryman.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_TrainerTowerDude[] = INCGFX_U16("graphics/object_events/pics/people/trainer_tower_dude.png", ".4bpp", "-mwidth 2 -mheight 4");
-const u16 gObjectEventPic_RocketM[] = INCGFX_U16("graphics/object_events/pics/people/rocket_m.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_Celio[] = INCGFX_U16("graphics/object_events/pics/people/celio.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_Agatha[] = INCGFX_U16("graphics/object_events/pics/people/agatha.png", ".4bpp", "-mwidth 2 -mheight 4");
 const u16 gObjectEventPic_Misty[] = INCGFX_U16("graphics/object_events/pics/people/misty.png", ".4bpp", "-mwidth 2 -mheight 4");

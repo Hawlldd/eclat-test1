@@ -1470,6 +1470,12 @@ static void NamingScreen_CreateRivalIcon(void)
     const struct SubspriteTable * tables_p;
     u8 spriteId;
 
+    if (!IS_FRLG)
+    {
+        NamingScreen_CreatePlayerIcon();
+        return;
+    }
+
     CopyObjectGraphicsInfoToSpriteTemplate(OBJ_EVENT_GFX_RED_NORMAL, SpriteCallbackDummy, &template, &tables_p);
 
     template.tileTag = sheet.tag;

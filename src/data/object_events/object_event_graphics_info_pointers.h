@@ -645,6 +645,8 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_OW_MON] =                   &gObjectEventGraphicsInfo_Follower,
     [OBJ_EVENT_GFX_LIGHT_SPRITE] =             &gObjectEventGraphicsInfo_BallLight,
     [OBJ_EVENT_GFX_APRICORN_TREE] =            &gObjectEventGraphicsInfo_ApricornTree,
+    [OBJ_EVENT_GFX_ROCKET_M]                 = &gObjectEventGraphicsInfo_RocketM,
+    [OBJ_EVENT_GFX_ROCKET_F]                 = &gObjectEventGraphicsInfo_RocketF,
 #if IS_FRLG
     [OBJ_EVENT_GFX_RED_NORMAL] =               &gObjectEventGraphicsInfo_RedNormal,
     [OBJ_EVENT_GFX_RED_BIKE] =                 &gObjectEventGraphicsInfo_RedBike,
@@ -692,8 +694,6 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_SWIMMER_F_LAND]           = &gObjectEventGraphicsInfo_SwimmerFLand,
     [OBJ_EVENT_GFX_WORKER_M]                 = &gObjectEventGraphicsInfo_WorkerM,
     [OBJ_EVENT_GFX_WORKER_F]                 = &gObjectEventGraphicsInfo_WorkerF,
-    [OBJ_EVENT_GFX_ROCKET_M]                 = &gObjectEventGraphicsInfo_RocketM,
-    [OBJ_EVENT_GFX_ROCKET_F]                 = &gObjectEventGraphicsInfo_RocketF,
     [OBJ_EVENT_GFX_GBA_KID]                  = &gObjectEventGraphicsInfo_GBAKid,
     [OBJ_EVENT_GFX_POKE_MANIAC_FRLG]         = &gObjectEventGraphicsInfo_PokeManiacFrlg,
     [OBJ_EVENT_GFX_BIKER]                    = &gObjectEventGraphicsInfo_Biker,

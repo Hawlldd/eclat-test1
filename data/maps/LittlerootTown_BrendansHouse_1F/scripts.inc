@@ -24,6 +24,7 @@ LittlerootTown_BrendansHouse_1F_EventScript_ShowRunningShoesManual::
 	return
 
 LittlerootTown_BrendansHouse_1F_OnTransition:
+	call LittlerootTown_BrendansHouse_1F_SetEclatObjects
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 3, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToDoor
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 5, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToStairs
 	call_if_eq VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToTV
@@ -47,12 +48,77 @@ LittlerootTown_BrendansHouse_1F_EventScript_MoveMomToDoor::
 @ Many of the below scripts have no gender check because they assume youre in the correct house
 @ The below SS Ticket script uses Mays house state by accident(?), but theyre both set identically after the intro
 LittlerootTown_BrendansHouse_1F_OnFrame:
+	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 8, LittlerootTown_BrendansHouse_1F_EclatRobbery
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 3, LittlerootTown_BrendansHouse_1F_EventScript_EnterHouseMovingIn
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 5, LittlerootTown_BrendansHouse_1F_EventScript_GoUpstairsToSetClock
 	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_BrendansHouse_1F_EventScript_PetalburgGymReport
 	map_script_2 VAR_LITTLEROOT_HOUSES_STATE_MAY, 1, LittlerootTown_BrendansHouse_1F_EventScript_YoureNewNeighbor
 	map_script_2 VAR_LITTLEROOT_HOUSES_STATE_MAY, 3, PlayersHouse_1F_EventScript_GetSSTicketAndSeeLatiTV
 	.2byte 0
+
+LittlerootTown_BrendansHouse_1F_SetEclatObjects:
+	setflag FLAG_HIDE_ECLAT_HOUSE_ROCKETS
+	goto_if_ne VAR_LITTLEROOT_INTRO_STATE, 8, EclatHouse_ObjectsDone
+	clearflag FLAG_HIDE_ECLAT_HOUSE_ROCKETS
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_PLAYERS_HOUSE_VIGOROTH_1
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_PLAYERS_HOUSE_VIGOROTH_2
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_MOM
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_RIVAL_SIBLING
+EclatHouse_ObjectsDone:
+	return
+
+LittlerootTown_BrendansHouse_1F_EclatRobbery:
+	lockall
+	playse SE_PIN
+	applymovement LOCALID_PLAYER, Common_Movement_ExclamationMark
+	waitmovement 0
+	msgbox EclatHouse_Text_RocketThreat, MSGBOX_DEFAULT
+	playse SE_PIN
+	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, Common_Movement_ExclamationMark
+	waitmovement 0
+	msgbox EclatHouse_Text_RocketLeaves, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_ECLAT_HOUSE_ROCKET_M, EclatHouse_Movement_Flee
+	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, EclatHouse_Movement_Flee
+	waitmovement 0
+	removeobject LOCALID_ECLAT_HOUSE_ROCKET_M
+	removeobject LOCALID_ECLAT_HOUSE_ROCKET_F
+	setflag FLAG_HIDE_ECLAT_HOUSE_ROCKETS
+	msgbox EclatHouse_Text_Mom, MSGBOX_DEFAULT
+	msgbox EclatHouse_Text_Player, MSGBOX_DEFAULT
+	setvar VAR_LITTLEROOT_INTRO_STATE, 7
+	warp MAP_LITTLEROOT_TOWN, 5, 9
+	waitstate
+	end
+
+EclatHouse_Movement_Flee:
+	walk_fast_down
+	walk_fast_down
+	step_end
+
+EclatHouse_Text_RocketThreat:
+	.string "???: Shut up damn it!\p"
+	.string "Grab that POKéMON, the boss\n"
+	.string "needs a lot of POKéMON!$"
+
+EclatHouse_Text_RocketLeaves:
+	.string "???: Damn, her kid is here!\n"
+	.string "Quickly grab that POKéMON and\l"
+	.string "let's go!$"
+
+EclatHouse_Text_Mom:
+	.string "Mom: (sniff) Oh honey…\p"
+	.string "Those bastards (sniff)…\n"
+	.string "took your father's POKéMON.\p"
+	.string "(sniff) It's all I have left\n"
+	.string "of him (sniff).$"
+
+EclatHouse_Text_Player:
+	.string "{PLAYER}: Don't worry, Mom. I'll\n"
+	.string "catch up to them, and I'll\l"
+	.string "get Dad's POKéMON back.\l"
+	.string "I promise you!$"
+
 
 LittlerootTown_BrendansHouse_1F_EventScript_GoUpstairsToSetClock::
 	lockall

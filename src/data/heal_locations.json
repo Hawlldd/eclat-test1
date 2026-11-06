@@ -3,12 +3,12 @@
     {
       "id": "HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F",
       "map": "MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F",
-      "x": 4,
-      "y": 2,
+      "x": 6,
+      "y": 5,
       "respawn_map": "MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F",
       "respawn_npc": "LOCALID_PLAYERS_HOUSE_1F_MOM",
-      "respawn_x": 2,
-      "respawn_y": 7
+      "respawn_x": 7,
+      "respawn_y": 4
     },
     {
       "id": "HEAL_LOCATION_LITTLEROOT_TOWN_MAYS_HOUSE_2F",

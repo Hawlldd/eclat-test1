@@ -1,6 +1,4 @@
 LittlerootTown_BrendansHouse_2F_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_BrendansHouse_2F_OnTransition
-	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, LittlerootTown_BrendansHouse_2F_OnWarp
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, LittlerootTown_BrendansHouse_2F_EclatIntro
 	.byte 0
 
@@ -13,6 +11,16 @@ LittlerootTown_BrendansHouse_2F_EventScript_EclatStarter:
 	setrespawn HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_BRENDANS_HOUSE_TRUCK
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_TRUCK
+	msgbox EclatIntro_Text_ShinyRates, MSGBOX_DEFAULT
+	msgbox EclatIntro_Text_ChooseShinyRate, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, EclatIntro_SetBoostedShinyRate
+	clearflag FLAG_ECLAT_BOOSTED_SHINY_RATE
+	goto EclatIntro_DescribeBedroom
+
+EclatIntro_SetBoostedShinyRate:
+	setflag FLAG_ECLAT_BOOSTED_SHINY_RATE
+
+EclatIntro_DescribeBedroom:
 	msgbox EclatIntro_Text_Bedroom, MSGBOX_DEFAULT
 EclatIntro_ChooseType:
 	message EclatIntro_Text_ChooseType
@@ -29,6 +37,8 @@ EclatIntro_ChooseType:
 	dynmultipush EclatIntro_Text_Tepig, SPECIES_TEPIG
 	dynmultipush EclatIntro_Text_Fennekin, SPECIES_FENNEKIN
 	dynmultipush EclatIntro_Text_Litten, SPECIES_LITTEN
+	dynmultipush EclatIntro_Text_Scorbunny, SPECIES_SCORBUNNY
+	dynmultipush EclatIntro_Text_Fuecoco, SPECIES_FUECOCO
 	goto EclatIntro_ChooseStarter
 
 EclatIntro_WaterStarters:
@@ -39,6 +49,8 @@ EclatIntro_WaterStarters:
 	dynmultipush EclatIntro_Text_Oshawott, SPECIES_OSHAWOTT
 	dynmultipush EclatIntro_Text_Froakie, SPECIES_FROAKIE
 	dynmultipush EclatIntro_Text_Popplio, SPECIES_POPPLIO
+	dynmultipush EclatIntro_Text_Sobble, SPECIES_SOBBLE
+	dynmultipush EclatIntro_Text_Quaxly, SPECIES_QUAXLY
 	goto EclatIntro_ChooseStarter
 
 EclatIntro_GrassStarters:
@@ -49,6 +61,8 @@ EclatIntro_GrassStarters:
 	dynmultipush EclatIntro_Text_Snivy, SPECIES_SNIVY
 	dynmultipush EclatIntro_Text_Chespin, SPECIES_CHESPIN
 	dynmultipush EclatIntro_Text_Rowlet, SPECIES_ROWLET
+	dynmultipush EclatIntro_Text_Grookey, SPECIES_GROOKEY
+	dynmultipush EclatIntro_Text_Sprigatito, SPECIES_SPRIGATITO
 
 EclatIntro_ChooseStarter:
 	dynmultistack 18, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE
@@ -72,6 +86,36 @@ EclatIntro_ChooseStarter:
 	msgbox EclatIntro_Text_Mom, MSGBOX_DEFAULT
 	releaseall
 	end
+
+EclatIntro_Text_ShinyRates:
+	.string "This game features two rates\n"
+	.string "of shiny POKéMON.\p"
+	.string "You must choose between a rate\n"
+	.string "of 1/400 or 1/8192.\p"
+	.string "This choice cannot be\n"
+	.string "changed later.$"
+
+EclatIntro_Text_ChooseShinyRate:
+	.string "Do you want to use the\n"
+	.string "1/400 shiny rate?$"
+
+EclatIntro_Text_Scorbunny:
+	.string "Scorbunny$"
+
+EclatIntro_Text_Fuecoco:
+	.string "Fuecoco$"
+
+EclatIntro_Text_Sobble:
+	.string "Sobble$"
+
+EclatIntro_Text_Quaxly:
+	.string "Quaxly$"
+
+EclatIntro_Text_Grookey:
+	.string "Grookey$"
+
+EclatIntro_Text_Sprigatito:
+	.string "Sprigatito$"
 
 EclatIntro_Text_Bedroom:
 	.string "You're in your room,\n"

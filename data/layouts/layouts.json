@@ -103,13 +103,16 @@
     {
       "id": "LAYOUT_LITTLEROOT_TOWN",
       "name": "LittlerootTown_Layout",
-      "width": 20,
-      "height": 20,
-      "primary_tileset": "gTileset_General",
-      "secondary_tileset": "gTileset_Petalburg",
-      "border_filepath": "data/layouts/LittlerootTown/border.bin",
-      "blockdata_filepath": "data/layouts/LittlerootTown/map.bin",
-      "layout_version": "emerald"
+      "width": 48,
+      "height": 38,
+      "primary_tileset": "gTileset_EclatIvierePrimary",
+      "secondary_tileset": "gTileset_EclatIviereSecondary",
+      "border_filepath": "data/layouts/eclat_iviere/border.bin",
+      "blockdata_filepath": "data/layouts/eclat_iviere/map.bin",
+      "layout_version": "emerald",
+      "tile_format": "frlg",
+      "border_width": 2,
+      "border_height": 2
     },
     {
       "id": "LAYOUT_OLDALE_TOWN",
@@ -587,24 +590,30 @@
     {
       "id": "LAYOUT_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F",
       "name": "LittlerootTown_BrendansHouse_1F_Layout",
-      "width": 11,
-      "height": 9,
-      "primary_tileset": "gTileset_Building",
-      "secondary_tileset": "gTileset_BrendansMaysHouse",
-      "border_filepath": "data/layouts/LittlerootTown_BrendansHouse_1F/border.bin",
-      "blockdata_filepath": "data/layouts/LittlerootTown_BrendansHouse_1F/map.bin",
-      "layout_version": "emerald"
+      "width": 13,
+      "height": 10,
+      "primary_tileset": "gTileset_EclatHousePrimary",
+      "secondary_tileset": "gTileset_EclatHouseSecondary",
+      "border_filepath": "data/layouts/eclat_house_1f/border.bin",
+      "blockdata_filepath": "data/layouts/eclat_house_1f/map.bin",
+      "layout_version": "emerald",
+      "tile_format": "frlg",
+      "border_width": 2,
+      "border_height": 2
     },
     {
       "id": "LAYOUT_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F",
       "name": "LittlerootTown_BrendansHouse_2F_Layout",
-      "width": 9,
-      "height": 8,
-      "primary_tileset": "gTileset_Building",
-      "secondary_tileset": "gTileset_BrendansMaysHouse",
-      "border_filepath": "data/layouts/LittlerootTown_BrendansHouse_2F/border.bin",
-      "blockdata_filepath": "data/layouts/LittlerootTown_BrendansHouse_2F/map.bin",
-      "layout_version": "emerald"
+      "width": 12,
+      "height": 9,
+      "primary_tileset": "gTileset_EclatHousePrimary",
+      "secondary_tileset": "gTileset_EclatHouseSecondary",
+      "border_filepath": "data/layouts/eclat_house_2f/border.bin",
+      "blockdata_filepath": "data/layouts/eclat_house_2f/map.bin",
+      "layout_version": "emerald",
+      "tile_format": "frlg",
+      "border_width": 2,
+      "border_height": 2
     },
     {
       "id": "LAYOUT_LITTLEROOT_TOWN_MAYS_HOUSE_1F",

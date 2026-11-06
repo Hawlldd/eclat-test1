@@ -1541,3 +1541,59 @@ const struct Tileset gTileset_HallOfFame =
 };
 
 #endif // IS_FRLG
+
+static const u32 sTiles_EclatHousePrimary[] = INCBIN_U32("data/tilesets/primary/eclat_house/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_EclatHousePrimary[] = INCBIN_U16("data/tilesets/primary/eclat_house/palettes.bin");
+static const u16 sMetatiles_EclatHousePrimary[] = INCBIN_U16("data/tilesets/primary/eclat_house/metatiles.bin");
+static const u32 sAttributes_EclatHousePrimary[] = INCBIN_U32("data/tilesets/primary/eclat_house/metatile_attributes.bin");
+
+const struct Tileset gTileset_EclatHousePrimary =
+{
+    .isSecondary = FALSE,
+    .tiles = sTiles_EclatHousePrimary,
+    .palettes = (const u16 (*)[16])sPalettes_EclatHousePrimary,
+    .metatiles = sMetatiles_EclatHousePrimary,
+    .metatileAttributes = (const u16 *)sAttributes_EclatHousePrimary,
+};
+
+static const u32 sTiles_EclatHouseSecondary[] = INCBIN_U32("data/tilesets/secondary/eclat_house/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_EclatHouseSecondary[] = INCBIN_U16("data/tilesets/secondary/eclat_house/palettes.bin");
+static const u16 sMetatiles_EclatHouseSecondary[] = INCBIN_U16("data/tilesets/secondary/eclat_house/metatiles.bin");
+static const u32 sAttributes_EclatHouseSecondary[] = INCBIN_U32("data/tilesets/secondary/eclat_house/metatile_attributes.bin");
+
+const struct Tileset gTileset_EclatHouseSecondary =
+{
+    .isSecondary = TRUE,
+    .tiles = sTiles_EclatHouseSecondary,
+    .palettes = (const u16 (*)[16])sPalettes_EclatHouseSecondary,
+    .metatiles = sMetatiles_EclatHouseSecondary,
+    .metatileAttributes = (const u16 *)sAttributes_EclatHouseSecondary,
+};
+
+static const u32 sTiles_EclatIvierePrimary[] = INCBIN_U32("data/tilesets/primary/eclat_iviere/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_EclatIvierePrimary[] = INCBIN_U16("data/tilesets/primary/eclat_iviere/palettes.bin");
+static const u16 sMetatiles_EclatIvierePrimary[] = INCBIN_U16("data/tilesets/primary/eclat_iviere/metatiles.bin");
+static const u32 sAttributes_EclatIvierePrimary[] = INCBIN_U32("data/tilesets/primary/eclat_iviere/metatile_attributes.bin");
+
+const struct Tileset gTileset_EclatIvierePrimary =
+{
+    .isSecondary = FALSE,
+    .tiles = sTiles_EclatIvierePrimary,
+    .palettes = (const u16 (*)[16])sPalettes_EclatIvierePrimary,
+    .metatiles = sMetatiles_EclatIvierePrimary,
+    .metatileAttributes = (const u16 *)sAttributes_EclatIvierePrimary,
+};
+
+static const u32 sTiles_EclatIviereSecondary[] = INCBIN_U32("data/tilesets/secondary/eclat_iviere/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_EclatIviereSecondary[] = INCBIN_U16("data/tilesets/secondary/eclat_iviere/palettes.bin");
+static const u16 sMetatiles_EclatIviereSecondary[] = INCBIN_U16("data/tilesets/secondary/eclat_iviere/metatiles.bin");
+static const u32 sAttributes_EclatIviereSecondary[] = INCBIN_U32("data/tilesets/secondary/eclat_iviere/metatile_attributes.bin");
+
+const struct Tileset gTileset_EclatIviereSecondary =
+{
+    .isSecondary = TRUE,
+    .tiles = sTiles_EclatIviereSecondary,
+    .palettes = (const u16 (*)[16])sPalettes_EclatIviereSecondary,
+    .metatiles = sMetatiles_EclatIviereSecondary,
+    .metatileAttributes = (const u16 *)sAttributes_EclatIviereSecondary,
+};

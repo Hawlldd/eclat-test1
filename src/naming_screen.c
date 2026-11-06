@@ -1494,7 +1494,10 @@ static void NamingScreen_CreateRivalIcon(void)
 
     if (!IS_FRLG)
     {
-        NamingScreen_CreatePlayerIcon();
+        u16 graphicsId = GetRivalAvatarGraphicsIdByStateIdAndGender(PLAYER_AVATAR_STATE_NORMAL, (enum Gender)sNamingScreen->monSpecies);
+        spriteId = CreateObjectGraphicsSprite(graphicsId, SpriteCallbackDummy, 56, 37, 0);
+        gSprites[spriteId].oam.priority = 3;
+        StartSpriteAnim(&gSprites[spriteId], ANIM_STD_FACE_SOUTH);
         return;
     }
 

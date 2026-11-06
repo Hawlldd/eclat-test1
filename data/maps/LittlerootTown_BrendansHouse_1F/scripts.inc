@@ -1,8 +1,15 @@
 LittlerootTown_BrendansHouse_1F_MapScripts::
-	map_script MAP_SCRIPT_ON_LOAD, LittlerootTown_BrendansHouse_1F_OnLoad
-	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_BrendansHouse_1F_OnTransition
-	map_script MAP_SCRIPT_ON_FRAME_TABLE, LittlerootTown_BrendansHouse_1F_OnFrame
+	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_BrendansHouse_1F_EclatTransition
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, LittlerootTown_BrendansHouse_1F_EclatFrame
 	.byte 0
+
+LittlerootTown_BrendansHouse_1F_EclatTransition:
+	call LittlerootTown_BrendansHouse_1F_SetEclatObjects
+	end
+
+LittlerootTown_BrendansHouse_1F_EclatFrame:
+	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 8, LittlerootTown_BrendansHouse_1F_EclatRobbery
+	.2byte 0
 
 LittlerootTown_BrendansHouse_1F_OnLoad:
 	call_if_lt VAR_LITTLEROOT_INTRO_STATE, 6, LittlerootTown_BrendansHouse_1F_EventScript_SetMovingBoxes
@@ -87,7 +94,7 @@ LittlerootTown_BrendansHouse_1F_EclatRobbery:
 	msgbox EclatHouse_Text_Mom, MSGBOX_DEFAULT
 	msgbox EclatHouse_Text_Player, MSGBOX_DEFAULT
 	setvar VAR_LITTLEROOT_INTRO_STATE, 7
-	warp MAP_LITTLEROOT_TOWN, 5, 9
+	warp MAP_LITTLEROOT_TOWN, 22, 26
 	waitstate
 	end
 

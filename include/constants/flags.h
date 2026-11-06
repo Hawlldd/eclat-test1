@@ -52,8 +52,8 @@
 #else
 
 #define FLAG_HIDE_ECLAT_HOUSE_ROCKETS 0x20
-#define FLAG_UNUSED_0x021    0x21 // Unused Flag
-#define FLAG_UNUSED_0x022    0x22 // Unused Flag
+#define FLAG_ECLAT_BOOSTED_SHINY_RATE 0x21
+#define FLAG_HIDE_ECLAT_UNUSED_OBJECTS 0x22
 #define FLAG_UNUSED_0x023    0x23 // Unused Flag
 #define FLAG_UNUSED_0x024    0x24 // Unused Flag
 #define FLAG_UNUSED_0x025    0x25 // Unused Flag

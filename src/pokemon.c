@@ -893,6 +893,17 @@ bool32 ComputePlayerShinyOdds(u32 personality, u32 value)
     if (gDexNavSpecies)
         totalRerolls += CalculateDexNavShinyRolls();
 
+    if (FlagGet(FLAG_ECLAT_BOOSTED_SHINY_RATE))
+    {
+        // Apply the chosen rate to the initial roll and each earned reroll.
+        for (u32 roll = 0; roll <= totalRerolls; roll++)
+        {
+            if (RandomUniform(RNG_NONE, 0, 399) == 0)
+                return TRUE;
+        }
+        return FALSE;
+    }
+
     while (GET_SHINY_VALUE(value, personality) >= SHINY_ODDS && totalRerolls > 0)
     {
         personality = Random32();

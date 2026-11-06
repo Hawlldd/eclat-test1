@@ -296,3 +296,8 @@ Route101_Text_RouteSign:
 	.string "ROUTE 101\n"
 	.string "{UP_ARROW} OLDALE TOWN$"
 
+
+Route101_EventScript_ToIviere::
+	warp MAP_LITTLEROOT_TOWN, 37, 16
+	waitstate
+	end

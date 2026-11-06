@@ -808,12 +808,13 @@ string generate_layout_headers_text(Json layouts_data) {
              << "\t.4byte " << blockdata_label << "\n"
              << "\t.4byte " << json_to_string(layout, "primary_tileset") << "\n"
              << "\t.4byte " << json_to_string(layout, "secondary_tileset") << "\n";
-        if (layout_version == "frlg")
+        const bool uses_frlg_tiles = layout_version == "frlg" || json_to_string(layout, "tile_format", true) == "frlg";
+        if (uses_frlg_tiles)
             text << "\t.byte TRUE\n";
         else
             text << "\t.byte FALSE\n";
 
-        if (layout_version == "frlg")
+        if (uses_frlg_tiles)
         {
             text << "\t.byte " << json_to_string(layout, "border_width") << "\n"
                  << "\t.byte " << json_to_string(layout, "border_height") << "\n"

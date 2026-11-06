@@ -5789,7 +5789,18 @@ static const union AnimCmd sIviereFlybyAnim[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sIviereFlybyAnims[] = {sIviereFlybyAnim};
+static const union AnimCmd sIviereFlybyAnimLeft[] =
+{
+    ANIMCMD_FRAME(0, 8, .hFlip = TRUE),
+    ANIMCMD_FRAME(1, 8, .hFlip = TRUE),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd *const sIviereFlybyAnims[] =
+{
+    sIviereFlybyAnim,
+    sIviereFlybyAnimLeft,
+};
 
 static void SpriteCB_IviereFlyby(struct Sprite *sprite)
 {
@@ -5807,9 +5818,12 @@ static void SpriteCB_IviereFlyby(struct Sprite *sprite)
     }
 
     sprite->invisible = FALSE;
-    if (++sprite->x > DISPLAY_WIDTH + 16)
+    sprite->x += sprite->data[1] ? -1 : 1;
+    if (sprite->x < -16 || sprite->x > DISPLAY_WIDTH + 16)
     {
-        sprite->x = -16;
+        sprite->data[1] ^= 1;
+        sprite->x = sprite->data[1] ? DISPLAY_WIDTH + 16 : -16;
+        StartSpriteAnim(sprite, sprite->data[1]);
         sprite->data[0] = 48;
         sprite->invisible = TRUE;
     }

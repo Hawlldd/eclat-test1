@@ -1451,6 +1451,87 @@ static void CB2_EclatBroadcast_Resume(void)
     SetMainCallback2(CB2_MainMenu);
 }
 
+static const u32 sEclatShrinkTiles[] = INCBIN_U32("graphics/eclat_intro/trainer_shrink.bin");
+static const u16 sEclatShrinkPalette[16] = {RGB_BLACK, RGB_WHITE};
+
+static const struct OamData sEclatShrinkOam =
+{
+    .shape = SPRITE_SHAPE(64x64),
+    .size = SPRITE_SIZE(64x64),
+};
+
+static const struct SpriteFrameImage sEclatShrinkImages[] =
+{
+    {sEclatShrinkTiles, 2048},
+    {sEclatShrinkTiles + 512, 2048},
+    {sEclatShrinkTiles + 1024, 2048},
+    {sEclatShrinkTiles + 1536, 2048},
+};
+
+static const union AnimCmd sEclatShrinkAnim[] =
+{
+    ANIMCMD_FRAME(0, 10),
+    ANIMCMD_FRAME(1, 20),
+    ANIMCMD_FRAME(2, 20),
+    ANIMCMD_FRAME(3, 40),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd *const sEclatShrinkAnims[] = {sEclatShrinkAnim};
+
+#define TAG_ECLAT_SHRINK 0x7EC1
+
+static void Task_EclatBroadcast_FinishShrink(u8 taskId)
+{
+    u8 spriteId = gTasks[taskId].data[0];
+    if (gPaletteFade.active)
+        return;
+
+    DestroySprite(&gSprites[spriteId]);
+    FreeSpritePaletteByTag(TAG_ECLAT_SHRINK);
+    DestroyTask(taskId);
+    SetMainCallback2(CB2_NewGame);
+}
+
+static void Task_EclatBroadcast_WaitForShrink(u8 taskId)
+{
+    if (!gSprites[gTasks[taskId].data[0]].animEnded)
+        return;
+
+    BeginNormalPaletteFade(PALETTES_ALL, 1, 0, 16, RGB_BLACK);
+    gTasks[taskId].func = Task_EclatBroadcast_FinishShrink;
+}
+
+static void EclatBroadcast_StartShrink(void)
+{
+    static const struct SpritePalette palette = {sEclatShrinkPalette, TAG_ECLAT_SHRINK};
+    static const struct SpriteTemplate template =
+    {
+        .tileTag = TAG_NONE,
+        .paletteTag = TAG_ECLAT_SHRINK,
+        .oam = &sEclatShrinkOam,
+        .anims = sEclatShrinkAnims,
+        .images = sEclatShrinkImages,
+        .affineAnims = gDummySpriteAffineAnimTable,
+        .callback = SpriteCallbackDummy,
+    };
+
+    ResetSpriteData();
+    FreeAllSpritePalettes();
+    LoadSpritePalette(&palette);
+    SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
+    u8 spriteId = CreateSprite(&template, DISPLAY_WIDTH / 2, DISPLAY_HEIGHT / 2, 0);
+    if (spriteId >= MAX_SPRITES)
+    {
+        SetMainCallback2(CB2_NewGame);
+        return;
+    }
+
+    u8 taskId = CreateTask(Task_EclatBroadcast_WaitForShrink, 0);
+    gTasks[taskId].data[0] = spriteId;
+}
+
+
 static void Task_EclatBroadcast_LeaveScreen(u8 taskId)
 {
     u8 beat = sEclatBroadcastBeat;
@@ -1472,7 +1553,7 @@ static void Task_EclatBroadcast_LeaveScreen(u8 taskId)
         DoRequiredNamingScreen(NAMING_SCREEN_RIVAL, sEclatPendingName, FEMALE, CB2_EclatBroadcast_Resume);
         break;
     case ECLAT_BEAT_SIGN_OFF:
-        SetMainCallback2(CB2_NewGame);
+        EclatBroadcast_StartShrink();
         break;
     }
 }

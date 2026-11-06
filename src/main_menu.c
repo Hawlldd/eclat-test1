@@ -1319,6 +1319,11 @@ enum
 };
 
 static EWRAM_DATA u8 sEclatBroadcastBeat = ECLAT_BEAT_GREETING;
+static EWRAM_DATA u8 sEclatPendingName[PLAYER_NAME_LENGTH + 1] = {0};
+static EWRAM_DATA bool8 sEclatConfirmName = FALSE;
+
+static const u8 sText_EclatConfirmPlayer[] = _("Is {STR_VAR_1} your name?");
+static const u8 sText_EclatConfirmRival[] = _("Is {STR_VAR_1} your rival's name?");
 
 static const u8 sText_EclatGreeting[] = _(
     "Hello dear viewers!\n"
@@ -1386,13 +1391,24 @@ static const struct BgTemplate sEclatBroadcastBgTemplate =
 
 static void Task_EclatBroadcast_WaitForInput(u8 taskId);
 static void Task_EclatBroadcast_Setup(u8 taskId);
+static void Task_EclatBroadcast_CreateNameMenu(u8 taskId);
 
 static void EclatBroadcast_ShowBeat(void)
 {
     const u16 *map = &sEclatBroadcastMaps[sEclatBroadcast[sEclatBroadcastBeat].scene * (32 * 32)];
     DmaCopy16(3, map, (void *)BG_SCREEN_ADDR(8), 32 * 32 * sizeof(u16));
     NewGameBirchSpeech_ClearWindow(0);
-    StringExpandPlaceholders(gStringVar4, sEclatBroadcast[sEclatBroadcastBeat].text);
+    if (sEclatConfirmName)
+    {
+        const u8 *text = sEclatBroadcastBeat == ECLAT_BEAT_PLAYER
+                       ? sText_EclatConfirmPlayer : sText_EclatConfirmRival;
+        StringCopy(gStringVar1, sEclatPendingName);
+        StringExpandPlaceholders(gStringVar4, text);
+    }
+    else
+    {
+        StringExpandPlaceholders(gStringVar4, sEclatBroadcast[sEclatBroadcastBeat].text);
+    }
     AddTextPrinterForMessage(TRUE);
     if (sEclatBroadcastBeat == ECLAT_BEAT_RAID)
         PlayCry_Normal(SPECIES_ALAKAZAM, 0);
@@ -1400,6 +1416,7 @@ static void EclatBroadcast_ShowBeat(void)
 
 static void CB2_EclatBroadcast_Resume(void)
 {
+    sEclatConfirmName = (sEclatPendingName[0] != EOS);
     SetVBlankCallback(NULL);
     ResetBgsAndClearDma3BusyFlags(0);
     ResetTasks();
@@ -1427,12 +1444,10 @@ static void Task_EclatBroadcast_LeaveScreen(u8 taskId)
     switch (beat)
     {
     case ECLAT_BEAT_PLAYER:
-        sEclatBroadcastBeat = ECLAT_BEAT_RIVAL;
-        DoNamingScreen(NAMING_SCREEN_PLAYER, gSaveBlock2Ptr->playerName, MALE, 0, 0, CB2_EclatBroadcast_Resume);
+        DoRequiredNamingScreen(NAMING_SCREEN_PLAYER, sEclatPendingName, MALE, CB2_EclatBroadcast_Resume);
         break;
     case ECLAT_BEAT_RIVAL:
-        sEclatBroadcastBeat = ECLAT_BEAT_ADVICE;
-        DoNamingScreen(NAMING_SCREEN_RIVAL, gSaveBlock1Ptr->rivalName, FEMALE, 0, 0, CB2_EclatBroadcast_Resume);
+        DoRequiredNamingScreen(NAMING_SCREEN_RIVAL, sEclatPendingName, FEMALE, CB2_EclatBroadcast_Resume);
         break;
     case ECLAT_BEAT_SIGN_OFF:
         SetMainCallback2(CB2_NewGame);
@@ -1449,6 +1464,8 @@ static void Task_EclatBroadcast_WaitForInput(u8 taskId)
     {
     case ECLAT_BEAT_PLAYER:
     case ECLAT_BEAT_RIVAL:
+        sEclatPendingName[0] = EOS;
+        // fall through
     case ECLAT_BEAT_SIGN_OFF:
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
         gTasks[taskId].func = Task_EclatBroadcast_LeaveScreen;
@@ -1459,6 +1476,40 @@ static void Task_EclatBroadcast_WaitForInput(u8 taskId)
         break;
     }
 }
+
+static void Task_EclatBroadcast_ConfirmName(u8 taskId)
+{
+    switch (Menu_ProcessInputNoWrapClearOnChoose())
+    {
+    case 0:
+        if (sEclatBroadcastBeat == ECLAT_BEAT_PLAYER)
+            StringCopy(gSaveBlock2Ptr->playerName, sEclatPendingName);
+        else
+            StringCopy(gSaveBlock1Ptr->rivalName, sEclatPendingName);
+
+        sEclatConfirmName = FALSE;
+        sEclatBroadcastBeat++;
+        EclatBroadcast_ShowBeat();
+        gTasks[taskId].func = Task_EclatBroadcast_WaitForInput;
+        break;
+    case 1:
+    case MENU_B_PRESSED:
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+        gTasks[taskId].func = Task_EclatBroadcast_LeaveScreen;
+        break;
+    }
+}
+
+static void Task_EclatBroadcast_CreateNameMenu(u8 taskId)
+{
+    if (gPaletteFade.active || RunTextPrintersAndIsPrinter0Active())
+        return;
+
+    LoadMainMenuWindowFrameTiles(0, 0xF3);
+    CreateYesNoMenuParameterized(21, 8, 0xF3, 0xDF, 2, 15);
+    gTasks[taskId].func = Task_EclatBroadcast_ConfirmName;
+}
+
 
 static void Task_EclatBroadcast_Setup(u8 taskId)
 {
@@ -1486,12 +1537,13 @@ static void Task_EclatBroadcast_Setup(u8 taskId)
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
     ShowBg(0);
     ShowBg(1);
-    gTasks[taskId].func = Task_EclatBroadcast_WaitForInput;
+    gTasks[taskId].func = sEclatConfirmName ? Task_EclatBroadcast_CreateNameMenu : Task_EclatBroadcast_WaitForInput;
 }
 
 static void Task_EclatBroadcast_Init(u8 taskId)
 {
     sEclatBroadcastBeat = ECLAT_BEAT_GREETING;
+    sEclatConfirmName = FALSE;
     gSaveBlock2Ptr->playerGender = MALE;
     Task_EclatBroadcast_Setup(taskId);
 }

@@ -160,6 +160,8 @@ struct NamingScreenData
     u8 tilemapBuffer2[0x800];
     u8 tilemapBuffer3[0x800];
     u8 textBuffer[16];
+    bool8 requireInput;
+    bool8 invalidInput;
     u8 tileBuffer[0x600];
     u8 state;
     u8 windows[WIN_COUNT];
@@ -381,7 +383,8 @@ static u8 GetTextEntryPosition(void);
 static void DeleteTextCharacter(void);
 static bool8 AddTextCharacter(void);
 static void BufferCharacter(u8);
-static void SaveInputText(void);
+static bool8 SaveInputText(void);
+static void SetInvalidInput(bool8 invalid);
 static void LoadGfx(void);
 static void CreateHelperTasks(void);
 static void LoadPalettes(void);
@@ -400,7 +403,7 @@ static bool8 IsWideLetter(u8);
 
 static const u8 sText_MoveOkBack[] = _("{DPAD_NONE}MOVE  {A_BUTTON}OK  {B_BUTTON}BACK");
 
-void DoNamingScreen(u8 templateNum, u8 *destBuffer, u16 monSpeciesOrPlayerGender, u16 monGender, u32 monPersonality, MainCallback returnCallback)
+static void StartNamingScreen(u8 templateNum, u8 *destBuffer, u16 monSpeciesOrPlayerGender, u16 monGender, u32 monPersonality, MainCallback returnCallback, bool8 requireInput)
 {
     sNamingScreen = Alloc(sizeof(struct NamingScreenData));
     if (!sNamingScreen)
@@ -410,6 +413,8 @@ void DoNamingScreen(u8 templateNum, u8 *destBuffer, u16 monSpeciesOrPlayerGender
     else
     {
         sNamingScreen->templateNum = templateNum;
+        sNamingScreen->requireInput = requireInput;
+        sNamingScreen->invalidInput = FALSE;
         sNamingScreen->monSpecies = monSpeciesOrPlayerGender;
         sNamingScreen->monGender = monGender;
         sNamingScreen->monPersonality = monPersonality;
@@ -422,6 +427,17 @@ void DoNamingScreen(u8 templateNum, u8 *destBuffer, u16 monSpeciesOrPlayerGender
         SetMainCallback2(CB2_LoadNamingScreen);
     }
 }
+
+void DoNamingScreen(u8 templateNum, u8 *destBuffer, u16 monSpeciesOrPlayerGender, u16 monGender, u32 monPersonality, MainCallback returnCallback)
+{
+    StartNamingScreen(templateNum, destBuffer, monSpeciesOrPlayerGender, monGender, monPersonality, returnCallback, FALSE);
+}
+
+void DoRequiredNamingScreen(u8 templateNum, u8 *destBuffer, u16 gender, MainCallback returnCallback)
+{
+    StartNamingScreen(templateNum, destBuffer, gender, 0, 0, returnCallback, TRUE);
+}
+
 
 static void CB2_LoadNamingScreen(void)
 {
@@ -486,7 +502,7 @@ static void NamingScreen_Init(void)
         sNamingScreen->inputCharBaseXPos += 11;
     sNamingScreen->keyRepeatStartDelayCopy = gKeyRepeatStartDelay;
     memset(sNamingScreen->textBuffer, EOS, sizeof(sNamingScreen->textBuffer));
-    if (sNamingScreen->template->copyExistingString)
+    if (sNamingScreen->template->copyExistingString || sNamingScreen->requireInput)
         StringCopy(sNamingScreen->textBuffer, sNamingScreen->destBuffer);
     gKeyRepeatStartDelay = 16;
 }
@@ -676,7 +692,13 @@ static bool8 MainState_MoveToOKButton(void)
 
 static bool8 MainState_PressedOKButton(void)
 {
-    SaveInputText();
+    if (!SaveInputText() && sNamingScreen->requireInput)
+    {
+        PlaySE(SE_FAILURE);
+        SetInvalidInput(TRUE);
+        sNamingScreen->state = STATE_HANDLE_INPUT;
+        return FALSE;
+    }
     SetInputState(INPUT_STATE_DISABLED);
     SetCursorFlashing(FALSE);
     TryStartButtonFlash(BUTTON_COUNT, FALSE, TRUE);
@@ -1776,8 +1798,10 @@ static void HandleDpadMovement(struct Task *task)
 
 static void DrawNormalTextEntryBox(void)
 {
+    const u8 *title = sNamingScreen->invalidInput ? COMPOUND_STRING("Enter a name.") : sNamingScreen->template->title;
+
     FillWindowPixelBuffer(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX], PIXEL_FILL(1));
-    AddTextPrinterParameterized(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX], FONT_NORMAL, sNamingScreen->template->title, 8, 1, 0, 0);
+    AddTextPrinterParameterized(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX], FONT_NORMAL, title, 8, 1, 0, 0);
     PutWindowTilemap(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX]);
 }
 
@@ -1807,6 +1831,13 @@ static void (*const sDrawTextEntryBoxFuncs[])(void) =
 static void DrawTextEntryBox(void)
 {
     sDrawTextEntryBoxFuncs[sNamingScreen->templateNum]();
+}
+
+static void SetInvalidInput(bool8 invalid)
+{
+    sNamingScreen->invalidInput = invalid;
+    DrawTextEntryBox();
+    CopyWindowToVram(sNamingScreen->windows[WIN_TEXT_ENTRY_BOX], COPYWIN_GFX);
 }
 
 static void DummyGenderIcon(void);
@@ -1922,21 +1953,39 @@ static void BufferCharacter(u8 ch)
 {
     u8 index = GetTextEntryPosition();
     sNamingScreen->textBuffer[index] = ch;
+    if (sNamingScreen->invalidInput && ch != CHAR_SPACE)
+        SetInvalidInput(FALSE);
 }
 
-static void SaveInputText(void)
+static bool8 SaveInputText(void)
 {
-    u8 i;
+    u8 first;
+    u8 end = 0;
 
-    for (i = 0; i < sNamingScreen->template->maxChars; i++)
+    while (end < sNamingScreen->template->maxChars && sNamingScreen->textBuffer[end] != EOS)
+        end++;
+
+    for (first = 0; first < end && sNamingScreen->textBuffer[first] == CHAR_SPACE; first++)
+        ;
+
+    if (first == end)
+        return FALSE;
+
+    if (sNamingScreen->requireInput)
     {
-        if (sNamingScreen->textBuffer[i] != CHAR_SPACE && sNamingScreen->textBuffer[i] != EOS)
-        {
-            StringCopyN(sNamingScreen->destBuffer, sNamingScreen->textBuffer, sNamingScreen->template->maxChars + 1);
-            break;
-        }
+        while (sNamingScreen->textBuffer[end - 1] == CHAR_SPACE)
+            end--;
+
+        memcpy(sNamingScreen->destBuffer, &sNamingScreen->textBuffer[first], end - first);
+        sNamingScreen->destBuffer[end - first] = EOS;
     }
+    else
+    {
+        StringCopyN(sNamingScreen->destBuffer, sNamingScreen->textBuffer, sNamingScreen->template->maxChars + 1);
+    }
+    return TRUE;
 }
+
 
 static void LoadGfx(void)
 {

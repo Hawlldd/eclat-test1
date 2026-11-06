@@ -1,3 +1,7 @@
+static const struct SpriteFrameImage sPicTable_FilaoTableMap[] = {
+    overworld_frame(sFilaoTableMapTiles, 4, 2, 0),
+};
+
 static const struct SpriteFrameImage sPicTable_IviereChild[] = {
     overworld_ascending_frames(sIviereChildTiles, 2, 2),
 };

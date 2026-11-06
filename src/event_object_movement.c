@@ -4121,6 +4121,11 @@ bool8 MovementType_LookAround_Step2(struct ObjectEvent *objectEvent, struct Spri
 {
     if (ObjectEventExecSingleMovementAction(objectEvent, sprite))
     {
+        if (objectEvent->graphicsId == OBJ_EVENT_GFX_ECLAT_TOWN_MON)
+        {
+            StartSpriteAnim(sprite, GetMoveDirectionAnimNum(objectEvent->facingDirection));
+            sprite->animPaused = FALSE;
+        }
         SetMovementDelay(sprite, sMovementDelaysMedium[Random() % ARRAY_COUNT(sMovementDelaysMedium)]);
         objectEvent->singleMovementActive = FALSE;
         sprite->sTypeFuncId = 3;

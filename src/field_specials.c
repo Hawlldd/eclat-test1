@@ -1640,7 +1640,7 @@ u8 GetLeadMonIndex(void)
 
 enum Species ScriptGetPartyMonSpecies(void)
 {
-    return GetMonData(&gParties[B_TRAINER_PLAYER][gSpecialVar_0x8004], MON_DATA_SPECIES_OR_EGG, NULL);
+    return GetBoxMonData(GetSelectedBoxMonFromPcOrParty(), MON_DATA_SPECIES_OR_EGG);
 }
 
 // Removed for Emerald
@@ -5804,29 +5804,25 @@ static const union AnimCmd *const sIviereFlybyAnims[] =
 
 static void SpriteCB_IviereFlyby(struct Sprite *sprite)
 {
-    if (gSaveBlock1Ptr->pos.x < 14 || gSaveBlock1Ptr->pos.x > 33
-     || gSaveBlock1Ptr->pos.y < 19 || gSaveBlock1Ptr->pos.y > 32)
-    {
-        sprite->invisible = TRUE;
-        return;
-    }
+    enum { IVIERE_FLYBY_DISTANCE = 144 };
 
     if (sprite->data[0] > 0)
-    {
         sprite->data[0]--;
-        return;
+    else
+    {
+        sprite->data[2] += sprite->data[1] ? -1 : 1;
+        if (sprite->data[2] == 0 || sprite->data[2] == IVIERE_FLYBY_DISTANCE)
+        {
+            sprite->data[1] ^= 1;
+            StartSpriteAnim(sprite, sprite->data[1]);
+        }
     }
 
-    sprite->invisible = FALSE;
-    sprite->x += sprite->data[1] ? -1 : 1;
-    if (sprite->x < -16 || sprite->x > DISPLAY_WIDTH + 16)
-    {
-        sprite->data[1] ^= 1;
-        sprite->x = sprite->data[1] ? DISPLAY_WIDTH + 16 : -16;
-        StartSpriteAnim(sprite, sprite->data[1]);
-        sprite->data[0] = 48;
-        sprite->invisible = TRUE;
-    }
+    SetSpritePosToMapCoords(14 + MAP_OFFSET, 22 + MAP_OFFSET, &sprite->x, &sprite->y);
+    sprite->x += 8 + sprite->data[2];
+    sprite->y += 16;
+    sprite->invisible = sprite->x < -16 || sprite->x > DISPLAY_WIDTH + 16
+                     || sprite->y < -16 || sprite->y > DISPLAY_HEIGHT + 16;
 }
 
 void StartIviereFlyby(void)
@@ -5855,6 +5851,9 @@ void StartIviereFlyby(void)
     if (id < MAX_SPRITES)
     {
         gSprites[id].invisible = TRUE;
-        gSprites[id].data[0] = 24;
+        gSprites[id].data[0] = 8;
+        gSprites[id].data[1] = 1;
+        gSprites[id].data[2] = 144;
+        StartSpriteAnim(&gSprites[id], 1);
     }
 }

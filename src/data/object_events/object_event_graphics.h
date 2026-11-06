@@ -1,3 +1,4 @@
+static const u32 sFilaoTableMapTiles[] = INCBIN_U32("graphics/eclat_intro/filao_table_map.bin");
 static const u32 sIviereChildTiles[] = INCBIN_U32("graphics/eclat_intro/npc_ivierechild.bin");
 static const u32 sIviereRiverNpcTiles[] = INCBIN_U32("graphics/eclat_intro/npc_iviererivernpc.bin");
 static const u32 sFilaoWifeTiles[] = INCBIN_U32("graphics/eclat_intro/npc_filaowife.bin");

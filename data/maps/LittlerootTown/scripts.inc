@@ -1037,8 +1037,28 @@ IviereTown_EventScript_NameRater::
 	lock
 	faceplayer
 	msgbox IviereTown_Text_NameRater, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, SlateportCity_NameRatersHouse_EventScript_ChooseMonToRate
+	goto_if_eq VAR_RESULT, NO, SlateportCity_NameRatersHouse_EventScript_DeclineNameRate
+	closemessage
+	dynmultichoice 18, 2, FALSE, 3, 0, DYN_MULTICHOICE_CB_NONE, IviereTown_Text_Party, IviereTown_Text_Box, IviereTown_Text_Cancel
+	goto_if_eq VAR_RESULT, 0, IviereTown_EventScript_RatePartyMon
+	goto_if_eq VAR_RESULT, 1, SlateportCity_NameRatersHouse_EventScript_ChooseMonToRate
 	goto SlateportCity_NameRatersHouse_EventScript_DeclineNameRate
+
+IviereTown_EventScript_RatePartyMon:
+	special ChoosePartyMon
+	waitstate
+	goto_if_eq VAR_0x8004, PARTY_NOTHING_CHOSEN, SlateportCity_NameRatersHouse_EventScript_DeclineNameRate
+	goto SlateportCity_NameRatersHouse_EventScript_RateMonNickname
+
+IviereTown_Text_Party:
+	.string "Party$"
+
+IviereTown_Text_Box:
+	.string "Box$"
+
+IviereTown_Text_Cancel:
+	.string "Cancel$"
+
 
 IviereTown_EventScript_Child::
 	msgbox IviereTown_Text_Child, MSGBOX_NPC

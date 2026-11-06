@@ -411,7 +411,9 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FilaoWife;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FilaoAide;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_IviereNameRater;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Filao;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FilaoTableMap;
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
+    [OBJ_EVENT_GFX_IVIERE_TOWN_MAP] = &gObjectEventGraphicsInfo_FilaoTableMap,
     [OBJ_EVENT_GFX_IVIERE_CHILD] = &gObjectEventGraphicsInfo_IviereChild,
     [OBJ_EVENT_GFX_IVIERE_RIVER_NPC] = &gObjectEventGraphicsInfo_IviereRiverNpc,
     [OBJ_EVENT_GFX_FILAO_WIFE] = &gObjectEventGraphicsInfo_FilaoWife,

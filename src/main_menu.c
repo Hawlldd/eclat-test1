@@ -1389,6 +1389,26 @@ static const struct BgTemplate sEclatBroadcastBgTemplate =
     .priority = 3,
 };
 
+static const struct WindowTemplate sEclatBroadcastWindows[] =
+{
+    {
+        .bg = 0,
+        .tilemapTop = 15,
+        .width = 30,
+        .height = 4,
+        .paletteNum = 15,
+        .baseBlock = 1,
+    },
+    DUMMY_WIN_TEMPLATE,
+};
+
+static const u16 sEclatDialogPalette[16] =
+{
+    RGB_BLACK, RGB(5, 5, 5), RGB_WHITE, RGB_BLACK,
+};
+static const u8 sEclatDialogColors[] = {TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY, TEXT_COLOR_LIGHT_GRAY};
+
+
 static void Task_EclatBroadcast_WaitForInput(u8 taskId);
 static void Task_EclatBroadcast_Setup(u8 taskId);
 static void Task_EclatBroadcast_CreateNameMenu(u8 taskId);
@@ -1397,7 +1417,8 @@ static void EclatBroadcast_ShowBeat(void)
 {
     const u16 *map = &sEclatBroadcastMaps[sEclatBroadcast[sEclatBroadcastBeat].scene * (32 * 32)];
     DmaCopy16(3, map, (void *)BG_SCREEN_ADDR(8), 32 * 32 * sizeof(u16));
-    NewGameBirchSpeech_ClearWindow(0);
+    FillWindowPixelBuffer(0, PIXEL_FILL(TEXT_COLOR_WHITE));
+    CopyWindowToVram(0, COPYWIN_GFX);
     if (sEclatConfirmName)
     {
         const u8 *text = sEclatBroadcastBeat == ECLAT_BEAT_PLAYER
@@ -1409,7 +1430,8 @@ static void EclatBroadcast_ShowBeat(void)
     {
         StringExpandPlaceholders(gStringVar4, sEclatBroadcast[sEclatBroadcastBeat].text);
     }
-    AddTextPrinterForMessage(TRUE);
+    gTextFlags.canABSpeedUpPrint = TRUE;
+    AddTextPrinterParameterized4(0, FONT_SMALL, 16, 1, 0, 2, sEclatDialogColors, GetPlayerTextSpeedDelay(), gStringVar4);
     if (sEclatBroadcastBeat == ECLAT_BEAT_RAID)
         PlayCry_Normal(SPECIES_ALAKAZAM, 0);
 }
@@ -1505,8 +1527,11 @@ static void Task_EclatBroadcast_CreateNameMenu(u8 taskId)
     if (gPaletteFade.active || RunTextPrintersAndIsPrinter0Active())
         return;
 
-    LoadMainMenuWindowFrameTiles(0, 0xF3);
-    CreateYesNoMenuParameterized(21, 8, 0xF3, 0xDF, 2, 15);
+    const struct TilesPal *frame = GetWindowFrameTilesPal(gSaveBlock2Ptr->optionsWindowFrameType);
+    LoadBgTiles(0, frame->tiles, 0x120, 0xF3);
+    // The broadcast uses 8bpp BG colors in the lower palette banks.
+    LoadPalette(frame->pal, BG_PLTT_ID(14), PLTT_SIZE_4BPP);
+    CreateYesNoMenuParameterized(21, 8, 0xF3, 0xDF, 14, 15);
     gTasks[taskId].func = Task_EclatBroadcast_ConfirmName;
 }
 
@@ -1528,11 +1553,10 @@ static void Task_EclatBroadcast_Setup(u8 taskId)
     DmaFill16(3, 0, (void *)BG_SCREEN_ADDR(30), 32 * 32 * sizeof(u16));
     LoadPalette(sEclatBroadcastPalette, 0, sizeof(sEclatBroadcastPalette));
 
-    InitWindows(sNewGameBirchSpeechTextWindows);
-    LoadMessageBoxGfx(0, BIRCH_DLG_BASE_TILE_NUM, BG_PLTT_ID(15));
-    DrawDialogFrameWithCustomTile(0, TRUE, BIRCH_DLG_BASE_TILE_NUM);
+    InitWindows(sEclatBroadcastWindows);
+    LoadPalette(sEclatDialogPalette, BG_PLTT_ID(15), sizeof(sEclatDialogPalette));
     PutWindowTilemap(0);
-    CopyWindowToVram(0, COPYWIN_GFX);
+    CopyWindowToVram(0, COPYWIN_MAP);
     EclatBroadcast_ShowBeat();
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
     ShowBg(0);

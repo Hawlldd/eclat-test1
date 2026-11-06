@@ -191,6 +191,7 @@ static void HighlightSelectedMainMenuItem(enum PartyMenuType, u8, s16);
 static void Task_HandleMainMenuInput(u8);
 static void Task_HandleMainMenuAPressed(u8);
 static void Task_HandleMainMenuBPressed(u8);
+static void Task_EclatBroadcast_Init(u8);
 static void Task_NewGameBirchSpeech_Init(u8);
 static void Task_DisplayMainMenuInvalidActionError(u8);
 static void AddBirchSpeechObjects(u8);
@@ -1091,7 +1092,7 @@ static void Task_HandleMainMenuAPressed(u8 taskId)
 
             gPlttBufferUnfaded[0] = RGB_BLACK;
             gPlttBufferFaded[0] = RGB_BLACK;
-            gTasks[taskId].func = Task_NewGameBirchSpeech_Init;
+            gTasks[taskId].func = Task_EclatBroadcast_Init;
             break;
         case ACTION_CONTINUE:
             gPlttBufferUnfaded[0] = RGB_BLACK;
@@ -1293,6 +1294,80 @@ static void HighlightSelectedMainMenuItem(enum PartyMenuType menuType, u8 select
 #define tLotadSpriteId data[9]
 #define tBrendanSpriteId data[10]
 #define tMaySpriteId data[11]
+
+static const u16 sEclatBroadcastTiles[] = INCBIN_U16("graphics/eclat_intro/broadcast_tiles.bin");
+static const u16 sEclatBroadcastMap[] = INCBIN_U16("graphics/eclat_intro/broadcast_map.bin");
+static const u16 sEclatBroadcastPalette[] = INCBIN_U16("graphics/eclat_intro/broadcast_palette.bin");
+
+static const u8 sText_EclatBroadcast[] = _(
+    "Hello dear viewers!\n"
+    "I am NATHALIE REDOUX, your\l"
+    "journalist on CHANNEL 6.\p"
+    "This is a emergency news flash,\n"
+    "We'll be reporting about the\l"
+    "recent crime wave.");
+
+static const struct BgTemplate sEclatBroadcastBgTemplate =
+{
+    .bg = 1,
+    .charBaseIndex = 0,
+    .mapBaseIndex = 7,
+    .paletteMode = 1,
+    .priority = 3,
+};
+
+static void Task_EclatBroadcast_ReturnToIntro(u8 taskId)
+{
+    if (gPaletteFade.active)
+        return;
+
+    HideBg(0);
+    HideBg(1);
+    FreeAllWindowBuffers();
+    DmaFill16(3, 0, (void *)BG_SCREEN_ADDR(30), sizeof(sEclatBroadcastMap));
+    InitBgFromTemplate(&sMainMenuBgTemplates[1]);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_Init;
+}
+
+static void Task_EclatBroadcast_WaitForInput(u8 taskId)
+{
+    if (gPaletteFade.active || RunTextPrintersAndIsPrinter0Active() || !JOY_NEW(A_BUTTON))
+        return;
+
+    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
+    gTasks[taskId].func = Task_EclatBroadcast_ReturnToIntro;
+}
+
+static void Task_EclatBroadcast_Init(u8 taskId)
+{
+    HideBg(0);
+    HideBg(1);
+    ScanlineEffect_Stop();
+    SetGpuReg(REG_OFFSET_DISPCNT, 0);
+    SetGpuReg(REG_OFFSET_BLDCNT, 0);
+    SetGpuReg(REG_OFFSET_BG1HOFS, 0);
+    SetGpuReg(REG_OFFSET_BG1VOFS, 0);
+    InitBgFromTemplate(&sBirchBgTemplate);
+    InitBgFromTemplate(&sEclatBroadcastBgTemplate);
+    DmaCopy16(3, sEclatBroadcastTiles, VRAM, sizeof(sEclatBroadcastTiles));
+    DmaCopy16(3, sEclatBroadcastMap, (void *)BG_SCREEN_ADDR(7), sizeof(sEclatBroadcastMap));
+    DmaFill16(3, 0, (void *)BG_SCREEN_ADDR(30), sizeof(sEclatBroadcastMap));
+    LoadPalette(sEclatBroadcastPalette, 0, sizeof(sEclatBroadcastPalette));
+
+    InitWindows(sNewGameBirchSpeechTextWindows);
+    LoadMessageBoxGfx(0, BIRCH_DLG_BASE_TILE_NUM, BG_PLTT_ID(15));
+    DrawDialogFrameWithCustomTile(0, TRUE, BIRCH_DLG_BASE_TILE_NUM);
+    PutWindowTilemap(0);
+    CopyWindowToVram(0, COPYWIN_GFX);
+    NewGameBirchSpeech_ClearWindow(0);
+    StringExpandPlaceholders(gStringVar4, sText_EclatBroadcast);
+    AddTextPrinterForMessage(TRUE);
+    BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
+    ShowBg(0);
+    ShowBg(1);
+    gTasks[taskId].func = Task_EclatBroadcast_WaitForInput;
+}
+
 
 static void Task_NewGameBirchSpeech_Init(u8 taskId)
 {

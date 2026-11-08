@@ -352,4 +352,24 @@ Na ligação da ROM, dez IDs gráficos da Route 2 não tinham descritores: os tr
   - ROM atualizada: `eclat-intro-teste.gba`.
   - SHA-256: `27D50FC7B7E8CB70E76BCF472D1287B90EB0A25C3DE9FA91C60B72594A61D347`.
 
+### Correção de Glitch ao Trocar Bolso para Direita e Alinhamento da Descrição — 08/11/2026
+
+- **Sintomas**:
+  1. Ao navegar para a direita entre os bolsos, o nome do bolso apresentava caracteres corrompidos (`''""`) no canto direito do visor, enquanto ao navegar para a esquerda o texto ficava normal.
+  2. O texto da descrição dos itens ficava colado na borda superior ciano (`y = 113`) e muito próximo da caixa branca do ícone do item.
+- **Causa identificada**:
+  1. No Emerald, a animação de deslizar o nome do bolso fazia cópia em buffer offscreen (`pocketNameBuffer`). Como o buffer na struct `BagMenu` tinha tamanho fixo de 32 tiles, ao deslizar para a direita (`timer >> 1 == 9`), os índices de cópia da linha inferior alcançavam os tiles 27 a 35, ultrapassando os 32 tiles alocados e lendo memória não inicializada da RAM (gerando caracteres de pontuação aleatórios). Ao navegar para a esquerda, os tiles acessados nunca passavam do índice 26, mantendo-se dentro do buffer.
+  2. No Unbound autêntico (offset `0x1087ec` do disassembly da ROM), o nome do bolso não sofre animação de deslizamento de texto: o Cube rotaciona no painel e o nome do bolso atualiza diretamente na janela (`WIN_POCKET_NAME`).
+  3. No Unbound autêntico (`step_6885_media_0.png`), o texto da descrição inicia em `x = 46` e `y = 120`, ficando alinhado perfeitamente com a caixa branca do ícone do item (`y = 120..152`) e com margem agradável sob a linha ciano.
+- **Correções aplicadas**:
+  - `src/item_menu.c`:
+    - `PrintPocketNames` atualizado para desenhar o nome do bolso diretamente em `WIN_POCKET_NAME` centralizado (72 px) com `CopyWindowToVram`, eliminando o overflow de buffer offscreen e garantindo transição 100% limpa tanto para a direita quanto para a esquerda.
+    - `Task_SwitchBagPocket`: simplificada a máquina de estados para manter a rotação suave do Cube por 16 frames e sincronizar a atualização do inventário sem deslizamento de tiles na VRAM.
+    - `BAG_DESCRIPTION_TEXT_LEFT` ajustado para `6` (tela `x = 46`).
+    - `BAG_DESCRIPTION_TEXT_TOP` definido como `4` (tela `y = 116`), alinhando o texto à altura do ícone do item e afastando-o da borda ciano superior.
+- **Validação**:
+  - Compilação concluída com sucesso via `./build.sh` (0 erros, 0 avisos).
+  - ROM atualizada: `eclat-intro-teste.gba`.
+  - SHA-256: `C5E2BB497020D97B79BF5C34481C8A01DF603A2E115ED2E4AB82276E0A673F38`.
+
 

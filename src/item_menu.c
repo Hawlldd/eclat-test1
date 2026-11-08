@@ -64,8 +64,8 @@
                             max(BAG_KEYITEMS_COUNT,          \
                                 BAG_POKEBALLS_COUNT))))) + 1)
 
-// Up to 8 item slots can be visible at a time
-#define MAX_ITEMS_SHOWN 8
+// Up to 5 item slots can be visible at a time
+#define MAX_ITEMS_SHOWN 5
 
 enum {
     SWITCH_POCKET_NONE,
@@ -272,7 +272,7 @@ static const struct ListMenuTemplate sItemListMenu =
     .moveCursorFunc = BagMenu_MoveCursorCallback,
     .itemPrintFunc = BagMenu_ItemPrintCallback,
     .totalItems = 0,
-    .maxShowed = 0,
+    .maxShowed = 5,
     .windowId = WIN_ITEM_LIST,
     .header_X = 0,
     .item_X = 8,
@@ -392,11 +392,11 @@ static const struct YesNoFuncTable sYesNoSellItemFunctions = {ConfirmSell, Cance
 
 static const struct ScrollArrowsTemplate sBagScrollArrowsTemplate = {
     .firstArrowType = SCROLL_ARROW_LEFT,
-    .firstX = 28,
-    .firstY = 16,
+    .firstX = 120,
+    .firstY = 12,
     .secondArrowType = SCROLL_ARROW_RIGHT,
-    .secondX = 100,
-    .secondY = 16,
+    .secondX = 200,
+    .secondY = 12,
     .fullyUpThreshold = -1,
     .fullyDownThreshold = -1,
     .tileTag = TAG_BAG_SCROLL_ARROW,
@@ -427,10 +427,10 @@ static const struct WindowTemplate sDefaultBagWindows[] =
 {
     [WIN_ITEM_LIST] = {
         .bg = 0,
-        .tilemapLeft = 14,
+        .tilemapLeft = 12,
         .tilemapTop = 2,
-        .width = 15,
-        .height = 16,
+        .width = 16,
+        .height = 10,
         .paletteNum = 1,
         .baseBlock = 0x27,
     },
@@ -441,16 +441,16 @@ static const struct WindowTemplate sDefaultBagWindows[] =
         .width = 24,
         .height = 6,
         .paletteNum = 1,
-        .baseBlock = 0x117,
+        .baseBlock = 0xC7,
     },
     [WIN_POCKET_NAME] = {
         .bg = 0,
-        .tilemapLeft = 4,
+        .tilemapLeft = 16,
         .tilemapTop = 1,
         .width = 8,
         .height = 2,
         .paletteNum = 1,
-        .baseBlock = 0x1A7,
+        .baseBlock = 0x157,
     },
     [WIN_TMHM_INFO_ICONS] = {
         .bg = 0,
@@ -459,7 +459,7 @@ static const struct WindowTemplate sDefaultBagWindows[] =
         .width = 5,
         .height = 6,
         .paletteNum = 12,
-        .baseBlock = 0x1B7,
+        .baseBlock = 0x167,
     },
     [WIN_TMHM_INFO] = {
         .bg = 0,
@@ -468,7 +468,7 @@ static const struct WindowTemplate sDefaultBagWindows[] =
         .width = 10,
         .height = 6,
         .paletteNum = 12,
-        .baseBlock = 0x1D5,
+        .baseBlock = 0x185,
     },
     [WIN_MESSAGE] = {
         .bg = 1,
@@ -477,7 +477,7 @@ static const struct WindowTemplate sDefaultBagWindows[] =
         .width = 27,
         .height = 4,
         .paletteNum = 15,
-        .baseBlock = 0x1B1,
+        .baseBlock = 0x1C5,
     },
     DUMMY_WIN_TEMPLATE,
 };
@@ -1067,9 +1067,9 @@ static void CreatePocketScrollArrowPair(void)
     if (gBagMenu->pocketScrollArrowsTask == TASK_NONE)
         gBagMenu->pocketScrollArrowsTask = AddScrollIndicatorArrowPairParameterized(
             SCROLL_ARROW_UP,
-            172,
-            12,
-            148,
+            168,
+            14,
+            98,
             gBagMenu->numItemStacks[gBagPosition.pocket] - gBagMenu->numShownItems[gBagPosition.pocket],
             TAG_POCKET_SCROLL_ARROW,
             TAG_POCKET_SCROLL_ARROW,

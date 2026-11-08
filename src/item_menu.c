@@ -64,8 +64,11 @@
                             max(BAG_KEYITEMS_COUNT,          \
                                 BAG_POKEBALLS_COUNT))))) + 1)
 
-// Up to 5 item slots can be visible at a time
-#define MAX_ITEMS_SHOWN 5
+// Up to 6 item slots can be visible at a time (matching FireRed / Unbound Cube)
+#define MAX_ITEMS_SHOWN 6
+
+#define BAG_DESCRIPTION_TEXT_LEFT 3
+#define BAG_DESCRIPTION_WRAP_WIDTH (WindowWidthPx(WIN_DESCRIPTION) - 16)
 
 enum {
     SWITCH_POCKET_NONE,
@@ -272,11 +275,11 @@ static const struct ListMenuTemplate sItemListMenu =
     .moveCursorFunc = BagMenu_MoveCursorCallback,
     .itemPrintFunc = BagMenu_ItemPrintCallback,
     .totalItems = 0,
-    .maxShowed = 5,
+    .maxShowed = 6,
     .windowId = WIN_ITEM_LIST,
     .header_X = 0,
-    .item_X = 8,
-    .cursor_X = 0,
+    .item_X = 9,
+    .cursor_X = 1,
     .upText_Y = 1,
     .cursorPal = 1,
     .fillValue = 0,
@@ -392,11 +395,11 @@ static const struct YesNoFuncTable sYesNoSellItemFunctions = {ConfirmSell, Cance
 
 static const struct ScrollArrowsTemplate sBagScrollArrowsTemplate = {
     .firstArrowType = SCROLL_ARROW_LEFT,
-    .firstX = 120,
-    .firstY = 12,
+    .firstX = 8,
+    .firstY = 76,
     .secondArrowType = SCROLL_ARROW_RIGHT,
-    .secondX = 200,
-    .secondY = 12,
+    .secondX = 88,
+    .secondY = 76,
     .fullyUpThreshold = -1,
     .fullyDownThreshold = -1,
     .tileTag = TAG_BAG_SCROLL_ARROW,
@@ -416,7 +419,7 @@ enum {
 };
 static const u8 sFontColorTable[][3] = {
                             // bgColor, textColor, shadowColor
-    [COLORID_NORMAL]      = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE,      TEXT_COLOR_LIGHT_GRAY},
+    [COLORID_NORMAL]      = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_WHITE,      TEXT_COLOR_DARK_GRAY},
     [COLORID_POCKET_NAME] = {TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_5,  TEXT_DYNAMIC_COLOR_1},
     [COLORID_GRAY_CURSOR] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_GREEN,       TEXT_COLOR_LIGHT_GREEN},
     [COLORID_UNUSED]      = {TEXT_COLOR_DARK_GRAY,   TEXT_COLOR_WHITE,      TEXT_COLOR_LIGHT_GRAY},
@@ -427,57 +430,57 @@ static const struct WindowTemplate sDefaultBagWindows[] =
 {
     [WIN_ITEM_LIST] = {
         .bg = 0,
-        .tilemapLeft = 12,
-        .tilemapTop = 2,
-        .width = 16,
-        .height = 10,
+        .tilemapLeft = 11,
+        .tilemapTop = 1,
+        .width = 18,
+        .height = 12,
         .paletteNum = 1,
         .baseBlock = 0x27,
+    },
+    [WIN_POCKET_NAME] = {
+        .bg = 0,
+        .tilemapLeft = 1,
+        .tilemapTop = 1,
+        .width = 9,
+        .height = 2,
+        .paletteNum = 1,
+        .baseBlock = 0xFF,
     },
     [WIN_DESCRIPTION] = {
         .bg = 0,
         .tilemapLeft = 5,
-        .tilemapTop = 13,
-        .width = 24,
+        .tilemapTop = 14,
+        .width = 25,
         .height = 6,
         .paletteNum = 1,
-        .baseBlock = 0xC7,
-    },
-    [WIN_POCKET_NAME] = {
-        .bg = 0,
-        .tilemapLeft = 16,
-        .tilemapTop = 1,
-        .width = 8,
-        .height = 2,
-        .paletteNum = 1,
-        .baseBlock = 0x157,
+        .baseBlock = 0x111,
     },
     [WIN_TMHM_INFO_ICONS] = {
         .bg = 0,
         .tilemapLeft = 6,
-        .tilemapTop = 13,
+        .tilemapTop = 14,
         .width = 5,
         .height = 6,
         .paletteNum = 12,
-        .baseBlock = 0x167,
+        .baseBlock = 0x1A7,
     },
     [WIN_TMHM_INFO] = {
         .bg = 0,
-        .tilemapLeft = 12,
-        .tilemapTop = 13,
+        .tilemapLeft = 11,
+        .tilemapTop = 14,
         .width = 10,
         .height = 6,
         .paletteNum = 12,
-        .baseBlock = 0x185,
+        .baseBlock = 0x1C5,
     },
     [WIN_MESSAGE] = {
         .bg = 1,
         .tilemapLeft = 2,
         .tilemapTop = 15,
-        .width = 27,
+        .width = 26,
         .height = 4,
         .paletteNum = 15,
-        .baseBlock = 0x1C5,
+        .baseBlock = 0x201,
     },
     DUMMY_WIN_TEMPLATE,
 };
@@ -1018,14 +1021,14 @@ static void BagMenu_ItemPrintCallback(u8 windowId, u32 itemIndex, u8 y)
             // Print item quantity
             ConvertIntToDecimalStringN(gStringVar1, itemSlot.quantity, STR_CONV_MODE_RIGHT_ALIGN, MAX_ITEM_DIGITS);
             StringExpandPlaceholders(gStringVar4, gText_xVar1);
-            offset = GetStringRightAlignXOffset(FONT_NARROW, gStringVar4, 119);
+            offset = GetStringRightAlignXOffset(FONT_NARROW, gStringVar4, 134);
             BagMenu_Print(windowId, FONT_NARROW, gStringVar4, offset, y, 0, 0, TEXT_SKIP_DRAW, COLORID_NORMAL);
         }
         else
         {
             // Print registered icon
             if (gSaveBlock1Ptr->registeredItem != ITEM_NONE && gSaveBlock1Ptr->registeredItem == itemSlot.itemId)
-                BlitBitmapToWindow(windowId, sRegisteredSelect_Gfx, 96, y - 1, 24, 16);
+                BlitBitmapToWindow(windowId, sRegisteredSelect_Gfx, 112, y - 1, 24, 16);
         }
     }
 }
@@ -1067,9 +1070,9 @@ static void CreatePocketScrollArrowPair(void)
     if (gBagMenu->pocketScrollArrowsTask == TASK_NONE)
         gBagMenu->pocketScrollArrowsTask = AddScrollIndicatorArrowPairParameterized(
             SCROLL_ARROW_UP,
-            168,
-            14,
-            98,
+            160,
+            8,
+            102,
             gBagMenu->numItemStacks[gBagPosition.pocket] - gBagMenu->numShownItems[gBagPosition.pocket],
             TAG_POCKET_SCROLL_ARROW,
             TAG_POCKET_SCROLL_ARROW,
@@ -1427,15 +1430,9 @@ static void SwitchBagPocket(u8 taskId, s16 deltaBagPocketId, bool16 skipEraseLis
     else
     {
         PrintPocketNames(gPocketNamesStringsTable[newPocket], gPocketNamesStringsTable[gBagPosition.pocket]);
-        CopyPocketNameToWindow(8);
+        CopyPocketNameToWindow(9);
     }
-    DrawPocketIndicatorSquare(gBagPosition.pocket, FALSE);
-    DrawPocketIndicatorSquare(newPocket, TRUE);
-    FillBgTilemapBufferRect_Palette0(2, 11, 14, 2, 15, 16);
-    ScheduleBgCopyTilemapToVram(2);
     SetBagVisualPocketId(newPocket, TRUE);
-    RemoveBagSprite(ITEMMENUSPRITE_BALL);
-    AddSwitchPocketRotatingBallSprite(deltaBagPocketId);
     SetTaskFuncWithFollowupFunc(taskId, Task_SwitchBagPocket, gTasks[taskId].func);
 }
 
@@ -1468,9 +1465,9 @@ static void Task_SwitchBagPocket(u8 taskId)
             if (tPocketSwitchDir == MENU_CURSOR_DELTA_RIGHT)
                 CopyPocketNameToWindow((u8)(tPocketSwitchTimer >> 1));
             else
-                CopyPocketNameToWindow((u8)(8 - (tPocketSwitchTimer >> 1)));
+                CopyPocketNameToWindow((u8)(9 - (tPocketSwitchTimer >> 1)));
         }
-        if (tPocketSwitchTimer == 16)
+        if (tPocketSwitchTimer == 18)
             tPocketSwitchState++;
         break;
     case 1:
@@ -1490,17 +1487,12 @@ static void Task_SwitchBagPocket(u8 taskId)
 // When the pocket is switched this lighter background is redrawn row by row
 static void DrawItemListBgRow(u8 y)
 {
-    FillBgTilemapBufferRect_Palette0(2, 17, 14, y + 2, 15, 1);
-    ScheduleBgCopyTilemapToVram(2);
+    // Unbound Cube uses a static background tilemap; do not overwrite with Emerald tiles
 }
 
 static void DrawPocketIndicatorSquare(u8 x, bool8 isCurrentPocket)
 {
-    if (!isCurrentPocket)
-        FillBgTilemapBufferRect_Palette0(2, 0x1017, x + 5, 3, 1, 1);
-    else
-        FillBgTilemapBufferRect_Palette0(2, 0x102B, x + 5, 3, 1, 1);
-    ScheduleBgCopyTilemapToVram(2);
+    // Unbound Cube has no pocket indicator squares
 }
 
 static bool8 CanSwapItems(void)
@@ -1527,7 +1519,7 @@ static void StartItemSwap(u8 taskId)
     CopyItemName(GetBagItemId(gBagPosition.pocket, tListPosition), gStringVar1);
     StringExpandPlaceholders(gStringVar4, gText_MoveVar1Where);
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
-    BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, 3, 1, 0, 0, 0, COLORID_NORMAL);
+    BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
     UpdateItemMenuSwapLinePos(tListPosition);
     DestroyPocketSwitchArrowPair();
     BagMenu_PrintCursor(tListTaskId, COLORID_GRAY_CURSOR);
@@ -1742,10 +1734,10 @@ static void OpenContextMenu(u8 taskId)
     else
     {
         u8 *end = CopyItemName(gSpecialVar_ItemId, gStringVar1);
-        WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, WindowWidthPx(WIN_DESCRIPTION) - 10 - 6);
+        WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, BAG_DESCRIPTION_WRAP_WIDTH);
         StringExpandPlaceholders(gStringVar4, gText_Var1IsSelected);
         FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
-        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, 3, 1, 0, 0, 0, COLORID_NORMAL);
+        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
     }
     if (gBagMenu->contextMenuNumItems == 1)
         PrintContextMenuItems(BagMenu_AddWindow(ITEMWIN_1x1));
@@ -1909,10 +1901,10 @@ static void ItemMenu_Toss(u8 taskId)
     else
     {
         u8 *end = CopyItemNameHandlePlural(gSpecialVar_ItemId, gStringVar1, 2);
-        WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, WindowWidthPx(WIN_DESCRIPTION) - 10 - 6);
+        WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, BAG_DESCRIPTION_WRAP_WIDTH);
         StringExpandPlaceholders(gStringVar4, gText_TossHowManyVar1s);
         FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
-        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, 3, 1, 0, 0, 0, COLORID_NORMAL);
+        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
         AddItemQuantityWindow(ITEMWIN_QUANTITY);
         gTasks[taskId].func = Task_ChooseHowManyToToss;
     }
@@ -1923,11 +1915,11 @@ static void AskTossItems(u8 taskId)
     s16 *data = gTasks[taskId].data;
 
     u8 *end = CopyItemNameHandlePlural(gSpecialVar_ItemId, gStringVar1, tItemCount);
-    WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, WindowWidthPx(WIN_DESCRIPTION) - 10 - 6);
+    WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, BAG_DESCRIPTION_WRAP_WIDTH);
     ConvertIntToDecimalStringN(gStringVar2, tItemCount, STR_CONV_MODE_LEFT_ALIGN, MAX_ITEM_DIGITS);
     StringExpandPlaceholders(gStringVar4, gText_ConfirmTossItems);
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
-    BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, 3, 1, 0, 0, 0, COLORID_NORMAL);
+    BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
     BagMenu_YesNo(taskId, ITEMWIN_YESNO_LOW, &sYesNoTossFunctions);
 }
 
@@ -1967,11 +1959,11 @@ static void ConfirmToss(u8 taskId)
     s16 *data = gTasks[taskId].data;
 
     u8 *end = CopyItemNameHandlePlural(gSpecialVar_ItemId, gStringVar1, tItemCount);
-    WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, WindowWidthPx(WIN_DESCRIPTION) - 10 - 6);
+    WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, BAG_DESCRIPTION_WRAP_WIDTH);
     ConvertIntToDecimalStringN(gStringVar2, tItemCount, STR_CONV_MODE_LEFT_ALIGN, MAX_ITEM_DIGITS);
     StringExpandPlaceholders(gStringVar4, gText_ThrewAwayVar2Var1s);
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
-    BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, 3, 1, 0, 0, 0, COLORID_NORMAL);
+    BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
     if (CurrentBattlePyramidLocation() != PYRAMID_LOCATION_NONE || FlagGet(FLAG_STORING_ITEMS_IN_PYRAMID_BAG) == TRUE)
         gTasks[taskId].func = Task_RemoveItemFromBag;
     else
@@ -2331,10 +2323,10 @@ static void Task_ItemContext_Deposit(u8 taskId)
     else
     {
         u8 *end = CopyItemNameHandlePlural(gSpecialVar_ItemId, gStringVar1, 2);
-        WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, WindowWidthPx(WIN_DESCRIPTION) - 10 - 6);
+        WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, BAG_DESCRIPTION_WRAP_WIDTH);
         StringExpandPlaceholders(gStringVar4, sText_DepositHowManyVar1);
         FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
-        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, 3, 1, 0, 0, 0, COLORID_NORMAL);
+        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
         AddItemQuantityWindow(ITEMWIN_QUANTITY);
         gTasks[taskId].func = Task_ChooseHowManyToDeposit;
     }
@@ -2372,23 +2364,23 @@ static void TryDepositItem(u8 taskId)
     if (GetItemImportance(gSpecialVar_ItemId))
     {
         // Can't deposit important items
-        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, sText_CantStoreImportantItems, 3, 1, 0, 0, 0, COLORID_NORMAL);
+        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, sText_CantStoreImportantItems, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
         gTasks[taskId].func = WaitDepositErrorMessage;
     }
     else if (AddPCItem(gSpecialVar_ItemId, tItemCount) == TRUE)
     {
         // Successfully deposited
         u8 *end = CopyItemNameHandlePlural(gSpecialVar_ItemId, gStringVar1, tItemCount);
-        WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, WindowWidthPx(WIN_DESCRIPTION) - 10 - 6);
+        WrapFontIdToFit(gStringVar1, end, FONT_NORMAL, BAG_DESCRIPTION_WRAP_WIDTH);
         ConvertIntToDecimalStringN(gStringVar2, tItemCount, STR_CONV_MODE_LEFT_ALIGN, MAX_ITEM_DIGITS);
         StringExpandPlaceholders(gStringVar4, sText_DepositedVar2Var1s);
-        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, 3, 1, 0, 0, 0, COLORID_NORMAL);
+        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, gStringVar4, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
         gTasks[taskId].func = Task_RemoveItemFromBag;
     }
     else
     {
         // No room to deposit
-        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, sText_NoRoomForItems, 3, 1, 0, 0, 0, COLORID_NORMAL);
+        BagMenu_Print(WIN_DESCRIPTION, FONT_NORMAL, sText_NoRoomForItems, BAG_DESCRIPTION_TEXT_LEFT, 1, 0, 0, 0, COLORID_NORMAL);
         gTasks[taskId].func = WaitDepositErrorMessage;
     }
 }
@@ -2552,16 +2544,16 @@ static void PrintPocketNames(const u8 *pocketName1, const u8 *pocketName2)
     u16 windowId;
     int offset;
 
-    window.width = 16;
+    window.width = 18;
     window.height = 2;
     windowId = AddWindow(&window);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
-    offset = GetStringCenterAlignXOffset(FONT_NORMAL, pocketName1, 0x40);
+    offset = GetStringCenterAlignXOffset(FONT_NORMAL, pocketName1, 72);
     BagMenu_Print(windowId, FONT_NORMAL, pocketName1, offset, 1, 0, 0, TEXT_SKIP_DRAW, COLORID_POCKET_NAME);
     if (pocketName2)
     {
-        offset = GetStringCenterAlignXOffset(FONT_NORMAL, pocketName2, 0x40);
-        BagMenu_Print(windowId, FONT_NORMAL, pocketName2, offset + 0x40, 1, 0, 0, TEXT_SKIP_DRAW, COLORID_POCKET_NAME);
+        offset = GetStringCenterAlignXOffset(FONT_NORMAL, pocketName2, 72);
+        BagMenu_Print(windowId, FONT_NORMAL, pocketName2, offset + 72, 1, 0, 0, TEXT_SKIP_DRAW, COLORID_POCKET_NAME);
     }
     CpuCopy32((u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA), gBagMenu->pocketNameBuffer, sizeof(gBagMenu->pocketNameBuffer));
     RemoveWindow(windowId);
@@ -2572,13 +2564,13 @@ static void CopyPocketNameToWindow(u32 a)
     u8 (*tileDataBuffer)[32][32];
     u8 *windowTileData;
     int b;
-    if (a > 8)
-        a = 8;
+    if (a > 9)
+        a = 9;
     tileDataBuffer = &gBagMenu->pocketNameBuffer;
-    windowTileData = (u8 *)GetWindowAttribute(2, WINDOW_TILE_DATA);
-    CpuCopy32(&tileDataBuffer[0][a], windowTileData, 0x100); // Top half of pocket name
-    b = a + 16;
-    CpuCopy32(&tileDataBuffer[0][b], windowTileData + 0x100, 0x100); // Bottom half of pocket name
+    windowTileData = (u8 *)GetWindowAttribute(WIN_POCKET_NAME, WINDOW_TILE_DATA);
+    CpuCopy32(&tileDataBuffer[0][a], windowTileData, 9 * 32); // Top half of pocket name
+    b = a + 18;
+    CpuCopy32(&tileDataBuffer[0][b], windowTileData + (9 * 32), 9 * 32); // Bottom half of pocket name
     CopyWindowToVram(WIN_POCKET_NAME, COPYWIN_GFX);
 }
 

@@ -303,3 +303,53 @@ Na ligação da ROM, dez IDs gráficos da Route 2 não tinham descritores: os tr
   - Suítes de regressão `test-route1.sh 0` e `test-unbound-grass.sh 0` 100% aprovadas.
   - ROM final copiada e entregue em `eclat-intro-teste.gba`.
 
+### Primeira integração visual do Cube do Pokémon Unbound na Bag — 08/11/2026
+
+- **Solicitação**: aproximar a tela da Bag do design do Cube de Pokémon Unbound, preservando a lógica de inventário da engine Emerald.
+- **Análise da referência**: a tela do Unbound foi conferida em estado jogável, em 240×160 pixels. O padrão observado foi uma coluna esquerda para o Cube, uma lista de itens mais larga à direita, o nome do bolso no cabeçalho e a descrição ocupando a faixa inferior.
+- **Implementação em `src/strings.c`**:
+  - `CLOSE BAG` passou a ser `CLOSE CUBE`.
+  - Os nomes dos bolsos passaram para capitalização de título (`Items`, `Poké Balls`, `TMs & HMs`, `Berries`, `Key Items`), sem alterar os índices ou a lógica de seleção.
+- **Implementação em `src/item_menu.c`**:
+  - A janela da lista foi ampliada de 16 para 18 tiles, criando o painel direito mais próximo do Cube.
+  - A janela de descrição passou de `(5, 13, 24×6)` para `(1, 13, 28×6)`, permitindo a faixa inferior quase completa.
+  - O título do bolso foi reposicionado para o painel esquerdo (`tilemapLeft = 1`).
+- **Implementação em `src/item_menu_icons.c`**:
+  - O sprite visual da Bag/Cube foi ancorado em `(48, 76)`, mantendo a escala e os seis quadros já existentes e evitando duplicação de gráficos.
+- **Validação**:
+  - `make -j4 emerald` concluído com sucesso; uso final: EWRAM 86,39%, IWRAM 86,66%, ROM 81,66%.
+  - A ROM resultante foi copiada para `eclat-intro-teste.gba`.
+  - SHA-256: `A37E528AE57E9BFFA0C9BC3BB142C66B9E4D54B54AFF07517836DED8F87D2E7D`.
+- **Limitação registrada**: esta é a primeira camada de integração de layout e textos. A equivalência pixel a pixel do painel, paleta e indicação `START Sort` ainda requer uma sessão de comparação no emulador com a Bag aberta e, se necessário, novos gráficos dedicados.
+
+### Implementação Definitiva e Correção de Layout do Cube (Unbound) — 08/11/2026
+
+- **Sintoma das alterações anteriores**: o menu apresentava corte no nome dos itens ("Ticke"), setas desalinhadas no topo sobrepostas ao texto, listras verdes geradas por rotinas legadas de wipe do Emerald, fragmentos de tiles e sprite de Pokéball giratória flutuando sobre a caixa do Cube e conflitos de baseBlock na VRAM.
+- **Diagnóstico e extração direta da ROM do Pokémon Unbound (offsets `0x4530c4` e `0x452f6c`)**:
+  - `WIN_ITEM_LIST`: `bg = 0, left = 11, top = 1, width = 18, height = 12, baseBlock = 0x27` (exibe 6 itens, `maxShowed = 6`).
+  - `WIN_POCKET_NAME`: `bg = 0, left = 1, top = 1, width = 9, height = 2, baseBlock = 0xFF` (encaixado no visor superior esquerdo).
+  - `WIN_DESCRIPTION`: `bg = 0, left = 5, top = 14, width = 25, height = 6, baseBlock = 0x111` (começa em x=40, preservando a área do ícone 32×32 em x=24).
+  - `WIN_TMHM_INFO_ICONS`: `baseBlock = 0x1A7`.
+  - `WIN_TMHM_INFO`: `baseBlock = 0x1C5`.
+  - `WIN_MESSAGE`: `baseBlock = 0x201`.
+  - Setas de bolso: `firstX = 8, firstY = 76, secondX = 88, secondY = 76` (flanqueando o Cube centralizado em `(48, 76)`).
+  - Setas de rolagem da lista: `x = 160, minY = 8, maxY = 102`.
+- **Correções aplicadas**:
+  - `src/item_menu.c`:
+    - BaseBlocks sequenciais e estritamente sem sobreposição na VRAM.
+    - `MAX_ITEMS_SHOWN` e `sItemListMenu.maxShowed = 6`, `item_X = 9, cursor_X = 1`.
+    - Alinhamento de quantidade em 134 px e ícone de item registrado em 112 px.
+    - Animação de rotação da Pokéball desativada (`AddSwitchPocketRotatingBallSprite` como no-op).
+    - Desativados wipes destrutivos do Emerald (`DrawItemListBgRow` e `DrawPocketIndicatorSquare` como no-ops, remoção de `FillBgTilemapBufferRect_Palette0(2, 11, 14, 2, 15, 16)`).
+    - `PrintPocketNames` e `CopyPocketNameToWindow` adaptados para 9 tiles (72 px) com texto centralizado.
+  - `src/item_menu_icons.c`:
+    - Cube centralizado perfeitamente em `(48, 76)`.
+    - Remoção do sprite de Pokéball giratória sobre o visor.
+  - `src/strings.c`:
+    - Nomes dos bolsos em Title Case ("Items", "Poké Balls", etc.) e "CLOSE CUBE".
+- **Validação**:
+  - Compilação concluída com sucesso via `./build.sh`.
+  - ROM atualizada: `eclat-intro-teste.gba`.
+  - SHA-256: `27D50FC7B7E8CB70E76BCF472D1287B90EB0A25C3DE9FA91C60B72594A61D347`.
+
+

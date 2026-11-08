@@ -92,7 +92,10 @@ const u8 gMenuText_Give2[] = _("GIVE");
 const u8 gText_xVar1[] = _("×{STR_VAR_1}");
 const u8 gText_Berry2[] = _(" BERRY"); // Unused
 const u8 gText_Coins[] = _("{STR_VAR_1} COINS");
-const u8 gText_CloseBag[] = _("CLOSE BAG");
+// Éclat/Unbound calls the inventory device the Cube.  Keep the existing
+// string symbol because several menu locations (battle, shop and PC) share
+// the same close-item path, but expose the Cube wording to the player.
+const u8 gText_CloseBag[] = _("CLOSE CUBE");
 const u8 gText_Var1IsSelected[] = _("{STR_VAR_1}\nis selected.");
 const u8 gText_CantWriteMail[] = _("You can't write\nMAIL here.");
 const u8 gText_NoPokemon[] = _("There is no\nPOKéMON.");
@@ -141,11 +144,14 @@ const u8 gText_ReturnToVar1[] = _("Return to\n{STR_VAR_1}.");
 
 const u8 *const gPocketNamesStringsTable[] =
 {
-    [POCKET_ITEMS]      = COMPOUND_STRING("ITEMS"),
-    [POCKET_POKE_BALLS] = COMPOUND_STRING("POKé BALLS"),
+    // The pocket names are deliberately title-cased like Unbound's Cube UI.
+    // They are still stored in the shared table so all Bag entry points stay
+    // synchronized when switching pockets.
+    [POCKET_ITEMS]      = COMPOUND_STRING("Items"),
+    [POCKET_POKE_BALLS] = COMPOUND_STRING("Poké Balls"),
     [POCKET_TM_HM]      = COMPOUND_STRING("TMs & HMs"),
-    [POCKET_BERRIES]    = COMPOUND_STRING("BERRIES"),
-    [POCKET_KEY_ITEMS]  = COMPOUND_STRING("KEY ITEMS")
+    [POCKET_BERRIES]    = COMPOUND_STRING("Berries"),
+    [POCKET_KEY_ITEMS]  = COMPOUND_STRING("Key Items")
 };
 
 const u8 gText_NumberItem_TMBerry[] = _("{NO}{STR_VAR_1}{CLEAR 3}{STR_VAR_2}");

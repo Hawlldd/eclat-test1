@@ -166,3 +166,26 @@ Para cada entrega seguinte, registre: hash da ROM de origem, arquivos modificado
 - Mantenha extração, adaptação e validação como etapas separadas. Se uma etapa não passou, diga exatamente qual e por quê.
 - Ao corrigir erro de build, encontre a primeira mensagem útil do compilador ou linker; não altere gráficos ou scripts por suposição. Se o erro for anterior à mudança atual, registre isso e faça a menor correção comprovada.
 - Compare o resultado com a ROM original no mesmo estado do jogo. Não declare equivalência quadro a quadro com base apenas em compilação, screenshot ou memória de uma jogada.
+
+## 11. Método aplicado à integração do Cube na Bag
+
+Para portar uma interface de outra ROM sem quebrar a lógica existente, a análise foi feita em quatro camadas:
+
+1. **Referência jogável**: abrir o Unbound no mesmo tamanho de tela da GBA e observar o Cube em uso, anotando a função de cada região (título, sprite, lista, descrição e comando de ordenação).
+2. **Mapeamento para a engine**: localizar as janelas Emerald responsáveis por essas regiões em `sDefaultBagWindows`, identificar os callbacks que imprimem itens/quantidades e separar geometria visual de regras de inventário.
+3. **Mudança mínima comprovável**: manter os bolsos, índices, callbacks, capacidades e estados de seleção originais; alterar somente textos, larguras/posições de janelas e a âncora do sprite já usado pela Bag. Isso evita introduzir uma segunda implementação de inventário.
+4. **Build e rastreabilidade**: recompilar a ROM, registrar o uso de memória, copiar o artefato final e salvar o SHA-256. A compilação comprova integração de código, mas não substitui a inspeção visual em emulador.
+
+### Como interpretar a tela do Cube
+
+O ponto importante é não tratar a imagem como um único bitmap. O Unbound combina um sprite animado do dispositivo, molduras de janela, texto e uma lista dinâmica. Por isso, a adaptação correta começa identificando quais pixels pertencem a gráficos persistentes e quais são desenhados pela engine a cada estado. No projeto atual, `graphics/bag/bag_male.png`/`bag_female.png` já são sprites de seis quadros com aparência de dispositivo; reutilizá-los preserva animação e paleta enquanto a geometria é ajustada no código.
+
+### Próxima verificação obrigatória
+
+Abrir a Bag da ROM recém-compilada e conferir: alinhamento do título, largura da lista, quantidades no limite direito, descrição de itens longos, troca de bolso, animação do Cube e retorno com `B`. Só depois dessa conferência deve ser adicionada a arte dedicada do painel ou a indicação `START Sort`; caso contrário, um ajuste gráfico pode mascarar um erro de janela ou de callback.
+
+### Diagnóstico da primeira falha visual
+
+A captura com listras não foi tratada como defeito aleatório de paleta. O padrão se repetia exatamente no intervalo acrescentado à direita da lista, o que apontou para uma incompatibilidade entre a largura da `WindowTemplate` e a margem reservada no tilemap da Bag. A conferência do recurso `graphics/bag/menu.bin` e do limite original de 16 tiles confirmou a hipótese; a largura foi restaurada sem alterar o callback da lista.
+
+O texto inferior exigiu uma segunda correção independente. O sprite do item é criado fora da janela, em `x2 = 24`, enquanto todas as rotinas de descrição imprimiam com deslocamento local de 3 pixels. Ao mover a janela para o painel inferior completo, esse deslocamento passou a colocar as letras sobre o ícone. A constante `BAG_DESCRIPTION_TEXT_LEFT` centraliza a decisão e foi aplicada também às mensagens de erro e aos caminhos de uso/troca, para não corrigir apenas o caso normal.

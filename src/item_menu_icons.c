@@ -371,7 +371,9 @@ void RemoveBagSprite(u8 id)
 void AddBagVisualSprite(u8 bagPocketId)
 {
     u8 *spriteId = &gBagMenu->spriteIds[ITEMMENUSPRITE_BAG];
-    *spriteId = CreateSprite(&sBagSpriteTemplate, 52, 76, 0);
+    // The Unbound Cube is anchored in the left panel, below the pocket title.
+    // The 64x64 sprite is centered at this coordinate by the sprite engine.
+    *spriteId = CreateSprite(&sBagSpriteTemplate, 48, 76, 0);
     SetBagVisualPocketId(bagPocketId, FALSE);
 }
 
@@ -430,11 +432,7 @@ static void SpriteCB_ShakeBagSprite(struct Sprite *sprite)
 
 void AddSwitchPocketRotatingBallSprite(s16 rotationDirection)
 {
-    u8 *spriteId = &gBagMenu->spriteIds[ITEMMENUSPRITE_BALL];
-    LoadSpriteSheet(&sRotatingBallTable);
-    LoadSpritePalette(&sRotatingBallPaletteTable);
-    *spriteId = CreateSprite(&sRotatingBallSpriteTemplate, 16, 16, 0);
-    gSprites[*spriteId].data[0] = rotationDirection;
+    // The Unbound Cube does not use the Emerald rotating ball sprite.
 }
 
 static void UpdateSwitchPocketRotatingBallCoords(struct Sprite *sprite)

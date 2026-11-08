@@ -137,6 +137,24 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_TallGrass = {
     .callback = UpdateTallGrassFieldEffect,
 };
 
+static const u32 sEclatTallGrassTiles[] = INCBIN_U32("graphics/eclat_intro/route1_tall_grass.bin");
+static const u16 sEclatTallGrassPalette[] = INCBIN_U16("graphics/eclat_intro/route1_tall_grass_palette.bin");
+
+const struct SpritePalette gSpritePalette_EclatTallGrass = {sEclatTallGrassPalette, FLDEFF_PAL_TAG_ECLAT_TALL_GRASS};
+
+static const struct SpriteFrameImage sPicTable_EclatTallGrass[] = {
+    overworld_ascending_frames(sEclatTallGrassTiles, 2, 2),
+};
+
+const struct SpriteTemplate gFieldEffectObjectTemplate_EclatTallGrass = {
+    .tileTag = TAG_NONE,
+    .paletteTag = FLDEFF_PAL_TAG_ECLAT_TALL_GRASS,
+    .oam = &gObjectEventBaseOam_16x16,
+    .anims = sAnimTable_TallGrass,
+    .images = sPicTable_EclatTallGrass,
+    .callback = UpdateTallGrassFieldEffect,
+};
+
 static const struct SpriteFrameImage sPicTable_Ripple[] = {
     overworld_ascending_frames(gFieldEffectObjectPic_Ripple, 2, 2),
 };

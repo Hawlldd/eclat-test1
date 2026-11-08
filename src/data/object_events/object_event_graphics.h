@@ -1,3 +1,27 @@
+static const u32 sRouteGateGuardTiles[] = INCBIN_U32("graphics/eclat_intro/route1_gateguard.bin");
+
+static const u32 sRouteRodFanTiles[] = INCBIN_U32("graphics/eclat_intro/route1_rodfan.bin");
+
+static const u32 sRouteBeginnerTiles[] = INCBIN_U32("graphics/eclat_intro/route1_beginner.bin");
+
+static const u32 sRouteRattataTiles[] = INCBIN_U32("graphics/eclat_intro/route1_rattata.bin");
+
+static const u32 sRouteSallyTiles[] = INCBIN_U32("graphics/eclat_intro/route1_sally.bin");
+
+static const u32 sRouteMystTiles[] = INCBIN_U32("graphics/eclat_intro/route1_myst.bin");
+
+static const u32 sRouteBenTiles[] = INCBIN_U32("graphics/eclat_intro/route1_ben.bin");
+
+static const u32 sRouteFisherTiles[] = INCBIN_U32("graphics/eclat_intro/route1_fisher.bin");
+
+static const u32 sRouteItemBallTiles[] = INCBIN_U32("graphics/eclat_intro/route1_itemball.bin");
+
+static const u32 sRouteTeaNpcTiles[] = INCBIN_U32("graphics/eclat_intro/route1_teanpc.bin");
+
+static const u32 sRouteMegaNpcTiles[] = INCBIN_U32("graphics/eclat_intro/route1_meganpc.bin");
+
+static const u32 sRouteCamperTiles[] = INCBIN_U32("graphics/eclat_intro/route1_camper.bin");
+
 static const u32 sFilaoTableMapTiles[] = INCBIN_U32("graphics/eclat_intro/filao_table_map.bin");
 static const u32 sIviereChildTiles[] = INCBIN_U32("graphics/eclat_intro/npc_ivierechild.bin");
 static const u32 sIviereRiverNpcTiles[] = INCBIN_U32("graphics/eclat_intro/npc_iviererivernpc.bin");
@@ -654,3 +678,6 @@ const u16 gObjectEventPic_PidgeyOld[] = INCGFX_U16("graphics/object_events/pics/
 const u16 gObjectEventPic_ClefairyOld[] = INCGFX_U16("graphics/object_events/pics/pokemon_old/clefairy.png", ".4bpp", "-mwidth 2 -mheight 2");
 
 #endif // IS_FRLG
+
+#include "petipres_graphics.h"
+#include "eclat_route2_graphics.h"

@@ -2210,8 +2210,13 @@ static void Cmd_getexp(void)
             else
                 calculatedExp /= 7;
 
-            if (GetConfig(B_TRAINER_EXP_MULTIPLIER) <= GEN_7 && gBattleTypeFlags & BATTLE_TYPE_TRAINER)
+            if (B_TRAINER_EXP_PERCENTAGE != 100 && (gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+                calculatedExp = (calculatedExp * B_TRAINER_EXP_PERCENTAGE) / 100;
+            else if (GetConfig(B_TRAINER_EXP_MULTIPLIER) <= GEN_7 && (gBattleTypeFlags & BATTLE_TYPE_TRAINER))
                 calculatedExp = (calculatedExp * 150) / 100;
+
+            if (B_WILD_EXP_MULTIPLIER != 100 && !(gBattleTypeFlags & BATTLE_TYPE_TRAINER))
+                calculatedExp = (calculatedExp * B_WILD_EXP_MULTIPLIER) / 100;
 
             if (GetConfig(B_SPLIT_EXP) < GEN_6)
             {

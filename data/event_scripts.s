@@ -142,12 +142,21 @@ gStdScripts_End::
 	.include "data/maps/LittlerootTown/scripts.inc"
 	.include "data/maps/Iviere_FilaosHouse/scripts.inc"
 	.include "data/maps/Iviere_FilaosLab/scripts.inc"
+	.include "data/maps/IviereRoute1Gate/scripts.inc"
+	.include "data/maps/Petipres/scripts.inc"
+	.include "data/maps/Petipres_Houses/scripts.inc"
+	.include "data/maps/Petipres_Mart/scripts.inc"
+	.include "data/maps/Petipres_PokemonCenter/scripts.inc"
+	.include "data/maps/Petipres_PokemonCenter_2F/scripts.inc"
+	.include "data/maps/EclatRoute1/scripts.inc"
 	.include "data/maps/OldaleTown/scripts.inc"
 	.include "data/maps/DewfordTown/scripts.inc"
 	.include "data/maps/LavaridgeTown/scripts.inc"
 	.include "data/maps/FallarborTown/scripts.inc"
 	.include "data/maps/VerdanturfTown/scripts.inc"
 	.include "data/maps/PacifidlogTown/scripts.inc"
+	.include "data/maps/Route1/scripts.inc"
+	.include "data/maps/Route2/scripts.inc"
 	.include "data/maps/Route101/scripts.inc"
 	.include "data/maps/Route102/scripts.inc"
 	.include "data/maps/Route103/scripts.inc"
@@ -1088,7 +1097,7 @@ EventScript_AfterWhiteOutHealMsg::
 EventScript_AfterWhiteOutMomHeal::
 	lockall
 	textcolor NPC_TEXT_COLOR_FEMALE
-	applymovement LOCALID_PLAYERS_HOUSE_1F_MOM, Common_Movement_WalkInPlaceFasterDown
+	applymovement LOCALID_PLAYERS_HOUSE_1F_MOM, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
 	msgbox gText_HadQuiteAnExperienceTakeRest
 	call Common_EventScript_OutOfCenterPartyHeal
@@ -1428,27 +1437,20 @@ gText_MonsHealed::
 	.string "We hope you excel!$"
 
 gText_HadQuiteAnExperienceTakeRest::
-	.string "MOM: {PLAYER}!\n"
-	.string "Welcome home.\p"
-	.string "It sounds like you had quite\n"
-	.string "an experience.\p"
-	.string "Maybe you should take a quick\n"
-	.string "rest.$"
+	.string "MOM: How are you,\n"
+	.string "{PLAYER}?\p"
+	.string "You must have had some\n"
+	.string "exhausting adventures.\p"
+	.string "You should take a nap.$"
 
 gText_MomExplainHPGetPotions::
-	.string "MOM: Oh, good! You and your\n"
-	.string "POKéMON are looking great.\p"
-	.string "I just heard from {STR_VAR_1}.\p"
-	.string "He said that POKéMON's energy is\n"
-	.string "measured in HP.\p"
-	.string "If your POKéMON lose their HP,\n"
-	.string "you can restore them at any\l"
-	.string "POKéMON CENTER.\p"
-	.string "If you're going to travel far away,\n"
-	.string "the smart TRAINER stocks up on\l"
-	.string "POTIONS at the POKéMON MART.\p"
-	.string "Make me proud, honey!\p"
-	.string "Take care!$"
+	.string "MOM: I took your POKéMON\n"
+	.string "to {STR_VAR_1} while\p"
+	.string "you were resting in your room.\p"
+	.string "Please be more careful\n"
+	.string "next time.\p"
+	.string "I wouldn't know what to do if\n"
+	.string "anything ever happened to you!$"
 
 gText_RegisteredTrainerinPokeNav::
 	.string "Registered {STR_VAR_1} {STR_VAR_2}\n"
@@ -1740,3 +1742,10 @@ EventScript_PalletTown_PlayersHouse_2F_TurnOnPC::
 	.include "data/scripts/battle_frontier.inc"
 	.include "data/scripts/apricorn_tree.inc"
 	.include "data/scripts/wild_encounter.inc"
+	.include "data/maps/EclatRoute2/scripts.inc"
+	.include "data/maps/EclatRockyPath/scripts.inc"
+	.include "data/maps/EclatRoute2Gate/scripts.inc"
+	.include "data/maps/EclatRoute2ResearchGate/scripts.inc"
+	.include "data/maps/EclatRoute2Center/scripts.inc"
+	.include "data/maps/EclatRoute2Center_2F/scripts.inc"
+	.include "data/maps/PeacefulWoods/scripts.inc"

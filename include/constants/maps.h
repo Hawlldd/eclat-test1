@@ -3,6 +3,10 @@
 
 #include "map_groups.h"
 
+#ifndef MAP_PETIPRES
+#define MAP_PETIPRES MAP_OLDALE_TOWN
+#endif
+
 enum
 {
     // Warps using this map will instead use the warp data stored in gSaveBlock1Ptr->dynamicWarp.

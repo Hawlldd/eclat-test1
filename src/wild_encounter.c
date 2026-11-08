@@ -421,6 +421,8 @@ u8 ChooseWildMonLevel(const struct WildPokemon *wildPokemon, u8 wildMonIndex, en
 u16 GetCurrentMapWildMonHeaderId(void)
 {
     u16 i;
+    u8 mapGroup = gSaveBlock1Ptr->location.mapGroup;
+    u8 mapNum = gSaveBlock1Ptr->location.mapNum;
 
     for (i = 0; ; i++)
     {
@@ -428,8 +430,8 @@ u16 GetCurrentMapWildMonHeaderId(void)
         if (wildHeader->mapGroup == MAP_GROUP(MAP_UNDEFINED))
             break;
 
-        if (gWildMonHeaders[i].mapGroup == gSaveBlock1Ptr->location.mapGroup &&
-            gWildMonHeaders[i].mapNum == gSaveBlock1Ptr->location.mapNum)
+        if (gWildMonHeaders[i].mapGroup == mapGroup &&
+            gWildMonHeaders[i].mapNum == mapNum)
         {
             if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ALTERING_CAVE) &&
                 gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ALTERING_CAVE))

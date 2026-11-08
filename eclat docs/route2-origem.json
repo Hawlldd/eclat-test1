@@ -1,0 +1,1184 @@
+{
+  "PeacefulWoods": {
+    "group": 1,
+    "num": 0,
+    "header": 3446372,
+    "layout": 8907664,
+    "width": 78,
+    "height": 78,
+    "border": 143113212,
+    "grid": 143113224,
+    "primary": 137162468,
+    "secondary": 137163284,
+    "script": 1443131,
+    "objects": [
+      {
+        "id": 1,
+        "gfx": 52,
+        "x": 57,
+        "y": 49,
+        "z": 3,
+        "movement": 0,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 135660869,
+        "flag": 0
+      },
+      {
+        "id": 2,
+        "gfx": 19,
+        "x": 23,
+        "y": 56,
+        "z": 3,
+        "movement": 17,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 135660878,
+        "flag": 0
+      },
+      {
+        "id": 3,
+        "gfx": 20,
+        "x": 43,
+        "y": 31,
+        "z": 3,
+        "movement": 0,
+        "ranges": 17,
+        "trainer": 1,
+        "sight": 5,
+        "script": 135660941,
+        "flag": 0
+      },
+      {
+        "id": 4,
+        "gfx": 20,
+        "x": 41,
+        "y": 22,
+        "z": 3,
+        "movement": 17,
+        "ranges": 17,
+        "trainer": 1,
+        "sight": 5,
+        "script": 135660964,
+        "flag": 0
+      },
+      {
+        "id": 5,
+        "gfx": 20,
+        "x": 27,
+        "y": 34,
+        "z": 3,
+        "movement": 0,
+        "ranges": 17,
+        "trainer": 1,
+        "sight": 6,
+        "script": 135660987,
+        "flag": 0
+      },
+      {
+        "id": 6,
+        "gfx": 92,
+        "x": 21,
+        "y": 38,
+        "z": 3,
+        "movement": 8,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 136040287,
+        "flag": 342
+      },
+      {
+        "id": 7,
+        "gfx": 92,
+        "x": 19,
+        "y": 13,
+        "z": 3,
+        "movement": 8,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 142608041,
+        "flag": 61573
+      },
+      {
+        "id": 8,
+        "gfx": 92,
+        "x": 43,
+        "y": 15,
+        "z": 3,
+        "movement": 8,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 136040313,
+        "flag": 344
+      },
+      {
+        "id": 9,
+        "gfx": 20,
+        "x": 49,
+        "y": 6,
+        "z": 3,
+        "movement": 0,
+        "ranges": 17,
+        "trainer": 1,
+        "sight": 5,
+        "script": 135661010,
+        "flag": 0
+      },
+      {
+        "id": 10,
+        "gfx": 20,
+        "x": 48,
+        "y": 63,
+        "z": 3,
+        "movement": 10,
+        "ranges": 17,
+        "trainer": 1,
+        "sight": 1,
+        "script": 135661033,
+        "flag": 0
+      },
+      {
+        "id": 11,
+        "gfx": 92,
+        "x": 38,
+        "y": 55,
+        "z": 3,
+        "movement": 8,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 136041600,
+        "flag": 446
+      },
+      {
+        "id": 12,
+        "gfx": 49,
+        "x": 56,
+        "y": 38,
+        "z": 0,
+        "movement": 7,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 930
+      },
+      {
+        "id": 13,
+        "gfx": 184,
+        "x": 57,
+        "y": 36,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 64004
+      },
+      {
+        "id": 14,
+        "gfx": 206,
+        "x": 57,
+        "y": 38,
+        "z": 0,
+        "movement": 7,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 930
+      },
+      {
+        "id": 15,
+        "gfx": 49,
+        "x": 58,
+        "y": 38,
+        "z": 0,
+        "movement": 7,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 930
+      },
+      {
+        "id": 16,
+        "gfx": 156,
+        "x": 39,
+        "y": 12,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 17,
+        "gfx": 156,
+        "x": 40,
+        "y": 11,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 18,
+        "gfx": 158,
+        "x": 29,
+        "y": 15,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 19,
+        "gfx": 157,
+        "x": 33,
+        "y": 38,
+        "z": 0,
+        "movement": 2,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147231408,
+        "flag": 0
+      },
+      {
+        "id": 20,
+        "gfx": 157,
+        "x": 35,
+        "y": 25,
+        "z": 0,
+        "movement": 2,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147231408,
+        "flag": 0
+      },
+      {
+        "id": 21,
+        "gfx": 158,
+        "x": 23,
+        "y": 22,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 22,
+        "gfx": 158,
+        "x": 17,
+        "y": 37,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 23,
+        "gfx": 158,
+        "x": 23,
+        "y": 9,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 24,
+        "gfx": 156,
+        "x": 40,
+        "y": 40,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 25,
+        "gfx": 158,
+        "x": 29,
+        "y": 40,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 26,
+        "gfx": 158,
+        "x": 41,
+        "y": 7,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 27,
+        "gfx": 158,
+        "x": 46,
+        "y": 11,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 28,
+        "gfx": 156,
+        "x": 68,
+        "y": 57,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 0,
+        "flag": 0
+      },
+      {
+        "id": 29,
+        "gfx": 158,
+        "x": 52,
+        "y": 5,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 30,
+        "gfx": 158,
+        "x": 54,
+        "y": 19,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 31,
+        "gfx": 156,
+        "x": 68,
+        "y": 6,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 32,
+        "gfx": 157,
+        "x": 56,
+        "y": 9,
+        "z": 0,
+        "movement": 2,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147231408,
+        "flag": 0
+      },
+      {
+        "id": 33,
+        "gfx": 158,
+        "x": 47,
+        "y": 23,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 34,
+        "gfx": 156,
+        "x": 70,
+        "y": 31,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 35,
+        "gfx": 158,
+        "x": 60,
+        "y": 23,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 36,
+        "gfx": 157,
+        "x": 49,
+        "y": 17,
+        "z": 0,
+        "movement": 5,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147231408,
+        "flag": 0
+      },
+      {
+        "id": 37,
+        "gfx": 158,
+        "x": 55,
+        "y": 30,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 38,
+        "gfx": 157,
+        "x": 44,
+        "y": 55,
+        "z": 0,
+        "movement": 2,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147231408,
+        "flag": 0
+      },
+      {
+        "id": 39,
+        "gfx": 156,
+        "x": 69,
+        "y": 32,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 40,
+        "gfx": 158,
+        "x": 33,
+        "y": 34,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 41,
+        "gfx": 158,
+        "x": 50,
+        "y": 37,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 42,
+        "gfx": 156,
+        "x": 67,
+        "y": 56,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 0
+      },
+      {
+        "id": 43,
+        "gfx": 148,
+        "x": 7,
+        "y": 4,
+        "z": 0,
+        "movement": 0,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 146683796,
+        "flag": 61625
+      },
+      {
+        "id": 44,
+        "gfx": 158,
+        "x": 45,
+        "y": 48,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 45,
+        "gfx": 158,
+        "x": 30,
+        "y": 55,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 46,
+        "gfx": 158,
+        "x": 21,
+        "y": 52,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 47,
+        "gfx": 158,
+        "x": 51,
+        "y": 47,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 48,
+        "gfx": 158,
+        "x": 59,
+        "y": 54,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 49,
+        "gfx": 156,
+        "x": 39,
+        "y": 56,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 50,
+        "gfx": 158,
+        "x": 45,
+        "y": 61,
+        "z": 0,
+        "movement": 0,
+        "ranges": 0,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147233480,
+        "flag": 0
+      },
+      {
+        "id": 51,
+        "gfx": 156,
+        "x": 39,
+        "y": 41,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 52,
+        "gfx": 156,
+        "x": 40,
+        "y": 57,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 145243172,
+        "flag": 0
+      },
+      {
+        "id": 53,
+        "gfx": 157,
+        "x": 27,
+        "y": 60,
+        "z": 0,
+        "movement": 2,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147231408,
+        "flag": 0
+      },
+      {
+        "id": 54,
+        "gfx": 157,
+        "x": 60,
+        "y": 62,
+        "z": 0,
+        "movement": 2,
+        "ranges": 17,
+        "trainer": 0,
+        "sight": 0,
+        "script": 147231408,
+        "flag": 0
+      },
+      {
+        "id": 55,
+        "gfx": 156,
+        "x": 26,
+        "y": 29,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 0,
+        "flag": 0
+      },
+      {
+        "id": 56,
+        "gfx": 96,
+        "x": 15,
+        "y": 9,
+        "z": 0,
+        "movement": 0,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 143055618,
+        "flag": 18
+      },
+      {
+        "id": 57,
+        "gfx": 156,
+        "x": 25,
+        "y": 30,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 0
+      },
+      {
+        "id": 58,
+        "gfx": 156,
+        "x": 40,
+        "y": 18,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 0
+      },
+      {
+        "id": 59,
+        "gfx": 156,
+        "x": 41,
+        "y": 19,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 0
+      },
+      {
+        "id": 60,
+        "gfx": 156,
+        "x": 69,
+        "y": 5,
+        "z": 0,
+        "movement": 27,
+        "ranges": 9,
+        "trainer": 0,
+        "sight": 0,
+        "script": 134217728,
+        "flag": 0
+      }
+    ],
+    "warps": [
+      [
+        12,
+        56,
+        3,
+        4,
+        20,
+        3
+      ],
+      [
+        12,
+        57,
+        3,
+        5,
+        20,
+        3
+      ],
+      [
+        69,
+        9,
+        3,
+        1,
+        21,
+        3
+      ],
+      [
+        69,
+        8,
+        3,
+        0,
+        21,
+        3
+      ],
+      [
+        26,
+        53,
+        3,
+        5,
+        0,
+        1
+      ],
+      [
+        26,
+        43,
+        3,
+        4,
+        0,
+        1
+      ],
+      [
+        2,
+        4,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        4,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        5,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        51,
+        36,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        6,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        6,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "coords": [
+      [
+        1,
+        3,
+        0,
+        0,
+        0,
+        134217728
+      ],
+      [
+        2,
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        4,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        26,
+        23,
+        0,
+        0,
+        0,
+        144152536
+      ],
+      [
+        77,
+        0,
+        0,
+        0,
+        0,
+        144402642
+      ],
+      [
+        2,
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        52,
+        40,
+        0,
+        0,
+        0,
+        145752108
+      ],
+      [
+        0,
+        4,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "signs": [
+      [
+        60,
+        29,
+        3,
+        0,
+        135660887
+      ],
+      [
+        67,
+        7,
+        0,
+        0,
+        145224359
+      ],
+      [
+        16,
+        14,
+        0,
+        0,
+        135660914
+      ],
+      [
+        15,
+        55,
+        0,
+        0,
+        145224338
+      ],
+      [
+        32,
+        6,
+        0,
+        0,
+        135660896
+      ],
+      [
+        33,
+        51,
+        0,
+        0,
+        135660923
+      ],
+      [
+        13,
+        15,
+        3,
+        7,
+        16777229
+      ],
+      [
+        10,
+        28,
+        0,
+        7,
+        16842766
+      ],
+      [
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        57,
+        37,
+        0,
+        0,
+        145618304
+      ],
+      [
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        4,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "trainers": [
+    {
+      "map": "PeacefulWoods",
+      "local_id": 3,
+      "source_trainer": 102,
+      "party": [
+        [
+          "Surskit",
+          7
+        ],
+        [
+          "Nincada",
+          6
+        ]
+      ]
+    },
+    {
+      "map": "PeacefulWoods",
+      "local_id": 4,
+      "source_trainer": 103,
+      "party": [
+        [
+          "Wurmple",
+          7
+        ],
+        [
+          "Silcoon",
+          7
+        ],
+        [
+          "Cascoon",
+          7
+        ]
+      ]
+    },
+    {
+      "map": "PeacefulWoods",
+      "local_id": 5,
+      "source_trainer": 104,
+      "party": [
+        [
+          "Yanma",
+          9
+        ]
+      ]
+    }
+  ]
+}

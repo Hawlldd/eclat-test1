@@ -639,3 +639,6 @@ gSpecials::
 	def_special StickerManGetBragFlags
 	def_special CheckAddCoins
 	def_special StartIviereFlyby
+	def_special StartEclatRoute1Flybys
+	def_special StartEclatRoute2Flybys
+	def_special StartEclatRockyFlybys

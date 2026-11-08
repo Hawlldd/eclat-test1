@@ -7,7 +7,7 @@
       "y": 5,
       "respawn_map": "MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F",
       "respawn_npc": "LOCALID_PLAYERS_HOUSE_1F_MOM",
-      "respawn_x": 7,
+      "respawn_x": 9,
       "respawn_y": 4
     },
     {
@@ -17,8 +17,8 @@
       "y": 2,
       "respawn_map": "MAP_LITTLEROOT_TOWN_MAYS_HOUSE_1F",
       "respawn_npc": "LOCALID_PLAYERS_HOUSE_1F_MOM",
-      "respawn_x": 8,
-      "respawn_y": 7
+      "respawn_x": 9,
+      "respawn_y": 4
     },
     {
       "id": "HEAL_LOCATION_PETALBURG_CITY",
@@ -99,8 +99,8 @@
       "y": 9,
       "respawn_map": "MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F",
       "respawn_npc": "LOCALID_PLAYERS_HOUSE_1F_MOM",
-      "respawn_x": 2,
-      "respawn_y": 7
+      "respawn_x": 9,
+      "respawn_y": 4
     },
     {
       "id": "HEAL_LOCATION_LITTLEROOT_TOWN_MAYS_HOUSE",
@@ -109,16 +109,16 @@
       "y": 9,
       "respawn_map": "MAP_LITTLEROOT_TOWN_MAYS_HOUSE_1F",
       "respawn_npc": "LOCALID_PLAYERS_HOUSE_1F_MOM",
-      "respawn_x": 8,
-      "respawn_y": 7
+      "respawn_x": 9,
+      "respawn_y": 4
     },
     {
       "id": "HEAL_LOCATION_OLDALE_TOWN",
       "map": "MAP_OLDALE_TOWN",
-      "x": 6,
-      "y": 17,
-      "respawn_map": "MAP_OLDALE_TOWN_POKEMON_CENTER_1F",
-      "respawn_npc": "LOCALID_OLDALE_NURSE"
+      "x": 47,
+      "y": 26,
+      "respawn_map": "MAP_PETIPRES_POKEMON_CENTER",
+      "respawn_npc": "LOCALID_PETIPRES_POKEMON_CENTER_1"
     },
     {
       "id": "HEAL_LOCATION_DEWFORD_TOWN",
@@ -193,10 +193,10 @@
       "map": "MAP_PALLET_TOWN",
       "x": 6,
       "y": 8,
-      "respawn_x": 8,
-      "respawn_y": 5,
       "respawn_map": "MAP_PALLET_TOWN_PLAYERS_HOUSE_1F",
-      "respawn_npc": "LOCALID_PLAYERS_HOUSE_1F_MOM"
+      "respawn_npc": "LOCALID_PLAYERS_HOUSE_1F_MOM",
+      "respawn_x": 8,
+      "respawn_y": 5
     },
     {
       "id": "HEAL_LOCATION_VIRIDIAN_CITY",
@@ -349,6 +349,26 @@
       "y": 12,
       "respawn_map": "MAP_SIX_ISLAND_POKEMON_CENTER_1F",
       "respawn_npc": "LOCALID_SIX_ISLAND_NURSE"
+    },
+    {
+      "id": "HEAL_LOCATION_PETIPRES",
+      "map": "MAP_OLDALE_TOWN",
+      "x": 47,
+      "y": 26,
+      "respawn_map": "MAP_PETIPRES_POKEMON_CENTER",
+      "respawn_npc": "LOCALID_PETIPRES_POKEMON_CENTER_1",
+      "respawn_x": 11,
+      "respawn_y": 12
+    },
+    {
+      "id": "HEAL_LOCATION_ECLAT_ROUTE2",
+      "map": "MAP_ROUTE102",
+      "x": 28,
+      "y": 17,
+      "respawn_map": "MAP_ECLAT_ROUTE2_CENTER",
+      "respawn_npc": "LOCALID_ECLAT_ROUTE2_CENTER_1",
+      "respawn_x": 11,
+      "respawn_y": 12
     }
   ]
 }

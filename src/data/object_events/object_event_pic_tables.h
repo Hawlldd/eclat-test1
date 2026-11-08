@@ -1,3 +1,51 @@
+static const struct SpriteFrameImage sPicTable_RouteGateGuard[] = {
+    overworld_ascending_frames(sRouteGateGuardTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteRodFan[] = {
+    overworld_ascending_frames(sRouteRodFanTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteBeginner[] = {
+    overworld_ascending_frames(sRouteBeginnerTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteRattata[] = {
+    overworld_ascending_frames(sRouteRattataTiles, 4, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteSally[] = {
+    overworld_ascending_frames(sRouteSallyTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteMyst[] = {
+    overworld_ascending_frames(sRouteMystTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteBen[] = {
+    overworld_ascending_frames(sRouteBenTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteFisher[] = {
+    overworld_ascending_frames(sRouteFisherTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteItemBall[] = {
+    {sRouteItemBallTiles, 128},
+};
+
+static const struct SpriteFrameImage sPicTable_RouteTeaNpc[] = {
+    overworld_ascending_frames(sRouteTeaNpcTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteMegaNpc[] = {
+    overworld_ascending_frames(sRouteMegaNpcTiles, 2, 4),
+};
+
+static const struct SpriteFrameImage sPicTable_RouteCamper[] = {
+    overworld_ascending_frames(sRouteCamperTiles, 2, 2),
+};
+
 static const struct SpriteFrameImage sPicTable_FilaoTableMap[] = {
     overworld_frame(sFilaoTableMapTiles, 4, 2, 0),
 };
@@ -2546,3 +2594,6 @@ static const struct SpriteFrameImage sPicTable_MomFrlg[] = {
 };
 
 #endif // IS_FRLG
+
+#include "petipres_pic_tables.h"
+#include "eclat_route2_pic_tables.h"

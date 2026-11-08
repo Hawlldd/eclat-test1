@@ -508,6 +508,10 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {sEclatRivalOverworldPalette,          OBJ_EVENT_PAL_TAG_ECLAT_RIVAL},
     {sEclatMotherPalette,                  OBJ_EVENT_PAL_TAG_ECLAT_MOTHER},
     {sEclatStolenMonPalette,               OBJ_EVENT_PAL_TAG_ECLAT_STOLEN_MON},
+    {sPetipresPalette03, OBJ_EVENT_PAL_TAG_PETIPRES_03},
+    {sPetipresPalette04, OBJ_EVENT_PAL_TAG_PETIPRES_04},
+    {sPetipresPalette05, OBJ_EVENT_PAL_TAG_PETIPRES_05},
+    {sPetipresPalette06, OBJ_EVENT_PAL_TAG_PETIPRES_06},
     {sFilaoWifePalette,                    OBJ_EVENT_PAL_TAG_IVIERE_WIFE},
     {gObjectEventPal_Brendan,               OBJ_EVENT_PAL_TAG_BRENDAN},
     {gObjectEventPal_BrendanReflection,     OBJ_EVENT_PAL_TAG_BRENDAN_REFLECTION},
@@ -3214,6 +3218,9 @@ const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId)
 
     if (graphicsId >= NUM_OBJ_EVENT_GFX)
         graphicsId = OBJ_EVENT_GFX_NINJA_BOY;
+
+    if (!gObjectEventGraphicsInfoPointers[graphicsId])
+        return gObjectEventGraphicsInfoPointers[OBJ_EVENT_GFX_NINJA_BOY];
 
     return gObjectEventGraphicsInfoPointers[graphicsId];
 }

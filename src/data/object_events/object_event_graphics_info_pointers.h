@@ -412,7 +412,98 @@ extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FilaoAide;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_IviereNameRater;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_Filao;
 extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_FilaoTableMap;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteGateGuard;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteRodFan;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteBeginner;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteRattata;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteSally;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteMyst;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteBen;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteFisher;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteItemBall;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteTeaNpc;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteMegaNpc;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_RouteCamper;
+
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc9F;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc74;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc12;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc13;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc20;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc1F;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc1E;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc32;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc59;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc1C;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc16;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc2F;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc1B;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc44;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc17;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc40;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc3D;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc75;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc42;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc37;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_PetipresNpc45;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc5F;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc14;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc27;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc1A;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc31;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc4C;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc9B;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc38;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc29;
+extern const struct ObjectEventGraphicsInfo gObjectEventGraphicsInfo_EclatRoute2Npc2A;
+
+
 const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM_OBJ_EVENT_GFX] = {
+
+
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_5F] = &gObjectEventGraphicsInfo_EclatRoute2Npc5F,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_14] = &gObjectEventGraphicsInfo_EclatRoute2Npc14,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_27] = &gObjectEventGraphicsInfo_EclatRoute2Npc27,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_1A] = &gObjectEventGraphicsInfo_EclatRoute2Npc1A,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_31] = &gObjectEventGraphicsInfo_EclatRoute2Npc31,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_4C] = &gObjectEventGraphicsInfo_EclatRoute2Npc4C,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_9B] = &gObjectEventGraphicsInfo_EclatRoute2Npc9B,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_38] = &gObjectEventGraphicsInfo_EclatRoute2Npc38,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_29] = &gObjectEventGraphicsInfo_EclatRoute2Npc29,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE2_2A] = &gObjectEventGraphicsInfo_EclatRoute2Npc2A,
+    [OBJ_EVENT_GFX_PETIPRES_45] = &gObjectEventGraphicsInfo_PetipresNpc45,
+    [OBJ_EVENT_GFX_PETIPRES_37] = &gObjectEventGraphicsInfo_PetipresNpc37,
+    [OBJ_EVENT_GFX_PETIPRES_42] = &gObjectEventGraphicsInfo_PetipresNpc42,
+    [OBJ_EVENT_GFX_PETIPRES_9F] = &gObjectEventGraphicsInfo_PetipresNpc9F,
+    [OBJ_EVENT_GFX_PETIPRES_74] = &gObjectEventGraphicsInfo_PetipresNpc74,
+    [OBJ_EVENT_GFX_PETIPRES_12] = &gObjectEventGraphicsInfo_PetipresNpc12,
+    [OBJ_EVENT_GFX_PETIPRES_13] = &gObjectEventGraphicsInfo_PetipresNpc13,
+    [OBJ_EVENT_GFX_PETIPRES_20] = &gObjectEventGraphicsInfo_PetipresNpc20,
+    [OBJ_EVENT_GFX_PETIPRES_1F] = &gObjectEventGraphicsInfo_PetipresNpc1F,
+    [OBJ_EVENT_GFX_PETIPRES_1E] = &gObjectEventGraphicsInfo_PetipresNpc1E,
+    [OBJ_EVENT_GFX_PETIPRES_32] = &gObjectEventGraphicsInfo_PetipresNpc32,
+    [OBJ_EVENT_GFX_PETIPRES_59] = &gObjectEventGraphicsInfo_PetipresNpc59,
+    [OBJ_EVENT_GFX_PETIPRES_1C] = &gObjectEventGraphicsInfo_PetipresNpc1C,
+    [OBJ_EVENT_GFX_PETIPRES_16] = &gObjectEventGraphicsInfo_PetipresNpc16,
+    [OBJ_EVENT_GFX_PETIPRES_2F] = &gObjectEventGraphicsInfo_PetipresNpc2F,
+    [OBJ_EVENT_GFX_PETIPRES_1B] = &gObjectEventGraphicsInfo_PetipresNpc1B,
+    [OBJ_EVENT_GFX_PETIPRES_44] = &gObjectEventGraphicsInfo_PetipresNpc44,
+    [OBJ_EVENT_GFX_PETIPRES_17] = &gObjectEventGraphicsInfo_PetipresNpc17,
+    [OBJ_EVENT_GFX_PETIPRES_40] = &gObjectEventGraphicsInfo_PetipresNpc40,
+    [OBJ_EVENT_GFX_PETIPRES_3D] = &gObjectEventGraphicsInfo_PetipresNpc3D,
+    [OBJ_EVENT_GFX_PETIPRES_75] = &gObjectEventGraphicsInfo_PetipresNpc75,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_GATE_GUARD] = &gObjectEventGraphicsInfo_RouteGateGuard,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_ROD_FAN] = &gObjectEventGraphicsInfo_RouteRodFan,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_BEGINNER] = &gObjectEventGraphicsInfo_RouteBeginner,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_RATTATA] = &gObjectEventGraphicsInfo_RouteRattata,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_SALLY] = &gObjectEventGraphicsInfo_RouteSally,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_MYST] = &gObjectEventGraphicsInfo_RouteMyst,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_BEN] = &gObjectEventGraphicsInfo_RouteBen,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_FISHER] = &gObjectEventGraphicsInfo_RouteFisher,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_ITEM_BALL] = &gObjectEventGraphicsInfo_RouteItemBall,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_TEA_NPC] = &gObjectEventGraphicsInfo_RouteTeaNpc,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_MEGA_NPC] = &gObjectEventGraphicsInfo_RouteMegaNpc,
+    [OBJ_EVENT_GFX_ECLAT_ROUTE_CAMPER] = &gObjectEventGraphicsInfo_RouteCamper,
     [OBJ_EVENT_GFX_IVIERE_TOWN_MAP] = &gObjectEventGraphicsInfo_FilaoTableMap,
     [OBJ_EVENT_GFX_IVIERE_CHILD] = &gObjectEventGraphicsInfo_IviereChild,
     [OBJ_EVENT_GFX_IVIERE_RIVER_NPC] = &gObjectEventGraphicsInfo_IviereRiverNpc,
@@ -669,6 +760,12 @@ const struct ObjectEventGraphicsInfo *const gObjectEventGraphicsInfoPointers[NUM
     [OBJ_EVENT_GFX_APRICORN_TREE] =            &gObjectEventGraphicsInfo_ApricornTree,
     [OBJ_EVENT_GFX_ROCKET_M]                 = &gObjectEventGraphicsInfo_RocketM,
     [OBJ_EVENT_GFX_ROCKET_F]                 = &gObjectEventGraphicsInfo_RocketF,
+    [OBJ_EVENT_GFX_CUTTABLE_TREE_FRLG]       = &gObjectEventGraphicsInfo_CuttableTree,
+    [OBJ_EVENT_GFX_BREAKABLE_ROCK_FRLG]      = &gObjectEventGraphicsInfo_BreakableRock,
+    [OBJ_EVENT_GFX_PUSHABLE_BOULDER_FRLG]    = &gObjectEventGraphicsInfo_PushableBoulder,
+    [OBJ_EVENT_GFX_BUG_CATCHER_FRLG]         = &gObjectEventGraphicsInfo_BugCatcher,
+    [OBJ_EVENT_GFX_PIDGEY]                   = &gObjectEventGraphicsInfo_EclatTownMon,
+    [OBJ_EVENT_GFX_SPEAROW]                  = &gObjectEventGraphicsInfo_EclatTownMon,
 #if IS_FRLG
     [OBJ_EVENT_GFX_RED_NORMAL] =               &gObjectEventGraphicsInfo_RedNormal,
     [OBJ_EVENT_GFX_RED_BIKE] =                 &gObjectEventGraphicsInfo_RedBike,

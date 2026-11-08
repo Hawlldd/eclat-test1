@@ -55,40 +55,40 @@
 #define FLAG_ECLAT_BOOSTED_SHINY_RATE 0x21
 #define FLAG_HIDE_ECLAT_UNUSED_OBJECTS 0x22
 #define FLAG_IVIERE_TOWN_MAP_TAKEN 0x23
-#define FLAG_UNUSED_0x024    0x24 // Unused Flag
-#define FLAG_UNUSED_0x025    0x25 // Unused Flag
-#define FLAG_UNUSED_0x026    0x26 // Unused Flag
-#define FLAG_UNUSED_0x027    0x27 // Unused Flag
-#define FLAG_UNUSED_0x028    0x28 // Unused Flag
-#define FLAG_UNUSED_0x029    0x29 // Unused Flag
-#define FLAG_UNUSED_0x02A    0x2A // Unused Flag
-#define FLAG_UNUSED_0x02B    0x2B // Unused Flag
-#define FLAG_UNUSED_0x02C    0x2C // Unused Flag
-#define FLAG_UNUSED_0x02D    0x2D // Unused Flag
-#define FLAG_UNUSED_0x02E    0x2E // Unused Flag
+#define FLAG_ECLAT_ROUTE1_MET_MYST 0x24
+#define FLAG_ECLAT_ROUTE1_OLD_ROD 0x25
+#define FLAG_ECLAT_ROUTE1_GATE_TEA 0x26
+#define FLAG_ECLAT_ROUTE1_ITEM 0x27
+#define FLAG_ECLAT_ROUTE1_HIDE_MEGA_NPC 0x28
+#define FLAG_ECLAT_ROUTE1_GOT_HERACRONITE 0x29
+#define FLAG_ECLAT_ROUTE1_GOT_SALAMENCITE 0x2A
+#define FLAG_ECLAT_ROUTE1_GOT_HOUNDOOMINITE 0x2B
+#define FLAG_ECLAT_ROUTE1_TM42 0x2C
+#define FLAG_ECLAT_ROUTE1_SECOND_PIDGEOTITE 0x2D
+#define FLAG_ECLAT_ROUTE1_GOT_TICKET 0x2E
 #define FLAG_UNUSED_0x02F    0x2F // Unused Flag
-#define FLAG_UNUSED_0x030    0x30 // Unused Flag
-#define FLAG_UNUSED_0x031    0x31 // Unused Flag
-#define FLAG_UNUSED_0x032    0x32 // Unused Flag
-#define FLAG_UNUSED_0x033    0x33 // Unused Flag
-#define FLAG_UNUSED_0x034    0x34 // Unused Flag
-#define FLAG_UNUSED_0x035    0x35 // Unused Flag
-#define FLAG_UNUSED_0x036    0x36 // Unused Flag
-#define FLAG_UNUSED_0x037    0x37 // Unused Flag
-#define FLAG_UNUSED_0x038    0x38 // Unused Flag
-#define FLAG_UNUSED_0x039    0x39 // Unused Flag
-#define FLAG_UNUSED_0x03A    0x3A // Unused Flag
-#define FLAG_UNUSED_0x03B    0x3B // Unused Flag
-#define FLAG_UNUSED_0x03C    0x3C // Unused Flag
-#define FLAG_UNUSED_0x03D    0x3D // Unused Flag
-#define FLAG_UNUSED_0x03E    0x3E // Unused Flag
-#define FLAG_UNUSED_0x03F    0x3F // Unused Flag
-#define FLAG_UNUSED_0x040    0x40 // Unused Flag
-#define FLAG_UNUSED_0x041    0x41 // Unused Flag
-#define FLAG_UNUSED_0x042    0x42 // Unused Flag
-#define FLAG_UNUSED_0x043    0x43 // Unused Flag
-#define FLAG_UNUSED_0x044    0x44 // Unused Flag
-#define FLAG_UNUSED_0x045    0x45 // Unused Flag
+#define FLAG_PETIPRES_POTION 0x30
+#define FLAG_HIDE_PETIPRES_STRANGER 0x31
+#define FLAG_GOT_PETIPRES_RADAR 0x32
+#define FLAG_GOT_PETIPRES_MILK 0x33
+#define FLAG_PETIPRES_TREASURE_CLUE 0x34
+#define FLAG_ECLAT_ROUTE2_ETHER 0x35
+#define FLAG_ECLAT_ROUTE2_PARALYZE_HEAL 0x36
+#define FLAG_ECLAT_ROUTE2_WHIPPED_DREAM 0x37
+#define FLAG_ECLAT_ROUTE2_LOPUNNITE 0x38
+#define FLAG_ECLAT_ROUTE2_EVERSTONE 0x39
+#define FLAG_ECLAT_ROUTE2_FLASH 0x3A
+#define FLAG_ECLAT_ROUTE2_TICKET 0x3B
+#define FLAG_ECLAT_ROUTE2_ROCKETS_DONE 0x3C
+#define FLAG_ECLAT_ROUTE2_MYST_HIDDEN 0x3D
+#define FLAG_ITEM_PEACEFUL_WOODS_POKE_BALL 0x3E
+#define FLAG_ITEM_PEACEFUL_WOODS_BEEDRILLITE 0x3F
+#define FLAG_ITEM_PEACEFUL_WOODS_POTION_1 0x40
+#define FLAG_ITEM_PEACEFUL_WOODS_POTION_2 0x41
+#define FLAG_PEACEFUL_WOODS_TICKET 0x42
+#define FLAG_PEACEFUL_WOODS_CUT_TREE_1 0x43
+#define FLAG_PEACEFUL_WOODS_CUT_TREE_2 0x44
+#define FLAG_PEACEFUL_WOODS_CUT_TREE_3 0x45
 #define FLAG_UNUSED_0x046    0x46 // Unused Flag
 #define FLAG_UNUSED_0x047    0x47 // Unused Flag
 #define FLAG_UNUSED_0x048    0x48 // Unused Flag
@@ -663,9 +663,8 @@
 #define FLAG_HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH           (FLAG_HIDDEN_ITEMS_START + 0x6D)
 #define FLAG_HIDDEN_ITEM_ROUTE_123_RARE_CANDY                (FLAG_HIDDEN_ITEMS_START + 0x6E)
 #define FLAG_HIDDEN_ITEM_ROUTE_105_BIG_PEARL                 (FLAG_HIDDEN_ITEMS_START + 0x6F)
-
-#define FLAG_UNUSED_0x264  0x264 // Unused Flag
-#define FLAG_UNUSED_0x265  0x265 // Unused Flag
+#define FLAG_HIDDEN_ITEM_PEACEFUL_WOODS_POTION               (FLAG_HIDDEN_ITEMS_START + 0x70)
+#define FLAG_HIDDEN_ITEM_PEACEFUL_WOODS_ANTIDOTE             (FLAG_HIDDEN_ITEMS_START + 0x71)
 #define FLAG_UNUSED_0x266  0x266 // Unused Flag
 #define FLAG_UNUSED_0x267  0x267 // Unused Flag
 #define FLAG_UNUSED_0x268  0x268 // Unused Flag
@@ -1299,22 +1298,22 @@
 #define FLAG_UNUSED_0x4DD                                           0x4DD // Unused Flag
 #define FLAG_UNUSED_0x4DE                                           0x4DE // Unused Flag
 #define FLAG_UNUSED_0x4DF                                           0x4DF // Unused Flag
-#define FLAG_UNUSED_0x4E0                                           0x4E0 // Unused Flag
-#define FLAG_UNUSED_0x4E1                                           0x4E1 // Unused Flag
-#define FLAG_UNUSED_0x4E2                                           0x4E2 // Unused Flag
-#define FLAG_UNUSED_0x4E3                                           0x4E3 // Unused Flag
-#define FLAG_UNUSED_0x4E4                                           0x4E4 // Unused Flag
-#define FLAG_UNUSED_0x4E5                                           0x4E5 // Unused Flag
-#define FLAG_UNUSED_0x4E6                                           0x4E6 // Unused Flag
-#define FLAG_UNUSED_0x4E7                                           0x4E7 // Unused Flag
-#define FLAG_UNUSED_0x4E8                                           0x4E8 // Unused Flag
-#define FLAG_UNUSED_0x4E9                                           0x4E9 // Unused Flag
-#define FLAG_UNUSED_0x4EA                                           0x4EA // Unused Flag
-#define FLAG_UNUSED_0x4EB                                           0x4EB // Unused Flag
-#define FLAG_UNUSED_0x4EC                                           0x4EC // Unused Flag
-#define FLAG_UNUSED_0x4ED                                           0x4ED // Unused Flag
-#define FLAG_UNUSED_0x4EE                                           0x4EE // Unused Flag
-#define FLAG_UNUSED_0x4EF                                           0x4EF // Unused Flag
+#define FLAG_ECLAT_EXTRA_TRAINER_00 0x4E0
+#define FLAG_ECLAT_EXTRA_TRAINER_01 0x4E1
+#define FLAG_ECLAT_EXTRA_TRAINER_02 0x4E2
+#define FLAG_ECLAT_EXTRA_TRAINER_03 0x4E3
+#define FLAG_ECLAT_EXTRA_TRAINER_04 0x4E4
+#define FLAG_ECLAT_EXTRA_TRAINER_05 0x4E5
+#define FLAG_ECLAT_EXTRA_TRAINER_06 0x4E6
+#define FLAG_ECLAT_EXTRA_TRAINER_07 0x4E7
+#define FLAG_ECLAT_EXTRA_TRAINER_08 0x4E8
+#define FLAG_ECLAT_EXTRA_TRAINER_09 0x4E9
+#define FLAG_ECLAT_EXTRA_TRAINER_0A 0x4EA
+#define FLAG_ECLAT_EXTRA_TRAINER_0B 0x4EB
+#define FLAG_ECLAT_EXTRA_TRAINER_0C 0x4EC
+#define FLAG_ECLAT_EXTRA_TRAINER_0D 0x4ED
+#define FLAG_ECLAT_EXTRA_TRAINER_0E 0x4EE
+#define FLAG_ECLAT_EXTRA_TRAINER_0F 0x4EF
 
 #define FLAG_DEFEATED_RUSTBORO_GYM                                  0x4F0
 #define FLAG_DEFEATED_DEWFORD_GYM                                   0x4F1
@@ -1341,7 +1340,19 @@
 // See constants/opponents.h. The values there + FLAG_TRAINER_FLAG_START are the flag IDs
 
 #define TRAINER_FLAGS_START                                         0x500
-#define TRAINER_FLAGS_END                                           (TRAINER_FLAGS_START + MAX_TRAINERS_COUNT - 1) // 0x85F
+#if IS_FRLG
+#define TRAINER_FLAGS_END (TRAINER_FLAGS_START + MAX_TRAINERS_COUNT - 1)
+#else
+#define TRAINER_FLAGS_END (TRAINER_FLAGS_START + 864 - 1)
+#endif
+
+// Preserve the original save flag addresses. Extra Emerald trainers use a
+// reserved bank of 16 formerly unused flags rather than moving system flags.
+#if IS_FRLG
+#define TRAINER_FLAG_ID(id) (TRAINER_FLAGS_START + (id))
+#else
+#define TRAINER_FLAG_ID(id) ((id) < 864 ? TRAINER_FLAGS_START + (id) : 0x4E0 + (id) - 864)
+#endif
 
 // System Flags
 

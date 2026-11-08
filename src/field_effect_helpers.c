@@ -14,6 +14,7 @@
 #include "wild_encounter_ow.h"
 #include "constants/event_objects.h"
 #include "constants/field_effects.h"
+#include "constants/layouts.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/species.h"
@@ -431,13 +432,46 @@ void UpdateShadowFieldEffect(struct Sprite *sprite)
 #define sCurrentMap  data[5]
 #define sObjectMoved data[7]
 
+extern const struct SpritePalette gSpritePalette_GeneralFieldEffect1;
+extern const struct SpritePalette gSpritePalette_EclatTallGrass;
+extern const struct SpriteTemplate gFieldEffectObjectTemplate_EclatTallGrass;
+extern const struct Tileset gTileset_EclatIvierePrimary;
+
+static bool32 ShouldUseEclatGrass(void)
+{
+    if ((gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE101) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE101))
+     || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE102) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE102))
+     || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ECLAT_ROUTE1) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ECLAT_ROUTE1))
+     || gMapHeader.mapLayoutId == LAYOUT_ECLAT_ROUTE1
+     || gMapHeader.mapLayoutId == LAYOUT_ECLAT_ROUTE2
+     || gMapHeader.mapLayoutId == LAYOUT_ECLAT_ROCKY_PATH
+     || gMapHeader.mapLayoutId == LAYOUT_PEACEFUL_WOODS
+     || (gMapHeader.mapLayout != NULL && gMapHeader.mapLayout->primaryTileset == &gTileset_EclatIvierePrimary))
+        return TRUE;
+
+    return FALSE;
+}
+
 u32 FldEff_TallGrass(void)
 {
+    bool32 useEclatGraphics = ShouldUseEclatGrass();
+    const struct SpritePalette *palette = useEclatGraphics ? &gSpritePalette_EclatTallGrass : &gSpritePalette_GeneralFieldEffect1;
+    const struct SpriteTemplate *template = useEclatGraphics ? &gFieldEffectObjectTemplate_EclatTallGrass
+                                          : gFieldEffectObjectTemplatePointers[FLDEFFOBJ_TALL_GRASS];
+    u8 paletteSlot = LoadSpritePalette(palette);
+    if (paletteSlot == 0xFF)
+    {
+        FieldEffectActiveListRemove(FLDEFF_TALL_GRASS);
+        return 0;
+    }
+    SetPaletteColorMapType(paletteSlot + 16, COLOR_MAP_DARK_CONTRAST);
+    UpdateSpritePaletteWithWeather(paletteSlot, FALSE);
+
     u8 spriteId;
     s16 x = gFieldEffectArguments[0];
     s16 y = gFieldEffectArguments[1];
     SetSpritePosToOffsetMapCoords(&x, &y, 8, 8);
-    spriteId = CreateSpriteAtEndUnchecked(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_TALL_GRASS], x, y, 0);
+    spriteId = CreateSpriteAtEndUnchecked(template, x, y, 0);
     if (spriteId != MAX_SPRITES)
     {
         struct Sprite *sprite = &gSprites[spriteId];
@@ -452,6 +486,11 @@ u32 FldEff_TallGrass(void)
 
         if (gFieldEffectArguments[7])
             SeekSpriteAnim(sprite, 4); // Skip to end of anim
+    }
+    else
+    {
+        FieldEffectFreePaletteIfUnused(paletteSlot);
+        FieldEffectActiveListRemove(FLDEFF_TALL_GRASS);
     }
     return 0;
 }
@@ -501,6 +540,9 @@ void UpdateTallGrassFieldEffect(struct Sprite *sprite)
 
 u32 FldEff_JumpTallGrass(void)
 {
+    if (ShouldUseEclatGrass())
+        return FldEff_TallGrass();
+
     u8 spriteId;
 
     SetSpritePosToOffsetMapCoords((s16 *)&gFieldEffectArguments[0], (s16 *)&gFieldEffectArguments[1], 8, 12);

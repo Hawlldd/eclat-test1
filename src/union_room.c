@@ -3378,16 +3378,17 @@ bool16 BufferUnionRoomPlayerName(void)
     if (!ShouldCheckForUnionRoom())
         return FALSE;
 
-    if (sUnionRoomPlayerName[0] != EOS)
+    // Ignore an empty or unterminated name before copying from the scan buffer.
+    for (u32 i = 1; i < sizeof(sUnionRoomPlayerName) && sUnionRoomPlayerName[0] != EOS; i++)
     {
-        StringCopy(gStringVar1, sUnionRoomPlayerName);
-        sUnionRoomPlayerName[0] = EOS;
-        return TRUE;
+        if (sUnionRoomPlayerName[i] == EOS)
+        {
+            StringCopy(gStringVar1, sUnionRoomPlayerName);
+            sUnionRoomPlayerName[0] = EOS;
+            return TRUE;
+        }
     }
-    else
-    {
-        return FALSE;
-    }
+    return FALSE;
 }
 
 static u8 HandlePlayerListUpdate(void)

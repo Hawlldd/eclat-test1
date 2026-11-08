@@ -689,6 +689,8 @@ bool8 TryStartStepBasedScript(struct MapPosition *position, u16 metatileBehavior
         return TRUE;
     if (TryStartWarpEventScript(position, metatileBehavior) == TRUE)
         return TRUE;
+    if (TryArrowWarp(position, metatileBehavior, direction) == TRUE)
+        return TRUE;
     if (TryStartMiscWalkingScripts(metatileBehavior) == TRUE)
         return TRUE;
     if (TryStartStepCountScript(metatileBehavior) == TRUE)

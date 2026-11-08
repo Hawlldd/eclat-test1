@@ -668,6 +668,27 @@ void InitTilesetAnim_Iviere(void)
     sPrimaryTilesetAnimCallback = TilesetAnim_Iviere;
 }
 
+static const u16 sPetipresHouseAnim[] = INCBIN_U16("data/tilesets/secondary/petipres_houses/animation.bin");
+
+static void TilesetAnim_PetipresHouses(u16 timer)
+{
+    if (timer % 16 != 1)
+        return;
+
+    u16 frame = timer / 16;
+    AppendTilesetAnimToBuffer(sPetipresHouseAnim + frame * 32,
+                              (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(0x2A2)), 64);
+    AppendTilesetAnimToBuffer(sPetipresHouseAnim + (4 + frame) * 32,
+                              (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(0x2B2)), 64);
+}
+
+void InitTilesetAnim_PetipresHouses(void)
+{
+    sSecondaryTilesetAnimCounter = 0;
+    sSecondaryTilesetAnimCounterMax = 64;
+    sSecondaryTilesetAnimCallback = TilesetAnim_PetipresHouses;
+}
+
 void InitTilesetAnim_General(void)
 {
     sPrimaryTilesetAnimCounter = 0;

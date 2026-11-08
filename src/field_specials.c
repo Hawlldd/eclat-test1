@@ -5769,6 +5769,8 @@ bool8 CheckAddCoins(void)
 
 static const u32 sIviereFlybyTiles[] = INCBIN_U32("graphics/eclat_intro/iviere_flyby.bin");
 
+static const u32 sEclatRoute1FlybyTiles[] = INCBIN_U32("graphics/eclat_intro/route1_flyby.bin");
+
 static const struct OamData sIviereFlybyOam =
 {
     .shape = SPRITE_SHAPE(32x32),
@@ -5780,6 +5782,12 @@ static const struct SpriteFrameImage sIviereFlybyImages[] =
 {
     {sIviereFlybyTiles, 512},
     {sIviereFlybyTiles + 128, 512},
+};
+
+static const struct SpriteFrameImage sEclatRoute1FlybyImages[] =
+{
+    {sEclatRoute1FlybyTiles, 512},
+    {sEclatRoute1FlybyTiles + 128, 512},
 };
 
 static const union AnimCmd sIviereFlybyAnim[] =
@@ -5807,7 +5815,7 @@ static const struct
     u8 x;
     u8 y;
     u8 range;
-} sIviereFlybyRoutes[] =
+} sEclatFlybyRoutes[] =
 {
     {16, 20, 9},
     {23, 23, 9},
@@ -5815,12 +5823,22 @@ static const struct
     {33, 5, 9},
     {29, 12, 9},
     {34, 4, 9},
+    // Route 1
+    {32, 12, 9},
+    {32, 13, 9},
+    {49, 2, 9},
+    {50, 3, 9},
+    {51, 15, 9},
+    {22, 20, 9},
+    {23, 21, 9},
 };
+
+enum { IVIERE_FLYBY_ROUTE_COUNT = 6 };
 
 static void SpriteCB_IviereFlyby(struct Sprite *sprite)
 {
     u8 route = sprite->data[0];
-    s16 distance = sIviereFlybyRoutes[route].range * 16;
+    s16 distance = sEclatFlybyRoutes[route].range * 16;
 
     sprite->data[2] += sprite->data[1] ? -1 : 1;
     if (sprite->data[2] == 0 || sprite->data[2] == distance)
@@ -5829,8 +5847,8 @@ static void SpriteCB_IviereFlyby(struct Sprite *sprite)
         StartSpriteAnim(sprite, sprite->data[1]);
     }
 
-    GetMapCoordsFromSpritePos(sIviereFlybyRoutes[route].x + MAP_OFFSET - sIviereFlybyRoutes[route].range,
-                              sIviereFlybyRoutes[route].y + MAP_OFFSET, &sprite->x, &sprite->y);
+    GetMapCoordsFromSpritePos(sEclatFlybyRoutes[route].x + MAP_OFFSET - sEclatFlybyRoutes[route].range,
+                              sEclatFlybyRoutes[route].y + MAP_OFFSET, &sprite->x, &sprite->y);
     sprite->x += 8 + sprite->data[2];
 
     s16 screenX = sprite->x + gSpriteCoordOffsetX;
@@ -5839,21 +5857,31 @@ static void SpriteCB_IviereFlyby(struct Sprite *sprite)
                      || screenY < -16 || screenY > DISPLAY_HEIGHT + 16;
 }
 
-
-void StartIviereFlyby(void)
+static const struct SpriteTemplate sIviereFlybyTemplate =
 {
-    static const struct SpriteTemplate template =
-    {
-        .tileTag = TAG_NONE,
-        .paletteTag = OBJ_EVENT_PAL_TAG_ECLAT_MOTHER,
-        .oam = &sIviereFlybyOam,
-        .anims = sIviereFlybyAnims,
-        .images = sIviereFlybyImages,
-        .affineAnims = gDummySpriteAffineAnimTable,
-        .callback = SpriteCB_IviereFlyby,
-    };
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_ECLAT_MOTHER,
+    .oam = &sIviereFlybyOam,
+    .anims = sIviereFlybyAnims,
+    .images = sIviereFlybyImages,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_IviereFlyby,
+};
 
-    if (LoadObjectEventPalette(template.paletteTag) == 0xFF)
+static const struct SpriteTemplate sRoute1FlybyTemplate =
+{
+    .tileTag = TAG_NONE,
+    .paletteTag = OBJ_EVENT_PAL_TAG_ECLAT_STOLEN_MON,
+    .oam = &sIviereFlybyOam,
+    .anims = sIviereFlybyAnims,
+    .images = sEclatRoute1FlybyImages,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCB_IviereFlyby,
+};
+
+static void StartEclatFlybys(u32 firstRoute, u32 endRoute, const struct SpriteTemplate *template)
+{
+    if (LoadObjectEventPalette(template->paletteTag) == 0xFF)
         return;
 
     u32 activeRoutes = 0;
@@ -5863,12 +5891,12 @@ void StartIviereFlyby(void)
             activeRoutes |= 1u << gSprites[i].data[0];
     }
 
-    for (u32 route = 0; route < ARRAY_COUNT(sIviereFlybyRoutes); route++)
+    for (u32 route = firstRoute; route < endRoute; route++)
     {
         if (activeRoutes & (1u << route))
             continue;
 
-        u8 id = CreateSprite(&template, 0, 0, 0);
+        u8 id = CreateSprite(template, 0, 0, 0);
         if (id >= MAX_SPRITES)
             break;
 
@@ -5877,7 +5905,17 @@ void StartIviereFlyby(void)
         sprite->coordOffsetEnabled = TRUE;
         sprite->data[0] = route;
         sprite->data[1] = 1;
-        sprite->data[2] = sIviereFlybyRoutes[route].range * 16;
+        sprite->data[2] = sEclatFlybyRoutes[route].range * 16;
         StartSpriteAnim(sprite, 1);
     }
+}
+
+void StartIviereFlyby(void)
+{
+    StartEclatFlybys(0, IVIERE_FLYBY_ROUTE_COUNT, &sIviereFlybyTemplate);
+}
+
+void StartEclatRoute1Flybys(void)
+{
+    StartEclatFlybys(IVIERE_FLYBY_ROUTE_COUNT, ARRAY_COUNT(sEclatFlybyRoutes), &sRoute1FlybyTemplate);
 }

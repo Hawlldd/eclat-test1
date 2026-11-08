@@ -14338,6 +14338,21 @@ const struct ItemInfo gItemsInfo[] =
 
 // Story Key Items
 
+    [ITEM_ECLAT_LOTTERY_TICKET] =
+    {
+        .name = ITEM_NAME("Ticket"),
+        .description = COMPOUND_STRING(
+            "A ticket for the\n"
+            "lottery in\n"
+            "PERCHARBRE."),
+        .importance = 1,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .iconPic = gItemIcon_SSTicket,
+        .iconPalette = gItemIconPalette_SSTicket,
+    },
+
     [ITEM_SS_TICKET] =
     {
         .name = ITEM_NAME("S.S. Ticket"),

@@ -739,18 +739,22 @@ static void SpriteCB_HealthBar(struct Sprite *sprite)
     {
     case 0:
         sprite->x = gSprites[healthboxSpriteId].x + 16;
-        sprite->y = gSprites[healthboxSpriteId].y;
+        sprite->y = gSprites[healthboxSpriteId].y + 2;
         break;
     case 1:
         sprite->x = gSprites[healthboxSpriteId].x + 16;
-        sprite->y = gSprites[healthboxSpriteId].y;
+        sprite->y = gSprites[healthboxSpriteId].y + 2;
         break;
     case 2:
     default:
         sprite->x = gSprites[healthboxSpriteId].x + 8;
-        sprite->y = gSprites[healthboxSpriteId].y;
+        sprite->y = gSprites[healthboxSpriteId].y + 2;
         break;
     }
+
+    // The singles frame meets the first opaque row of the HP bar tile.
+    if (GetBattlerCoordsIndex(gSprites[healthboxSpriteId].hMain_Battler) == BATTLE_COORDS_SINGLES)
+        sprite->y--;
 
     sprite->x2 = gSprites[healthboxSpriteId].x2;
     sprite->y2 = gSprites[healthboxSpriteId].y2;
@@ -842,7 +846,7 @@ static const s16 sBattlerHealthboxCoords[BATTLE_COORDS_COUNT][MAX_BATTLERS_COUNT
 {
     [BATTLE_COORDS_SINGLES] =
     {
-        [B_POSITION_PLAYER_LEFT]   = { 158, 88 },
+        [B_POSITION_PLAYER_LEFT]   = { 157, 88 },
         [B_POSITION_OPPONENT_LEFT] = { 44,  (B_HP_PERCENTAGE_DISPLAY ? 22 : 30)},
     },
     [BATTLE_COORDS_DOUBLES] =

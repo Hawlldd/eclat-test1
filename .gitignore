@@ -63,6 +63,8 @@ tools/aif2pcm/aif2pcm
 *.Identifier
 *.smol
 *.fastSmol
+backup_working_tree.patch
+.histignore
 *.smolTM
 __pycache__
 .map_version

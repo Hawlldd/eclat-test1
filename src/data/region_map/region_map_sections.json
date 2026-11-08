@@ -130,18 +130,18 @@
     },
     {
       "id": "MAPSEC_ROUTE_101",
-      "name": "ROUTE 101",
-      "x": 4,
-      "y": 10,
+      "name": "ROUTE 1",
+      "x": 5,
+      "y": 11,
       "width": 1,
       "height": 1
     },
     {
       "id": "MAPSEC_ROUTE_102",
-      "name": "ROUTE 102",
-      "x": 2,
-      "y": 9,
-      "width": 2,
+      "name": "ROUTE 2",
+      "x": 7,
+      "y": 11,
+      "width": 1,
       "height": 1
     },
     {
@@ -782,7 +782,6 @@
     {
       "id": "MAPSEC_ROUTE_4_POKECENTER",
       "name": "ROUTE 4",
-      "name_clone": true,
       "x": 8,
       "y": 3,
       "width": 1,
@@ -791,7 +790,6 @@
     {
       "id": "MAPSEC_ROUTE_10_POKECENTER",
       "name": "ROUTE 10",
-      "name_clone": true,
       "x": 18,
       "y": 3,
       "width": 1,
@@ -1032,7 +1030,6 @@
     {
       "id": "MAPSEC_UNDERGROUND_PATH_2",
       "name": "UNDERGROUND PATH",
-      "name_clone": true,
       "x": 12,
       "y": 6,
       "width": 1,
@@ -1393,7 +1390,6 @@
     {
       "id": "MAPSEC_TRAINER_TOWER_2",
       "name": "TRAINER TOWER",
-      "name_clone": true,
       "x": 5,
       "y": 6,
       "width": 1,
@@ -1628,6 +1624,46 @@
       "name": "TRAINER HILL",
       "x": 8,
       "y": 4,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ECLAT_ROUTE1",
+      "name": "ROUTE 1",
+      "x": 5,
+      "y": 11,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_PETIPRES",
+      "name": "PETIPRES",
+      "x": 6,
+      "y": 11,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ECLAT_ROUTE2",
+      "name": "ROUTE 2",
+      "x": 7,
+      "y": 11,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_ECLAT_ROCKY_PATH",
+      "name": "ROCKY PATH",
+      "x": 7,
+      "y": 11,
+      "width": 1,
+      "height": 1
+    },
+    {
+      "id": "MAPSEC_PEACEFUL_WOODS",
+      "name": "PEACEFUL WOODS",
+      "x": 8,
+      "y": 11,
       "width": 1,
       "height": 1
     }

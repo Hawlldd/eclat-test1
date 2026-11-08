@@ -16877,3 +16877,365 @@ Double Battle: No
 Kyogre
 Level: 5
 IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_ECLAT_ROUTE1_SALLY ===
+Name: SALLY
+Class: Lass
+Pic: Lass
+Gender: Female
+Music: Female
+Double Battle: No
+AI: Check Bad Move
+
+Pikipek
+Level: 3
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Nidoran-F
+Level: 4
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_ECLAT_ROUTE1_BEN ===
+Name: BEN
+Class: Youngster
+Pic: Youngster
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Rattata
+Level: 3
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+Zigzagoon
+Level: 4
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+
+=== TRAINER_ECLAT_ROUTE2_PIOTR ===
+Name: PIOTR
+Class: Bug Catcher FRLG
+Pic: Bug Catcher FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Caterpie
+Level: 5
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- String Shot
+
+Weedle
+Level: 5
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Poison Sting
+- String Shot
+
+Wurmple
+Level: 5
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- String Shot
+
+=== TRAINER_ECLAT_ROUTE2_PERRINE ===
+Name: PERRINE
+Class: Lass FRLG
+Pic: Lass FRLG
+Gender: Female
+Music: Female
+Double Battle: No
+AI: Check Bad Move
+
+Glameow
+Level: 5
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Scratch
+- Growl
+- Fake Out
+
+Skitty
+Level: 6
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- Tail Whip
+- Assist
+
+=== TRAINER_ECLAT_ROUTE2_GREGORY ===
+Name: GREGORY
+Class: Youngster FRLG
+Pic: Youngster FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Pikachu
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Quick Attack
+- ThunderShock
+- Tail Whip
+
+=== TRAINER_ECLAT_ROCKY_PATH_CHRIS ===
+Name: CHRIS
+Class: Black Belt FRLG
+Pic: Black Belt FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Geodude
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- Rock Throw
+- Defense Curl
+
+Aron
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Mud-Slap
+- Scratch
+- Harden
+
+=== TRAINER_ECLAT_ROCKY_PATH_BILL ===
+Name: BILL
+Class: Pkmn Ranger FRLG
+Pic: Pokemon Ranger M FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Rockruff
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Scratch
+- Tackle
+- Leer
+- Sand Attack
+
+Cubone
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Bone Club
+- Tail Whip
+- Headbutt
+
+=== TRAINER_ECLAT_ROCKY_PATH_BETTY ===
+Name: BETTY
+Class: Pkmn Ranger FRLG
+Pic: Pokemon Ranger F FRLG
+Gender: Female
+Music: Female
+Double Battle: No
+AI: Check Bad Move
+
+Venonat
+Level: 6
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Stun Spore
+- Leech Life
+- Tackle
+
+Morelull
+Level: 6
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Absorb
+- Astonish
+
+Dunsparce
+Level: 6
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Glare
+- Rollout
+- Defense Curl
+- Astonish
+
+=== TRAINER_ECLAT_ROCKY_PATH_ELIOT ===
+Name: ELIOT
+Class: Ruin Maniac FRLG
+Pic: Ruin Maniac FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Sandshrew
+Level: 6
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Scratch
+- Mud-Slap
+- Sand Attack
+
+Baltoy
+Level: 6
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Confusion
+- Mud-Slap
+- Harden
+- Rapid Spin
+
+Onix
+Level: 6
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Rock Throw
+- Tackle
+- Bind
+
+=== TRAINER_ECLAT_ROUTE2_ROCKET ===
+Name: GRUNT
+Class: Team Rocket FRLG
+Pic: Rocket Grunt M FRLG
+Gender: Male
+Music: Suspicious
+Double Battle: No
+AI: Check Bad Move
+
+Rattata @ Oran Berry
+Level: 10
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- Quick Attack
+- Hyper Fang
+- Tail Whip
+
+Zubat @ Oran Berry
+Level: 10
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- Astonish
+- Wing Attack
+- Leech Life
+- Supersonic
+
+Houndour @ Oran Berry
+Level: 11
+IVs: 12 HP / 12 Atk / 12 Def / 12 SpA / 12 SpD / 12 Spe
+- Bite
+- Ember
+- Smog
+
+=== TRAINER_PEACEFUL_WOODS_OMAR ===
+Name: OMAR
+Class: Bug Catcher
+Pic: Bug Catcher FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Surskit
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Bubble
+- Quick Attack
+- String Shot
+
+Nincada
+Level: 6
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Scratch
+- Sand Attack
+- Leech Life
+- Mud-Slap
+
+=== TRAINER_PEACEFUL_WOODS_ALFRED ===
+Name: ALFRED
+Class: Bug Catcher
+Pic: Bug Catcher FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Wurmple
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- String Shot
+
+Silcoon
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- String Shot
+- Harden
+
+Cascoon
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- String Shot
+- Harden
+
+=== TRAINER_PEACEFUL_WOODS_SAMMY ===
+Name: SAMMY
+Class: Bug Catcher
+Pic: Bug Catcher FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Yanma
+Level: 9
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Quick Attack
+- Sonic Boom
+- Double Team
+
+=== TRAINER_PEACEFUL_WOODS_ANTHONY ===
+Name: ANTHONY
+Class: Bug Catcher
+Pic: Bug Catcher FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Combee
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Sweet Scent
+- Gust
+- Endeavor
+
+Pineco
+Level: 8
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Protect
+- Tackle
+- Self Destruct
+
+=== TRAINER_PEACEFUL_WOODS_CHARLES ===
+Name: CHARLES
+Class: Bug Catcher
+Pic: Bug Catcher FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Metapod
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- Harden
+
+Kakuna
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Poison Sting
+- Harden
+
+Swadloon
+Level: 7
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Grass Whistle
+- Tackle
+- String Shot
+- Razor Leaf
+
+

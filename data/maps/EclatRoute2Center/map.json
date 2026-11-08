@@ -1,0 +1,135 @@
+{
+  "id": "MAP_ECLAT_ROUTE2_CENTER",
+  "name": "EclatRoute2Center",
+  "layout": "LAYOUT_ECLAT_ROUTE2_CENTER",
+  "music": "MUS_RG_POKE_CENTER",
+  "region": "REGION_HOENN",
+  "region_map_section": "MAPSEC_ECLAT_ROUTE2",
+  "requires_flash": false,
+  "weather": "WEATHER_NONE",
+  "map_type": "MAP_TYPE_INDOOR",
+  "allow_cycling": false,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": null,
+  "object_events": [
+    {
+      "local_id": "LOCALID_ECLAT_ROUTE2_CENTER_1",
+      "graphics_id": "OBJ_EVENT_GFX_PETIPRES_40",
+      "x": 11,
+      "y": 10,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EclatRoute2Center_Nurse",
+      "flag": "0"
+    },
+    {
+      "local_id": "LOCALID_ECLAT_ROUTE2_CENTER_3",
+      "graphics_id": "OBJ_EVENT_GFX_PETIPRES_3D",
+      "x": 17,
+      "y": 13,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EclatRoute2Center_Npc3",
+      "flag": "0"
+    },
+    {
+      "local_id": "LOCALID_ECLAT_ROUTE2_CENTER_4",
+      "graphics_id": "OBJ_EVENT_GFX_PETIPRES_13",
+      "x": 5,
+      "y": 13,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_WANDER_AROUND",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EclatRoute2Center_Npc4",
+      "flag": "0"
+    },
+    {
+      "local_id": "LOCALID_ECLAT_ROUTE2_CENTER_5",
+      "graphics_id": "OBJ_EVENT_GFX_PETIPRES_12",
+      "x": 13,
+      "y": 5,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_LOOK_AROUND",
+      "movement_range_x": 1,
+      "movement_range_y": 1,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "EclatRoute2Center_Npc5",
+      "flag": "0"
+    },
+    {
+      "local_id": "LOCALID_ECLAT_ROUTE2_CENTER_7",
+      "graphics_id": "OBJ_EVENT_GFX_PETIPRES_44",
+      "x": 7,
+      "y": 2,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Petipres_PokemonCenter_BerrySeller",
+      "flag": "0"
+    },
+    {
+      "local_id": "LOCALID_ECLAT_ROUTE2_CENTER_8",
+      "graphics_id": "OBJ_EVENT_GFX_PETIPRES_75",
+      "x": 12,
+      "y": 10,
+      "elevation": 0,
+      "movement_type": "MOVEMENT_TYPE_NONE",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Petipres_PokemonCenter_Chansey",
+      "flag": "0"
+    }
+  ],
+  "warp_events": [
+    {
+      "x": 10,
+      "y": 17,
+      "elevation": 3,
+      "dest_map": "MAP_ROUTE102",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 11,
+      "y": 17,
+      "elevation": 3,
+      "dest_map": "MAP_ROUTE102",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 12,
+      "y": 17,
+      "elevation": 3,
+      "dest_map": "MAP_ROUTE102",
+      "dest_warp_id": "1"
+    },
+    {
+      "x": 21,
+      "y": 5,
+      "elevation": 4,
+      "dest_map": "MAP_ECLAT_ROUTE2_CENTER_2F",
+      "dest_warp_id": "0"
+    }
+  ],
+  "coord_events": [],
+  "bg_events": []
+}

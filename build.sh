@@ -22,6 +22,8 @@ rsync -rtuv --include='*/' \
 
 rsync -rtuv "$SRC_DIR/src/" "$BUILD_DIR/src/"
 rsync -rtuv "$SRC_DIR/include/" "$BUILD_DIR/include/"
+rsync -rtuv "$SRC_DIR/asm/" "$BUILD_DIR/asm/"
+rsync -rtuv "$SRC_DIR/graphics/" "$BUILD_DIR/graphics/"
 
 cd "$BUILD_DIR"
 echo "Compilando pokeemerald..."

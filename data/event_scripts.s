@@ -157,6 +157,7 @@ gStdScripts_End::
 	.include "data/maps/PacifidlogTown/scripts.inc"
 	.include "data/maps/Route1/scripts.inc"
 	.include "data/maps/Route2/scripts.inc"
+	.include "data/maps/Route3/scripts.inc"
 	.include "data/maps/Route101/scripts.inc"
 	.include "data/maps/Route102/scripts.inc"
 	.include "data/maps/Route103/scripts.inc"
@@ -1258,6 +1259,7 @@ Common_EventScript_OutOfCenterPartyHeal::
 	special HealPlayerParty
 	callnative UpdateFollowingPokemon
 	fadescreenswapbuffers FADE_FROM_BLACK
+	callnative ShowFollowerHeartEmote
 	return
 
 EventScript_RegionMap::

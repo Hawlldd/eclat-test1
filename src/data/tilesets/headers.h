@@ -1769,3 +1769,46 @@ const struct Tileset gTileset_PeacefulWoodsSecondary =
     .metatiles = sMetatiles_PeacefulWoodsSecondary,
     .metatileAttributes = (const u16 *)sAttributes_PeacefulWoodsSecondary,
 };
+
+static const u32 sTiles_PeacefulWoodsGrimPrimary[] = INCBIN_U32("data/tilesets/primary/peaceful_woods_grim/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_PeacefulWoodsGrimPrimary[] = INCBIN_U16("data/tilesets/primary/peaceful_woods_grim/palettes.bin");
+static const u16 sMetatiles_PeacefulWoodsGrimPrimary[] = INCBIN_U16("data/tilesets/primary/peaceful_woods_grim/metatiles.bin");
+static const u32 sAttributes_PeacefulWoodsGrimPrimary[] = INCBIN_U32("data/tilesets/primary/peaceful_woods_grim/metatile_attributes.bin");
+
+const struct Tileset gTileset_PeacefulWoodsGrimPrimary =
+{
+    .isSecondary = FALSE,
+    .tiles = sTiles_PeacefulWoodsGrimPrimary,
+    .palettes = (const u16 (*)[16])sPalettes_PeacefulWoodsGrimPrimary,
+    .metatiles = sMetatiles_PeacefulWoodsGrimPrimary,
+    .metatileAttributes = (const u16 *)sAttributes_PeacefulWoodsGrimPrimary,
+};
+
+static const u32 sTiles_PeacefulWoodsGrimSecondary[] = INCBIN_U32("data/tilesets/secondary/peaceful_woods_grim/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_PeacefulWoodsGrimSecondary[] = INCBIN_U16("data/tilesets/secondary/peaceful_woods_grim/palettes.bin");
+static const u16 sMetatiles_PeacefulWoodsGrimSecondary[] = INCBIN_U16("data/tilesets/secondary/peaceful_woods_grim/metatiles.bin");
+static const u32 sAttributes_PeacefulWoodsGrimSecondary[] = INCBIN_U32("data/tilesets/secondary/peaceful_woods_grim/metatile_attributes.bin");
+
+const struct Tileset gTileset_PeacefulWoodsGrimSecondary =
+{
+    .isSecondary = TRUE,
+    .tiles = sTiles_PeacefulWoodsGrimSecondary,
+    .palettes = (const u16 (*)[16])sPalettes_PeacefulWoodsGrimSecondary,
+    .metatiles = sMetatiles_PeacefulWoodsGrimSecondary,
+    .metatileAttributes = (const u16 *)sAttributes_PeacefulWoodsGrimSecondary,
+    .callback = InitTilesetAnim_PeacefulWoodsGrim,
+};
+
+static const u32 sTiles_EclatRoute3Secondary[] = INCBIN_U32("data/tilesets/secondary/eclat_route3/tiles.bin");
+static const u16 ALIGNED(4) sPalettes_EclatRoute3Secondary[] = INCBIN_U16("data/tilesets/secondary/eclat_route3/palettes.bin");
+static const u16 sMetatiles_EclatRoute3Secondary[] = INCBIN_U16("data/tilesets/secondary/eclat_route3/metatiles.bin");
+static const u32 sAttributes_EclatRoute3Secondary[] = INCBIN_U32("data/tilesets/secondary/eclat_route3/metatile_attributes.bin");
+
+const struct Tileset gTileset_EclatRoute3Secondary =
+{
+    .isSecondary = TRUE,
+    .tiles = sTiles_EclatRoute3Secondary,
+    .palettes = (const u16 (*)[16])sPalettes_EclatRoute3Secondary,
+    .metatiles = sMetatiles_EclatRoute3Secondary,
+    .metatileAttributes = (const u16 *)sAttributes_EclatRoute3Secondary,
+};

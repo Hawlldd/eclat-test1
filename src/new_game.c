@@ -138,7 +138,7 @@ static void WarpToStartingRoom(void)
     if (IS_FRLG)
         SetWarpDestination(MAP_GROUP(MAP_PALLET_TOWN_PLAYERS_HOUSE_2F), MAP_NUM(MAP_PALLET_TOWN_PLAYERS_HOUSE_2F), WARP_ID_NONE, 6, 6);
     else
-        SetWarpDestination(MAP_GROUP(MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), MAP_NUM(MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), WARP_ID_NONE, 6, 5);
+        SetWarpDestination(MAP_GROUP(MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), MAP_NUM(MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F), WARP_ID_NONE, 7, 7);
     WarpIntoMap();
 }
 
@@ -214,6 +214,7 @@ void NewGameInitData(void)
     {
         RunScriptImmediately(EventScript_ResetAllMapFlags);
         FlagSet(FLAG_HIDE_ECLAT_UNUSED_OBJECTS);
+        FlagSet(FLAG_HIDE_IVIERE_FILAO_OUTSIDE);
     }
     memcpy(gSaveBlock1Ptr->rivalName, rivalName, sizeof(rivalName));
     ResetMiniGamesRecords();

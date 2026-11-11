@@ -3,7 +3,6 @@
   "name": "EclatRoute1",
   "layout": "LAYOUT_ECLAT_ROUTE1",
   "music": "MUS_RG_ROUTE1",
-  "region": "REGION_HOENN",
   "region_map_section": "MAPSEC_ECLAT_ROUTE1",
   "requires_flash": false,
   "weather": "WEATHER_SUNNY",
@@ -304,5 +303,6 @@
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "EclatRoute1_MightyenaSign"
     }
-  ]
+  ],
+  "region": "REGION_HOENN"
 }

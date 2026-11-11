@@ -667,6 +667,11 @@ enum
 #define OBJ_EVENT_PAL_TAG_PETIPRES_05 0x1172
 #define OBJ_EVENT_PAL_TAG_PETIPRES_06 0x1173
 #define OBJ_EVENT_PAL_TAG_IVIERE_WIFE             0x116F
+#define GFXTAG_ECLAT_FLYER_65                     0x1180
+#define GFXTAG_ECLAT_FLYER_98                     0x1181
+#define GFXTAG_ECLAT_FLYER_9A                     0x1182
+#define GFXTAG_ECLAT_FLYER_IVIERE                 0x1183
+#define GFXTAG_ECLAT_FLYER_ROUTE1                 0x1184
 // Used as a placeholder follower graphic
 #define OBJ_EVENT_PAL_TAG_SUBSTITUTE              0x7611
 #define OBJ_EVENT_PAL_TAG_LIGHT                   0x8001

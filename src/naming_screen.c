@@ -644,19 +644,6 @@ static u8 CurrentPageToKeyboardId(void)
 static bool8 MainState_FadeIn(void)
 {
     DrawBgTilemap(3, gNamingScreenBackground_Tilemap);
-    if (!IS_FRLG && sNamingScreen->templateNum == NAMING_SCREEN_RIVAL)
-    {
-        u16 *map = GetBgTilemapBuffer(3);
-        // Move the two tiles under the rival icon to its new position.
-        for (u32 column = 0; column < 2; column++)
-        {
-            u16 *left = &map[6 * 32 + 6 + column];
-            u16 *right = &map[6 * 32 + 21 + column];
-            u16 tile = *left;
-            *left = *right;
-            *right = tile;
-        }
-    }
     sNamingScreen->currentPage = KBPAGE_LETTERS_UPPER;
     DrawBgTilemap(2, gNamingScreenKeyboardLower_Tilemap);
     DrawBgTilemap(1, gNamingScreenKeyboardUpper_Tilemap);
@@ -1508,9 +1495,9 @@ static void NamingScreen_CreateRivalIcon(void)
     if (!IS_FRLG)
     {
         u16 graphicsId = GetRivalAvatarGraphicsIdByStateIdAndGender(PLAYER_AVATAR_STATE_NORMAL, (enum Gender)sNamingScreen->monSpecies);
-        spriteId = CreateObjectGraphicsSprite(graphicsId, SpriteCallbackDummy, 176, 37, 0);
+        spriteId = CreateObjectGraphicsSprite(graphicsId, SpriteCallbackDummy, 56, 37, 0);
         gSprites[spriteId].oam.priority = 3;
-        StartSpriteAnim(&gSprites[spriteId], ANIM_STD_FACE_SOUTH);
+        StartSpriteAnim(&gSprites[spriteId], ANIM_STD_GO_SOUTH);
         return;
     }
 

@@ -5,9 +5,11 @@ Route2_MapScripts::
 
 Route2_OnTransition:
 EclatRoute2_OnTransition::
+	setstepcallback STEP_CB_FORTREE_BRIDGE
 	setflag FLAG_ECLAT_ROUTE2_MYST_HIDDEN
-	checktrainerflag TRAINER_ECLAT_ROUTE2_ROCKET
-	goto_if_eq VAR_RESULT, TRUE, Route2_RocketsAlreadyBeaten
+	special StartEclatRoute2Flybys
+	goto_if_set FLAG_ECLAT_ROUTE2_ROCKETS_DONE, Route2_RocketsAlreadyBeaten
+	goto_if_defeated TRAINER_ECLAT_ROUTE2_ROCKET, Route2_RocketsAlreadyBeaten
 	end
 
 Route2_RocketsAlreadyBeaten:
@@ -17,6 +19,7 @@ EclatRoute2_RocketsAlreadyBeaten::
 
 Route2_OnResume:
 EclatRoute2_OnResume::
+	setstepcallback STEP_CB_FORTREE_BRIDGE
 	special StartEclatRoute2Flybys
 	end
 

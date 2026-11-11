@@ -18,6 +18,7 @@
 #include "gpu_regs.h"
 #include "international_string_util.h"
 #include "item.h"
+#include "line_break.h"
 #include "item_menu_icons.h"
 #include "item_use.h"
 #include "lilycove_lady.h"
@@ -69,7 +70,7 @@
 
 #define BAG_DESCRIPTION_TEXT_LEFT 6
 #define BAG_DESCRIPTION_TEXT_TOP  4
-#define BAG_DESCRIPTION_WRAP_WIDTH (WindowWidthPx(WIN_DESCRIPTION) - 16)
+#define BAG_DESCRIPTION_WRAP_WIDTH (WindowWidthPx(WIN_DESCRIPTION) - 20)
 
 enum {
     SWITCH_POCKET_NONE,
@@ -1034,18 +1035,79 @@ static void BagMenu_ItemPrintCallback(u8 windowId, u32 itemIndex, u8 y)
     }
 }
 
+static void BagMenu_FormatDescription(u8 *dest, u32 maxWidth)
+{
+    u32 i = 0;
+    u32 lineWidth = 0;
+    u32 wordStart = 0;
+    u32 wordLen = 0;
+    u8 tempWord[64];
+    u32 spaceWidth = GetStringWidth(FONT_NORMAL, (const u8[]) {CHAR_SPACE, EOS}, 0);
+    bool32 isFirstWordOnLine = TRUE;
+
+    // 1. Strip legacy Emerald hardcoded line breaks
+    StripLineBreaks(dest);
+
+    // 2. Greedy word wrap: scan through dest and turn the space before overflowing words into CHAR_NEWLINE
+    i = 0;
+    while (dest[i] != EOS)
+    {
+        if (dest[i] == CHAR_SPACE || dest[i] == CHAR_ZWS)
+        {
+            i++;
+            continue;
+        }
+
+        wordStart = i;
+        wordLen = 0;
+        while (dest[i] != EOS && dest[i] != CHAR_SPACE && dest[i] != CHAR_ZWS && dest[i] != CHAR_NEWLINE)
+        {
+            if (wordLen < sizeof(tempWord) - 1)
+                tempWord[wordLen++] = dest[i];
+            i++;
+        }
+        tempWord[wordLen] = EOS;
+
+        u32 wordWidth = GetStringWidth(FONT_NORMAL, tempWord, 0);
+
+        if (isFirstWordOnLine)
+        {
+            lineWidth = wordWidth;
+            isFirstWordOnLine = FALSE;
+        }
+        else
+        {
+            if (lineWidth + spaceWidth + wordWidth <= maxWidth)
+            {
+                lineWidth += spaceWidth + wordWidth;
+            }
+            else
+            {
+                // Break before this word
+                if (wordStart > 0)
+                    dest[wordStart - 1] = CHAR_NEWLINE;
+                lineWidth = wordWidth;
+            }
+        }
+    }
+}
+
 static void PrintItemDescription(int itemIndex)
 {
     const u8 *str;
     if (itemIndex != LIST_CANCEL)
     {
         str = GetItemDescription(GetBagItemId(gBagPosition.pocket, itemIndex));
+        StringCopy(gStringVar4, str);
+        BagMenu_FormatDescription(gStringVar4, BAG_DESCRIPTION_WRAP_WIDTH);
+        str = gStringVar4;
     }
     else
     {
         // Print 'Cancel' description
         StringCopy(gStringVar1, gBagMenu_ReturnToStrings[gBagPosition.location]);
         StringExpandPlaceholders(gStringVar4, gText_ReturnToVar1);
+        BagMenu_FormatDescription(gStringVar4, BAG_DESCRIPTION_WRAP_WIDTH);
         str = gStringVar4;
     }
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));

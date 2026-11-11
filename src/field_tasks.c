@@ -507,7 +507,6 @@ static void FortreeBridgePerStepCallback(u8 taskId)
 {
     bool8 isFortreeBridgeCur;
     bool8 isFortreeBridgePrev;
-    u8 elevation, onBridgeElevation;
     s16 x, y, prevX, prevY;
     s16 *data = gTasks[taskId].data;
     PlayerGetDestCoords(&x, &y);
@@ -538,13 +537,7 @@ static void FortreeBridgePerStepCallback(u8 taskId)
         isFortreeBridgeCur = MetatileBehavior_IsFortreeBridge(MapGridGetMetatileBehaviorAt(x, y));
         isFortreeBridgePrev = MetatileBehavior_IsFortreeBridge(MapGridGetMetatileBehaviorAt(prevX, prevY));
 
-        // Make sure player isn't below bridge
-        elevation = PlayerGetElevation();
-        onBridgeElevation = FALSE;
-        if ((u8)(elevation & 1) == 0)
-            onBridgeElevation = TRUE;
-
-        if (onBridgeElevation && (isFortreeBridgeCur == TRUE || isFortreeBridgePrev == TRUE))
+        if ((isFortreeBridgeCur == TRUE || isFortreeBridgePrev == TRUE) && !(PlayerGetElevation() & 1))
             PlaySE(SE_BRIDGE_WALK);
 
         // Because this doesn't check for isFortreeBridgeCur, bridge sections aren't

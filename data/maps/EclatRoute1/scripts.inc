@@ -6,6 +6,7 @@ EclatRoute1_MapScripts::
 
 EclatRoute1_OnTransition:
 	setflag FLAG_ECLAT_ROUTE1_HIDE_MEGA_NPC
+	special StartEclatRoute1Flybys
 	goto_if_unset FLAG_ECLAT_ROUTE1_GOT_TICKET, EclatRoute1_EndTransition
 	goto_if_unset FLAG_BADGE02_GET, EclatRoute1_EndTransition
 	clearflag FLAG_ECLAT_ROUTE1_HIDE_MEGA_NPC
@@ -24,14 +25,19 @@ EclatRoute1_MeetMyst:
 	lockall
 	applymovement LOCALID_PLAYER, EclatRoute1_Movement_NoticedMyst
 	waitmovement 0
+	setspeaker SP_NAME_MYSTERIOUS
 	msgbox EclatRoute1_Text_MystIntro, MSGBOX_DEFAULT
+	setspeaker SP_NAME_PLAYER
 	msgbox EclatRoute1_Text_PlayerSuspicious, MSGBOX_DEFAULT
+	setspeaker SP_NAME_MYSTERIOUS
 	msgbox EclatRoute1_Text_MystReply, MSGBOX_DEFAULT
+	setspeaker SP_NAME_PLAYER
 	msgbox EclatRoute1_Text_PlayerQuestion, MSGBOX_DEFAULT
+	setspeaker SP_NAME_MYST
 	msgbox EclatRoute1_Text_MystRocket, MSGBOX_DEFAULT
-	msgbox EclatRoute1_Text_PlayerQuestion2, MSGBOX_DEFAULT
-	msgbox EclatRoute1_Text_MystGMEN, MSGBOX_DEFAULT
+	setspeaker SP_NAME_PLAYER
 	msgbox EclatRoute1_Text_PlayerClefable, MSGBOX_DEFAULT
+	setspeaker SP_NAME_MYST
 	msgbox EclatRoute1_Text_MystLeave, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_ECLAT_ROUTE1_MYST, EclatRoute1_Movement_MystLeaves
@@ -184,95 +190,90 @@ EclatRoute1_Text_TeaNpc:
 	.string "don't know how.$"
 
 EclatRoute1_Text_MystIntro:
-	.string "???: Hey, you! You wouldn't happen\n"
-	.string "to see two suspicious guys dressed in\l"
-	.string "black around here? I've been\l"
-	.string "following them for a while, but I\l"
-	.string "recently lost sight of them.$"
+	.string "Huh? What in the world\n"
+	.string "is a kid doing out here\l"
+	.string "in the wild all alone?\p"
+	.string "This isn't a playground.\n"
+	.string "Wild MIGHTYENA and dangerous\l"
+	.string "beasts prowl in the grass.\p"
+	.string "Wait… you just stepped out\n"
+	.string "of that gate, didn't you?\p"
+	.string "You wouldn't happen to have\n"
+	.string "seen two suspicious guys\l"
+	.string "dressed in black, would you?\p"
+	.string "I was hot on their trail,\n"
+	.string "but I lost them in the brush.$"
 
 EclatRoute1_Text_PlayerSuspicious:
-	.string "{PLAYER}: First, who are you?\n"
-	.string "I need to know who I'm dealing with!\l"
-	.string "I've just been robbed...\l"
-	.string "and then you show up\l"
-	.string "asking me for information.\l"
-	.string "It all seems convenient.\l"
-	.string "You'll understand why I'm curious\l"
-	.string "about you.$"
+	.string "First of all: who are you?\p"
+	.string "My house was just raided\n"
+	.string "by thugs like that, and now\l"
+	.string "you appear asking questions?\p"
+	.string "It seems a little convenient.\n"
+	.string "How do I know you're not\l"
+	.string "one of them?$"
 
 EclatRoute1_Text_MystReply:
-	.string "???: Well someone is really\n"
-	.string "cynical.\l"
-	.string "You may notice, however, that I'm\l"
-	.string "not wearing their uniform,\l"
-	.string "and if I were with them, I certainly\l"
-	.string "wouldn't ask a stranger\l"
-	.string "where my accomplices are.$"
+	.string "Haha! Easy there, kid.\p"
+	.string "You're sharp and cautious--\n"
+	.string "I respect that.\p"
+	.string "Take a look at me, though:\n"
+	.string "I'm not wearing that uniform.\p"
+	.string "If I were an accomplice, why\n"
+	.string "would I ask a stranger\l"
+	.string "which way my partners fled?$"
 
 EclatRoute1_Text_PlayerQuestion:
-	.string "{PLAYER}: Alright, let's say that I\n"
-	.string "believe you, why do you wanna know?$"
+	.string "Fair point… I believe you.\n"
+	.string "Why track them down, then?$"
 
 EclatRoute1_Text_MystRocket:
-	.string "???: Before I answer,\n"
-	.string "allow me to introduce myself.\l"
-	.string "All this excitement almost\l"
-	.string "made me forget the customs of\l"
-	.string "courtesy.\l"
-	.string "My name is MYST, and I've been\l"
-	.string "tracking these GRUNTS for some time\l"
-	.string "as I've already mentioned. They are\l"
-	.string "in fact members of a\l"
-	.string "criminal organization\l"
-	.string "called TEAM ROCKET.\l"
-	.string "Recently, they have become\l"
-	.string "very active in the region, and\l"
-	.string "started stealing\l"
-	.string "all kinds of POKéMON.\l"
-	.string "I still don't know why, but I'm\l"
-	.string "going to find out.$"
-
-EclatRoute1_Text_PlayerQuestion2:
-	.string "{PLAYER}: Hum...\l"
-	.string "I see, my name is {PLAYER}.\n"
-	.string "But why are you looking for them?\l"
-	.string "You don't look like a policeman\l"
-	.string "or part of the International Police.\l"
-	.string "Is it a personal story?$"
-
-EclatRoute1_Text_MystGMEN:
-	.string "MYST: Well, let's just say I'm\n"
-	.string "trying to keep them from doing harm.\l"
-	.string "I'm part of a group called the G-Men\l"
-	.string "just like LANCE,\l"
-	.string "the famous dracologist.\l"
-	.string "I'm sorry, but you mentioned a\l"
-	.string "burglary earlier?$"
+	.string "Where are my manners?\n"
+	.string "Allow me to introduce myself.\p"
+	.string "My name is MYST.\n"
+	.string "I am an operative with the\l"
+	.string "G-Men--the same elite unit\l"
+	.string "as LANCE, the Dragon Master.\p"
+	.string "Those two men are grunts\n"
+	.string "from a criminal syndicate\l"
+	.string "known as TEAM ROCKET.\p"
+	.string "Lately, they have been causing\n"
+	.string "trouble across this region,\l"
+	.string "stealing POKéMON from trainers.\p"
+	.string "You said your home was raided…\n"
+	.string "What did they do?$"
 
 EclatRoute1_Text_PlayerClefable:
-	.string "{PLAYER}: These guys stole a\n"
-	.string "POKéMON that my father had\l"
-	.string "left, a Clefable. And I absolutely\l"
-	.string "have to get it back,\l"
-	.string "no matter the cost.$"
+	.string "They broke in and took the\n"
+	.string "only keepsake of my father…\l"
+	.string "his beloved CLEFABLE.\p"
+	.string "I just got my first partner,\n"
+	.string "and I swore to my mother:\p"
+	.string "I will cross the whole region\n"
+	.string "to get his CLEFABLE back,\l"
+	.string "no matter the cost!$"
 
 EclatRoute1_Text_MystLeave:
-	.string "MYST: I see. Well, I'll\n"
-	.string "continue my investigation, and\l"
-	.string "with a little luck, I might be able\l"
-	.string "to help you out, but don't kid yourself.\l"
-	.string "Chances of finding your\l"
-	.string "POKéMON are slim.\l"
-	.string "Nevertheless, I'll do what I can.\l"
-	.string "You seem like an interesting and\l"
-	.string "determined kid.\l"
-	.string "I'll be keeping an eye on you.$"
+	.string "Your late father's POKéMON…\n"
+	.string "Damn it. Those scoundrels have\l"
+	.string "no shame.\p"
+	.string "Listen to me, {PLAYER}…\n"
+	.string "I won't sugarcoat it: TEAM\l"
+	.string "ROCKET is dangerous, and saving\l"
+	.string "a stolen POKéMON isn't easy.\p"
+	.string "Yet, looking in your eyes,\n"
+	.string "I see you won't back down.\p"
+	.string "I'll keep pursuing their trail\n"
+	.string "ahead. If I find their hideout,\l"
+	.string "I'll do whatever I can to help.\p"
+	.string "Train hard and stay alert.\n"
+	.string "I'll keep an eye on you, kid!$"
 
 EclatRoute1_Text_RodFan:
 	.string "There's a fisherman over there,\ngiving out free RODS.\lYou should go talk to him.$"
 
 EclatRoute1_Text_Beginner:
-	.string "There aren't any strong POKéMON\naround here. It's the ideal place to\lmark your debut!$"
+	.string "There aren't strong POKéMON\naround here. It's the ideal\lplace to mark your debut!$"
 
 EclatRoute1_Text_LeaveAlone:
 	.string "This wild POKéMON seems to be\nignoring you. It's best to leave\lit alone.$"
@@ -342,7 +343,7 @@ EclatRoute1_MegaNpcDone:
 	end
 
 EclatRoute1_Text_MegaIntro:
-	.string "Hello, young trainer. Are you familiar\n"
+	.string "Hello, trainer. Are you familiar\n"
 	.string "with mega-evolution?\l"
 	.string "You have badges, so you must\l"
 	.string "be a good trainer.\l"

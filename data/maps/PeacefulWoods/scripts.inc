@@ -87,31 +87,6 @@ PeacefulWoods_ItemPotion2::
 	finditem ITEM_POTION
 	end
 
-PeacefulWoods_Npc12::
-	msgbox PeacefulWoods_Npc12_Text, MSGBOX_NPC
-	end
-
-PeacefulWoods_Npc12_Text:
-	.string "There is nothing to say here.$"
-
-PeacefulWoods_Npc13::
-	msgbox PeacefulWoods_Npc13_Text, MSGBOX_NPC
-	end
-
-PeacefulWoods_Npc13_Text:
-	.string "There is nothing to say here.$"
-
-PeacefulWoods_Npc14::
-	msgbox PeacefulWoods_Npc14_Text, MSGBOX_NPC
-	end
-
-PeacefulWoods_Npc14_Text:
-	.string "There is nothing to say here.$"
-
-PeacefulWoods_Npc15::
-	msgbox PeacefulWoods_Npc12_Text, MSGBOX_NPC
-	end
-
 PeacefulWoods_AmbientIgnored::
 	msgbox PeacefulWoods_AmbientIgnored_Text, MSGBOX_NPC
 	end

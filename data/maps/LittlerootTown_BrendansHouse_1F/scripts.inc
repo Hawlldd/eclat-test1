@@ -83,36 +83,56 @@ LittlerootTown_BrendansHouse_1F_EclatRobbery:
 	applymovement LOCALID_CAMERA, EclatHouse_Movement_PanToTable
 	waitmovement LOCALID_CAMERA
 	delay 24
+	setspeaker SP_NAME_ROCKET
 	msgbox EclatHouse_Text_RocketThreat, MSGBOX_DEFAULT
+	closemessage
+	setspeaker SP_NAME_MOM
+	msgbox EclatHouse_Text_MomBegs, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_CAMERA, EclatHouse_Movement_PanToStairs
+	waitmovement LOCALID_CAMERA
+	special RemoveCameraObject
+	applymovement LOCALID_PLAYER, EclatHouse_Movement_PlayerApproachRobbery
+	waitmovement LOCALID_PLAYER
+	setspeaker SP_NAME_PLAYER
+	msgbox EclatHouse_Text_PlayerIntervene, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, Common_Movement_FaceRight
 	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_F
 	playse SE_PIN
 	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, Common_Movement_ExclamationMark
 	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_F
-	msgbox EclatHouse_Text_RocketLeaves, MSGBOX_DEFAULT
+	setspeaker SP_NAME_ROCKET
+	msgbox EclatHouse_Text_RocketMocksPlayer, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_ECLAT_HOUSE_ROCKET_M, Common_Movement_FaceDown
 	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_M
 	removeobject LOCALID_ECLAT_STOLEN_MON
+	playse SE_BALL_BOUNCE_1
+	setspeaker SP_NAME_ROCKET
+	msgbox EclatHouse_Text_RocketEscape, MSGBOX_DEFAULT
+	closemessage
 	applymovement LOCALID_ECLAT_HOUSE_ROCKET_M, EclatHouse_Movement_LeftRocketFlees
 	applymovement LOCALID_ECLAT_HOUSE_ROCKET_F, EclatHouse_Movement_RightRocketFlees
 	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_M
 	removeobject LOCALID_ECLAT_HOUSE_ROCKET_M
+	playse SE_EXIT
 	waitmovement LOCALID_ECLAT_HOUSE_ROCKET_F
 	removeobject LOCALID_ECLAT_HOUSE_ROCKET_F
+	playse SE_EXIT
 	setflag FLAG_HIDE_ECLAT_HOUSE_ROCKETS
-	applymovement LOCALID_CAMERA, EclatHouse_Movement_PanToStairs
-	waitmovement LOCALID_CAMERA
-	special RemoveCameraObject
 	applymovement LOCALID_PLAYER, EclatHouse_Movement_ApproachMom
 	waitmovement LOCALID_PLAYER
 	applymovement LOCALID_PLAYERS_HOUSE_1F_MOM, Common_Movement_FaceRight
 	waitmovement LOCALID_PLAYERS_HOUSE_1F_MOM
+	setspeaker SP_NAME_MOM
 	msgbox EclatHouse_Text_Mom, MSGBOX_DEFAULT
-	msgbox EclatHouse_Text_Player, MSGBOX_DEFAULT
+	setspeaker SP_NAME_PLAYER
+	msgbox EclatHouse_Text_PlayerPromise, MSGBOX_DEFAULT
+	setspeaker SP_NAME_MOM
+	msgbox EclatHouse_Text_MomWarning, MSGBOX_DEFAULT
 	closemessage
-	setvar VAR_LITTLEROOT_INTRO_STATE, 7
+	setvar VAR_LITTLEROOT_INTRO_STATE, 9
 	releaseall
 	end
 
@@ -132,6 +152,12 @@ EclatHouse_Movement_PanToStairs:
 	walk_right
 	walk_right
 	walk_right
+	step_end
+
+EclatHouse_Movement_PlayerApproachRobbery:
+	walk_down
+	walk_left
+	walk_in_place_faster_left
 	step_end
 
 EclatHouse_Movement_LeftRocketFlees:
@@ -154,44 +180,150 @@ EclatHouse_Movement_RightRocketFlees:
 
 EclatHouse_Movement_ApproachMom:
 	walk_down
-	walk_left
 	face_left
 	step_end
 
 LittlerootTown_BrendansHouse_1F_EventScript_EclatMom::
-	msgbox EclatHouse_Text_MomAfterRobbery, MSGBOX_NPC
+	lock
+	faceplayer
+	goto_if_set FLAG_TALKED_TO_MOM_AFTER_STARTER, LittlerootTown_BrendansHouse_1F_EventScript_MomHealPrompt
+	goto_if_ge VAR_LITTLEROOT_INTRO_STATE, 7, LittlerootTown_BrendansHouse_1F_EventScript_MomShowStarter
+	setspeaker SP_NAME_MOM
+	msgbox EclatHouse_Text_MomAfterRobbery, MSGBOX_DEFAULT
+	release
 	end
 
-EclatHouse_Text_MomAfterRobbery:
-	.string "MOM: I'm sorry you had to go\n"
-	.string "through all this, my darling,\l"
-	.string "but I'm glad you're safe.\l"
-	.string "Stay close to home\l"
-	.string "and rest now.$"
+LittlerootTown_BrendansHouse_1F_EventScript_MomShowStarter::
+	setspeaker SP_NAME_PLAYER
+	msgbox EclatHouse_Text_PlayerShowsStarter, MSGBOX_DEFAULT
+	closemessage
+	setspeaker SP_NAME_MOM
+	msgbox EclatHouse_Text_MomProudReaction, MSGBOX_DEFAULT
+	setflag FLAG_TALKED_TO_MOM_AFTER_STARTER
+	release
+	end
 
+LittlerootTown_BrendansHouse_1F_EventScript_MomHealPrompt::
+	setspeaker SP_NAME_MOM
+	msgbox EclatHouse_Text_MomWelcomeRestPrompt, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, LittlerootTown_BrendansHouse_1F_EventScript_MomRest
+	setspeaker SP_NAME_MOM
+	msgbox EclatHouse_Text_MomComeBackAnytime, MSGBOX_DEFAULT
+	release
+	end
+
+LittlerootTown_BrendansHouse_1F_EventScript_MomRest::
+	setspeaker SP_NAME_MOM
+	msgbox EclatHouse_Text_MomTakeARest, MSGBOX_DEFAULT
+	closemessage
+	call Common_EventScript_OutOfCenterPartyHeal
+	setspeaker SP_NAME_MOM
+	msgbox EclatHouse_Text_MomFullyRested, MSGBOX_DEFAULT
+	release
+	end
+
+EclatHouse_Text_PlayerShowsStarter:
+	.string "Mom, look… PROF. FILAO gave me\n"
+	.string "a POKéMON of my own.\p"
+	.string "Things are not going to stay\n"
+	.string "like this.\p"
+	.string "I swear to you, I will hunt down\n"
+	.string "those thieves and bring Dad's\l"
+	.string "POKéMON back where it belongs!$"
+
+EclatHouse_Text_MomProudReaction:
+	.string "Oh, {PLAYER}…\p"
+	.string "Standing there with your head\n"
+	.string "held high and that fierce fire\l"
+	.string "burning in your eyes…\p"
+	.string "You remind me so much of your\n"
+	.string "father.\p"
+	.string "He carried that exact same\n"
+	.string "determination whenever he stood\l"
+	.string "up to protect the ones he loved.\p"
+	.string "If this is the path your heart\n"
+	.string "has chosen, I won't hold you\l"
+	.string "back.\p"
+	.string "Just promise me one thing: whenever\n"
+	.string "the journey gets heavy, come home.\p"
+	.string "There will always be a warm bed\n"
+	.string "and a safe haven waiting for\l"
+	.string "you both.\p"
+	.string "Take care of each other out\n"
+	.string "there, my darling.\l"
+	.string "I believe in you!$"
+
+EclatHouse_Text_MomWelcomeRestPrompt:
+	.string "Welcome home, {PLAYER}!\p"
+	.string "You and your POKéMON must be\n"
+	.string "exhausted from the road.\p"
+	.string "Would you like to rest here for a bit?$"
+
+EclatHouse_Text_MomTakeARest:
+	.string "Take all the time you need, honey.$"
+
+EclatHouse_Text_MomFullyRested:
+	.string "You and your team look completely\n"
+	.string "refreshed!\p"
+	.string "Give it your best out there!$"
+
+EclatHouse_Text_MomComeBackAnytime:
+	.string "Don't push yourself too hard, honey.\n"
+	.string "I'll be right here whenever you need.$"
+
+EclatHouse_Text_MomAfterRobbery:
+	.string "I'm sorry you had to go through\n"
+	.string "such a terrifying ordeal, my darling…\p"
+	.string "Please be careful out there.$"
 
 EclatHouse_Text_RocketThreat:
-	.string "???: Shut up damn it!\p"
-	.string "Grab that POKéMON, the boss\n"
-	.string "needs a lot of POKéMON!$"
+	.string "Shut up, damn it!\p"
+	.string "Grab that POKéMON on the table!\n"
+	.string "The boss needs every powerful\l"
+	.string "POKéMON we can steal!$"
 
-EclatHouse_Text_RocketLeaves:
-	.string "???: Damn, her kid is here!\n"
-	.string "Quickly grab that POKéMON and\l"
-	.string "let's go!$"
+EclatHouse_Text_MomBegs:
+	.string "No! Please, take anything else,\n"
+	.string "just leave that POKéMON alone!\p"
+	.string "That POKéMON belonged to my husband…\n"
+	.string "It's all our family has left!$"
+
+EclatHouse_Text_PlayerIntervene:
+	.string "Hey! Get your hands off my mom\n"
+	.string "and that POKéBALL right now!$"
+
+EclatHouse_Text_RocketMocksPlayer:
+	.string "Hah! And who's this little hero?\n"
+	.string "Look at the fierce look in your eyes!\p"
+	.string "What are you gonna do, kid?\n"
+	.string "Fight us with your bare hands?\p"
+	.string "You don't even have a POKéMON!\n"
+	.string "Know your place and get lost!$"
+
+EclatHouse_Text_RocketEscape:
+	.string "We got the POKéMON!\n"
+	.string "Let's get out of here before\n"
+	.string "anyone else shows up!$"
 
 EclatHouse_Text_Mom:
-	.string "Mom: (sniff) Oh honey…\p"
-	.string "Those bastards (sniff)…\n"
+	.string "(sniff) Oh honey…\p"
+	.string "Those bastards… (sniff)\n"
 	.string "took your father's POKéMON.\p"
-	.string "(sniff) It's all I have left\n"
-	.string "of him (sniff).$"
+	.string "(sniff) It was the only keepsake\n"
+	.string "we had left of him (sob)…$"
 
-EclatHouse_Text_Player:
-	.string "{PLAYER}: Don't worry, Mom. I'll\n"
-	.string "catch up to them, and I'll\l"
-	.string "get Dad's POKéMON back.\l"
+EclatHouse_Text_PlayerPromise:
+	.string "Mom, please don't cry…\p"
+	.string "I swear to you, I will track them\n"
+	.string "down and bring Dad's POKéMON back.\l"
 	.string "I promise you!$"
+
+EclatHouse_Text_MomWarning:
+	.string "Oh, {PLAYER}… I know your heart is\n"
+	.string "in the right place, but please be safe!\p"
+	.string "You don't have a POKéMON yet…\n"
+	.string "You can't face dangerous criminals\n"
+	.string "without a partner to protect you…$"
 
 
 LittlerootTown_BrendansHouse_1F_EventScript_GoUpstairsToSetClock::

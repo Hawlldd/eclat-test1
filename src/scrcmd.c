@@ -1269,7 +1269,7 @@ struct ObjectEvent *ScriptHideFollower(void)
     ClearObjectEventMovement(obj, &gSprites[obj->spriteId]);
     gSprites[obj->spriteId].animCmdIndex = 0; // Reset start frame of animation
     // Note: ScriptMovement_ returns TRUE on error
-    if (ScriptMovement_StartObjectMovementScript(obj->localId, obj->mapGroup, obj->mapNum, EnterPokeballMovement))
+    if (ScriptMovement_StartObjectMovementScript(obj->localId, obj->mapNum, obj->mapGroup, EnterPokeballMovement))
         return NULL;
     return obj;
 }
@@ -1518,16 +1518,16 @@ bool8 ScrCmd_faceplayer(struct ScriptContext *ctx)
         switch (DetermineFollowerNPCDirection(&gObjectEvents[gPlayerAvatar.objectEventId], npcFollower))
         {
         case DIR_NORTH:
-            ScriptMovement_StartObjectMovementScript(OBJ_EVENT_ID_NPC_FOLLOWER, npcFollower->mapGroup, npcFollower->mapNum, Common_Movement_FaceUp);
+            ScriptMovement_StartObjectMovementScript(OBJ_EVENT_ID_NPC_FOLLOWER, npcFollower->mapNum, npcFollower->mapGroup, Common_Movement_FaceUp);
             break;
         case DIR_SOUTH:
-            ScriptMovement_StartObjectMovementScript(OBJ_EVENT_ID_NPC_FOLLOWER, npcFollower->mapGroup, npcFollower->mapNum, Common_Movement_FaceDown);
+            ScriptMovement_StartObjectMovementScript(OBJ_EVENT_ID_NPC_FOLLOWER, npcFollower->mapNum, npcFollower->mapGroup, Common_Movement_FaceDown);
             break;
         case DIR_EAST:
-            ScriptMovement_StartObjectMovementScript(OBJ_EVENT_ID_NPC_FOLLOWER, npcFollower->mapGroup, npcFollower->mapNum, Common_Movement_FaceRight);
+            ScriptMovement_StartObjectMovementScript(OBJ_EVENT_ID_NPC_FOLLOWER, npcFollower->mapNum, npcFollower->mapGroup, Common_Movement_FaceRight);
             break;
         case DIR_WEST:
-            ScriptMovement_StartObjectMovementScript(OBJ_EVENT_ID_NPC_FOLLOWER, npcFollower->mapGroup, npcFollower->mapNum, Common_Movement_FaceLeft);
+            ScriptMovement_StartObjectMovementScript(OBJ_EVENT_ID_NPC_FOLLOWER, npcFollower->mapNum, npcFollower->mapGroup, Common_Movement_FaceLeft);
             break;
         default:
             break;

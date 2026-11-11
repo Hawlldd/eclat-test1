@@ -16,6 +16,7 @@
 #include "menu.h"
 #include "overworld.h"
 #include "palette.h"
+#include "rtc.h"
 #include "sound.h"
 #include "sprite.h"
 #include "task.h"
@@ -23,6 +24,7 @@
 #include "text_window.h"
 #include "trig.h"
 #include "window.h"
+#include "constants/layouts.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
@@ -30,6 +32,7 @@
 #include "constants/battle_partner.h"
 #include "data/battle_environment.h"
 #include "data/unbound_grass_battle.h"
+#include "data/grim_woods_battle.h"
 
 // .rodata
 
@@ -875,6 +878,30 @@ static const struct BattleEnvironment *GetBattleEnvironmentGraphics(u16 environm
 {
     if (environment >= NELEMS(gBattleEnvironmentInfo))
         environment = BATTLE_ENVIRONMENT_PLAIN;
+
+    if (gMapHeader.mapLayoutId == LAYOUT_PEACEFUL_WOODS
+     && !(gBattleTypeFlags & (BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER
+                           | BATTLE_TYPE_RECORDED_LINK | BATTLE_TYPE_EREADER_TRAINER
+                           | BATTLE_TYPE_FIRST_BATTLE | BATTLE_TYPE_CATCH_TUTORIAL | BATTLE_TYPE_LEGENDARY)))
+    {
+        enum TimeOfDay timeOfDay = GetTimeOfDay();
+        if (environment == BATTLE_ENVIRONMENT_GRASS || environment == BATTLE_ENVIRONMENT_LONG_GRASS)
+        {
+            if (timeOfDay == TIME_NIGHT)
+                return &sGrimWoodsGrassNightBattleGraphics;
+            if (timeOfDay == TIME_EVENING)
+                return &sGrimWoodsGrassEveningBattleGraphics;
+            return &sGrimWoodsGrassDayBattleGraphics;
+        }
+        else
+        {
+            if (timeOfDay == TIME_NIGHT)
+                return &sGrimWoodsPlainNightBattleGraphics;
+            if (timeOfDay == TIME_EVENING)
+                return &sGrimWoodsPlainEveningBattleGraphics;
+            return &sGrimWoodsPlainDayBattleGraphics;
+        }
+    }
 
     if (environment == BATTLE_ENVIRONMENT_GRASS
      && !(gBattleTypeFlags & (BATTLE_TYPE_TRAINER | BATTLE_TYPE_LINK | BATTLE_TYPE_FRONTIER

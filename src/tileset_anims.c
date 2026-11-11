@@ -689,6 +689,35 @@ void InitTilesetAnim_PetipresHouses(void)
     sSecondaryTilesetAnimCallback = TilesetAnim_PetipresHouses;
 }
 
+#define GRIM_WOODS_TREE_ANIM_STEPS     8
+#define GRIM_WOODS_TREE_ANIM_INTERVAL  14
+#define GRIM_WOODS_TREE_STEP_STRIDE    (38 * (TILE_SIZE_4BPP / sizeof(u16)))
+
+static const u16 sPeacefulWoodsGrimTreeAnim[] = INCBIN_U16("data/tilesets/secondary/peaceful_woods_grim/tree_anim.bin");
+
+static void TilesetAnim_PeacefulWoodsGrim(u16 timer)
+{
+    if (timer % GRIM_WOODS_TREE_ANIM_INTERVAL != 1)
+        return;
+
+    u16 step = (timer / GRIM_WOODS_TREE_ANIM_INTERVAL) % GRIM_WOODS_TREE_ANIM_STEPS;
+    const u16 *frame = sPeacefulWoodsGrimTreeAnim + step * GRIM_WOODS_TREE_STEP_STRIDE;
+
+    AppendTilesetAnimToBuffer(frame +   0, (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(1)),   13 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(frame + 208, (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(15)),   5 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(frame + 288, (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(713)),  4 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(frame + 352, (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(729)),  4 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(frame + 416, (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(744)),  6 * TILE_SIZE_4BPP);
+    AppendTilesetAnimToBuffer(frame + 512, (u16 *)(BG_VRAM + TILE_OFFSET_4BPP(760)),  6 * TILE_SIZE_4BPP);
+}
+
+void InitTilesetAnim_PeacefulWoodsGrim(void)
+{
+    sSecondaryTilesetAnimCounter = 0;
+    sSecondaryTilesetAnimCounterMax = GRIM_WOODS_TREE_ANIM_STEPS * GRIM_WOODS_TREE_ANIM_INTERVAL;
+    sSecondaryTilesetAnimCallback = TilesetAnim_PeacefulWoodsGrim;
+}
+
 void InitTilesetAnim_General(void)
 {
     sPrimaryTilesetAnimCounter = 0;

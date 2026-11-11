@@ -2441,6 +2441,16 @@ static void ObjectEventEmote(struct ObjectEvent *objEvent, u8 emotion)
     FieldEffectStart(FLDEFF_EMOTE);
 }
 
+void ShowFollowerHeartEmote(void)
+{
+    struct ObjectEvent *follower = GetFollowerObject();
+    if (follower != NULL && follower->active && !follower->invisible && IsFollowerVisible())
+    {
+        ObjectEventEmote(follower, FOLLOWER_EMOTION_LOVE);
+        PlaySE(SE_CONTEST_HEART);
+    }
+}
+
 // Find and return direction of metatile behavior within distance
 static enum Direction FindMetatileBehaviorWithinRange(s32 x, s32 y, u32 mb, u8 distance)
 {
@@ -3719,14 +3729,36 @@ const struct ObjectEventTemplate *GetObjectEventTemplateByLocalIdAndMap(u8 local
     {
         templates = gSaveBlock1Ptr->objectEventTemplates;
         count = gMapHeader.events->objectEventCount;
+        const struct ObjectEventTemplate *match = FindObjectEventTemplateByLocalId(localId, templates, count);
+        if (match != NULL)
+            return match;
+
+        // Fallback: template might not exist in saveblock if game was saved on this map before object was added
+        if (gMapHeader.events != NULL)
+        {
+            match = FindObjectEventTemplateByLocalId(localId, gMapHeader.events->objectEvents, gMapHeader.events->objectEventCount);
+            if (match != NULL)
+            {
+                for (u32 j = 0; j < OBJECT_EVENT_TEMPLATES_COUNT; j++)
+                {
+                    if (gSaveBlock1Ptr->objectEventTemplates[j].localId == 0)
+                    {
+                        gSaveBlock1Ptr->objectEventTemplates[j] = *match;
+                        return &gSaveBlock1Ptr->objectEventTemplates[j];
+                    }
+                }
+                return match;
+            }
+        }
+        return NULL;
     }
     else
     {
         mapHeader = Overworld_GetMapHeaderByGroupAndId(mapGroup, mapNum);
         templates = mapHeader->events->objectEvents;
         count = mapHeader->events->objectEventCount;
+        return FindObjectEventTemplateByLocalId(localId, templates, count);
     }
-    return FindObjectEventTemplateByLocalId(localId, templates, count);
 }
 
 const struct ObjectEventTemplate *FindObjectEventTemplateByLocalId(u8 localId, const struct ObjectEventTemplate *templates, u8 count)

@@ -155,6 +155,24 @@ const struct SpriteTemplate gFieldEffectObjectTemplate_EclatTallGrass = {
     .callback = UpdateTallGrassFieldEffect,
 };
 
+static const u32 sUnboundTallGrassTiles[] = INCBIN_U32("graphics/eclat_intro/unbound_tall_grass.bin");
+static const u16 sGrimWoodsTallGrassPalette[] = INCBIN_U16("graphics/eclat_intro/grim_woods_tall_grass_palette.bin");
+
+const struct SpritePalette gSpritePalette_GrimWoodsTallGrass = {sGrimWoodsTallGrassPalette, FLDEFF_PAL_TAG_GRIM_WOODS_TALL_GRASS};
+
+static const struct SpriteFrameImage sPicTable_UnboundTallGrass[] = {
+    overworld_ascending_frames(sUnboundTallGrassTiles, 2, 2),
+};
+
+const struct SpriteTemplate gFieldEffectObjectTemplate_GrimWoodsTallGrass = {
+    .tileTag = TAG_NONE,
+    .paletteTag = FLDEFF_PAL_TAG_GRIM_WOODS_TALL_GRASS,
+    .oam = &gObjectEventBaseOam_16x16,
+    .anims = sAnimTable_TallGrass,
+    .images = sPicTable_UnboundTallGrass,
+    .callback = UpdateTallGrassFieldEffect,
+};
+
 static const struct SpriteFrameImage sPicTable_Ripple[] = {
     overworld_ascending_frames(gFieldEffectObjectPic_Ripple, 2, 2),
 };

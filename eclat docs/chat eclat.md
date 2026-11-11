@@ -2,7 +2,7 @@
 
 Atualizado em 7 de novembro de 2026.
 
-Este documento explica como investigamos e implementamos o port do Éclat Pourpre para a base Emerald. Foi escrito para outra IA conseguir retomar o trabalho, reproduzir os achados e verificar as próprias alterações. Consulte também o [modus](modus.md), o [histórico](historico.md) e a [metodologia](metodologia.md).
+Este documento explica como investigamos e implementamos o port do Éclat Pourpre para a base Emerald. Foi escrito para outra IA conseguir retomar o trabalho, reproduzir os achados e verificar as próprias alterações. Consulte também a [história](historia.md), o [modus](modus.md), o [histórico](historico.md) e a [metodologia](metodologia.md).
 
 A identificação visual dos sprites começa com uma hipótese. A identificação técnica exige relacionar a imagem exibida aos tiles, à paleta, à tabela de quadros e à rotina que produz o movimento. A precisão alcançada depende desse cruzamento e das revisões do usuário. Houve implementações que compilavam e pareciam corretas em uma captura, mas falhavam em outros estados.
 

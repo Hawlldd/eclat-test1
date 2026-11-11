@@ -52,7 +52,7 @@
 #else
 
 #define FLAG_HIDE_ECLAT_HOUSE_ROCKETS 0x20
-#define FLAG_ECLAT_BOOSTED_SHINY_RATE 0x21
+#define FLAG_TALKED_TO_MOM_AFTER_STARTER 0x21
 #define FLAG_HIDE_ECLAT_UNUSED_OBJECTS 0x22
 #define FLAG_IVIERE_TOWN_MAP_TAKEN 0x23
 #define FLAG_ECLAT_ROUTE1_MET_MYST 0x24
@@ -66,7 +66,7 @@
 #define FLAG_ECLAT_ROUTE1_TM42 0x2C
 #define FLAG_ECLAT_ROUTE1_SECOND_PIDGEOTITE 0x2D
 #define FLAG_ECLAT_ROUTE1_GOT_TICKET 0x2E
-#define FLAG_UNUSED_0x02F    0x2F // Unused Flag
+#define FLAG_HIDE_IVIERE_FILAO_OUTSIDE 0x2F
 #define FLAG_PETIPRES_POTION 0x30
 #define FLAG_HIDE_PETIPRES_STRANGER 0x31
 #define FLAG_GOT_PETIPRES_RADAR 0x32
@@ -89,8 +89,8 @@
 #define FLAG_PEACEFUL_WOODS_CUT_TREE_1 0x43
 #define FLAG_PEACEFUL_WOODS_CUT_TREE_2 0x44
 #define FLAG_PEACEFUL_WOODS_CUT_TREE_3 0x45
-#define FLAG_UNUSED_0x046    0x46 // Unused Flag
-#define FLAG_UNUSED_0x047    0x47 // Unused Flag
+#define FLAG_GOT_EXP_SHARE_FROM_ALDA 0x46
+#define FLAG_PETIPRES_NURSE_INTRO 0x47
 #define FLAG_UNUSED_0x048    0x48 // Unused Flag
 #define FLAG_UNUSED_0x049    0x49 // Unused Flag
 #define FLAG_UNUSED_0x04A    0x4A // Unused Flag
@@ -665,10 +665,11 @@
 #define FLAG_HIDDEN_ITEM_ROUTE_105_BIG_PEARL                 (FLAG_HIDDEN_ITEMS_START + 0x6F)
 #define FLAG_HIDDEN_ITEM_PEACEFUL_WOODS_POTION               (FLAG_HIDDEN_ITEMS_START + 0x70)
 #define FLAG_HIDDEN_ITEM_PEACEFUL_WOODS_ANTIDOTE             (FLAG_HIDDEN_ITEMS_START + 0x71)
-#define FLAG_UNUSED_0x266  0x266 // Unused Flag
-#define FLAG_UNUSED_0x267  0x267 // Unused Flag
-#define FLAG_UNUSED_0x268  0x268 // Unused Flag
-#define FLAG_UNUSED_0x269  0x269 // Unused Flag
+#define FLAG_HIDDEN_ITEM_ROUTE_3_ORAN_BERRY                  (FLAG_HIDDEN_ITEMS_START + 0x72)
+#define FLAG_DEXNAV_SEARCHING                0x266
+#define FLAG_DEXNAV_DETECTOR_MODE            0x267
+#define FLAG_SYS_EXP_SHARE                   0x268
+#define FLAG_RECEIVED_POKE_BALLS_FROM_FILAO  0x269
 #define FLAG_UNUSED_0x26A  0x26A // Unused Flag
 #define FLAG_UNUSED_0x26B  0x26B // Unused Flag
 #define FLAG_UNUSED_0x26C  0x26C // Unused Flag
@@ -1188,6 +1189,10 @@
 #define FLAG_UNUSED_0x470                                           0x470 // Unused Flag
 #define FLAG_ITEM_ROUTE_103_PP_UP                                   0x471
 #define FLAG_UNUSED_0x472                                           0x472 // Unused Flag
+#define FLAG_ITEM_ROUTE_3_SUPER_POTION                              FLAG_ITEM_ROUTE_103_GUARD_SPEC
+#define FLAG_ITEM_ROUTE_3_AWAKENING                                 FLAG_ITEM_ROUTE_103_PP_UP
+#define FLAG_ITEM_ROUTE_3_RARE_CANDY                                0x472
+#define FLAG_ROUTE_3_LOTTERY_TICKET                                 0x479
 #define FLAG_ITEM_ROUTE_108_STAR_PIECE                              0x473
 #define FLAG_ITEM_ROUTE_109_POTION                                  0x474
 #define FLAG_ITEM_ROUTE_110_ELIXIR                                  0x475
@@ -1361,7 +1366,7 @@
 #define FLAG_SYS_POKEMON_GET                         (SYSTEM_FLAGS + 0x0) // FLAG_0x860
 #define FLAG_SYS_POKEDEX_GET                         (SYSTEM_FLAGS + 0x1)
 #define FLAG_SYS_POKENAV_GET                         (SYSTEM_FLAGS + 0x2)
-#define FLAG_UNUSED_0x863                            (SYSTEM_FLAGS + 0x3) // Unused Flag
+#define FLAG_SYS_DEXNAV_GET                          (SYSTEM_FLAGS + 0x3)
 #define FLAG_SYS_GAME_CLEAR                          (SYSTEM_FLAGS + 0x4)
 #define FLAG_SYS_CHAT_USED                           (SYSTEM_FLAGS + 0x5)
 #define FLAG_UNLOCKED_TRENDY_SAYINGS                 (SYSTEM_FLAGS + 0x6)

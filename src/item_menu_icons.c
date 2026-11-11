@@ -479,7 +479,7 @@ void AddBagItemIconSprite(enum Item itemId, u8 id)
         {
             *spriteId = iconSpriteId;
             gSprites[iconSpriteId].x2 = 24;
-            gSprites[iconSpriteId].y2 = 136;
+            gSprites[iconSpriteId].y2 = 140;
         }
     }
 }

@@ -58,6 +58,12 @@ src/data/tutor_moves.h
 test/battle/trainer_control.h
 test/battle/partner_control.h
 tools/compresSmol/compresSmol
+scratch/
+*.bak
+entrada_peaceful_woods_comparacao.png
+render_sign_area.png
+render_stairs_area.png
+check_gbapal.py
 tools/compresSmol/compresSmolTilemap
 tools/aif2pcm/aif2pcm
 *.Identifier

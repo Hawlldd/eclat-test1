@@ -2,6 +2,9 @@
 
 Este documento acompanha a recriação da abertura e da primeira cidade de Pokémon Éclat Pourpre no Pokémon Emerald Expansion. A referência foi a ROM local em inglês, baseada em FireRed. A implementação usa a versão **1.17.2** do Expansion, commit `79dd436920`, na branch `eclat-intro`.
 
+> [!NOTE]
+> Para o roteiro narrativo, trama, arcos de personagens e a "Bíblia da História" do jogo, consulte o documento dedicado: [**`historia.md`**](historia.md).
+
 ## Preparação do projeto
 
 A base limpa e a cópia de trabalho ficaram em pastas separadas dentro de `zEmerald`. O código do port passou a ser registrado em Git para permitir comparar mudanças, recuperar uma versão conhecida e recompilar sem baixar ou descompactar o Expansion novamente. A compilação foi feita no Ubuntu via WSL, com uma cópia de compilação no sistema de arquivos do Linux. A ROM de teste foi entregue na pasta do projeto como `eclat-intro-teste.gba`.
@@ -32,6 +35,29 @@ A base limpa e a cópia de trabalho ficaram em pastas separadas dentro de `zEmer
 | --- | --- | --- |
 | Portaria e Rota 1 | Importação do mapa `IviereRoute1Gate` e da `EclatRoute1`, com tilesets secundários e conexão de warps. Encontros selvagens, treinadores Sally e Ben, e entrega da Old Rod pelo pescador. | Layouts configurados em `tile_format: frlg`. O guarda bloqueia o corredor sul exigindo `ITEM_TEA`. O pescador entrega a `ITEM_OLD_ROD` e grava `FLAG_ECLAT_ROUTE1_OLD_ROD`. Sete rotas aéreas de Pidgeot integradas em `StartEclatRoute1Flybys`. |
 | Cena do Myst e Mega NPC | Apresentação do Myst na chegada à Rota 1 com diálogo completo e NPC de Mega Evolução condicionado a duas insígnias. | `EclatRoute1_OnFrame` aciona o avanço do jogador para fora da portaria e a conversa investigativa com o Myst. O Myst sai pela direita e o controle é devolvido em `(8,15)`. O NPC da Mega Evolução verifica `FLAG_BADGE02_GET` para oferecer o Mega Ring e Mega Stones. |
+
+## Mochila Cube (Pokémon Unbound)
+
+| Escopo | O que foi feito | Como foi feito |
+| --- | --- | --- |
+| Transição dos Bolsos do Cube | Correção de corrupção visual (`''""`) ao trocar bolsos para a direita. | O buffer de deslizamento legado de 32 tiles do Emerald causava overflow de memória ao copiar 9 tiles a partir do índice 27. Substituído por sincronização e renderização direta no `WIN_POCKET_NAME` durante o giro suave de 16 quadros do Cubo. |
+| Quebra e Ocupação da Descrição de Itens | Formatação horizontal em 2 linhas com preenchimento da largura da caixa e fim do corte no rodapé. | Criada a rotina `BagMenu_FormatDescription` com algoritmo guloso (*greedy wrap*) a 180 px, substituindo o balanceador simétrico de `BreakStringAutomatic` que dividia arbitrariamente o texto em 3 linhas curtas. Os textos agora preenchem toda a largura da janela em no máximo 2 linhas com margem limpa no rodapé. |
+
+## Evento da Portaria (DexNav do Guarda)
+
+| Escopo | O que foi feito | Como foi feito |
+| --- | --- | --- |
+| Ativação do Sistema DexNav | Ativação do DexNav no Expansion com flags e variáveis de sistema dedicadas. | Habilitado `DEXNAV_ENABLED = TRUE` em `include/config/dexnav.h`. Alocadas as flags `FLAG_SYS_DEXNAV_GET` (`SYSTEM_FLAGS + 0x3`), `FLAG_DEXNAV_SEARCHING` (`0x266`), `FLAG_DEXNAV_DETECTOR_MODE` (`0x267`) e variáveis `VAR_DEXNAV_SPECIES` (`0x40F7`), `VAR_DEXNAV_STEP_COUNTER` (`0x40F8`). Ícone no Unbound Start Menu condicionado a `FLAG_SYS_DEXNAV_GET`. |
+| Cena do Guarda na Portaria | O guarda interrompe a passagem do jogador para a Rota 1 e entrega o DexNav com diálogo sobre seu sonho frustrado de ser treinador. | Adicionados gatilhos em `(6,5)` e `(6,6)` de `IviereRoute1Gate` que acionam a cena caso `FLAG_SYS_DEXNAV_GET` não esteja ativa. O guarda chama a atenção do jogador, desabafa sobre seu sonho de infância, entrega o DexNav com fanfarra oficial, explica o funcionamento e incentiva o protagonista a conquistar o sonho pelos dois. |
+
+## Cidade de Petipres e Textbox Éclat
+
+| Escopo | O que foi feito | Como foi feito |
+| --- | --- | --- |
+| Textbox e Namebox Éclat Pourpre | Troca do design da message box e name box pelo estilo moderno do Éclat Pourpre com cantos arredondados e realce ciano. | `graphics/text_window/message_box.png` (56x16) e `name_box.png` (24x16) convertidos em PNGs indexados 4bpp (16 cores estritas). Ajuste de paletas no C e quebra manual de diálogos ($\le 32$ caracteres por linha) para eliminar corte de palavras nas caixas. |
+| Cena do Fugitivo em Petipres | Monólogo reflexivo de superação do protagonista e correção da rota de fuga do estranho pelas escadas. | Após o homem em pânico fugir e deixar a carta de advertência da Team Rocket, o protagonista reflete empaticamente sobre a dor daquela vítima, mas reafirma sua determinação de não desistir e honrar a promessa feita à sua mãe e ao Clefable de seu pai. A rota de corrida do NPC foi ajustada para subir pelo caminho de terra (`walk_fast_up` x 3) e subir a escadaria com corrimão vermelho (`walk_fast_right` x 6 através de `x=22, y=22`) em direção ao terraço superior, eliminando o clipping através do desnível rochoso. |
+| Acolhimento no Centro Pokémon de Petipres | Cena de boas-vindas da Enfermeira Joy com presente, humor sobre a família Joy, primeira cura e animação da Chansey. | Adicionado `SP_NAME_JOY` (`"NURSE JOY"`) e flag `FLAG_PETIPRES_NURSE_INTRO` (`0x47`). Na 1ª visita, a Joy acolhe o protagonista ao notar sua tensão, explica que o Centro é um porto seguro, presenteia com uma Potion e brinca que nem toda Joy da família o mimará assim, curando a equipe em seguida. Visitas posteriores usam o menu ágil padrão. A Chansey teve seu texto em francês traduzido para inglês com animação de pulinho e coração (`jump_in_place_down` + `emote_heart`). |
+| Confronto Team Rocket na Rota 2 | Reformulação do diálogo do encontro com os capangas e chegada de Myst: orgulho dos vilões ferido por uma criança e remoção de piadas de tradução. | Em `data/maps/Route2/rocket.inc`, o protagonista confronta os dois capangas sobre o roubo em Iviere; os vilões inicialmente desdenham por ser uma criança e mandam ele voltar para a mãe. O protagonista peita os vilões e os desafia para uma batalha Pokémon. Sentindo-se rebaixados por um pirralho, os vilões se enfurecem e aceitam o embate. Myst intervém repreendendo a impulsividade do jovem, mas dá cobertura na luta. Removida a antiga quebra de quarta parede ("Chidori / piada de Naruto"), substituída por um interrogatório coerente onde o capanga revela que a tropa principal se reúne em Peaceful Woods. Integração total com `setspeaker` (`SP_NAME_ROCKET`, `SP_NAME_PLAYER`, `SP_NAME_MYST`) e limite $\le 32$ caracteres por linha. |
 
 ## Ponto de controle
 
@@ -99,6 +125,15 @@ Seguindo o protocolo da seção 11 da metodologia, as modificações e decisões
 - **Gemini [Implementação]**: Desmontada a ROM do Unbound. Extraídos os dados oficiais da Entrada 0: tileset `0x8ED708C`, tilemap `0x8ED79D8`, base tileset `0x8248C68`, base tilemap `0x8248F58` e paleta de 48 cores `0x8ED7E8C`. Gerados os renders limpos de referência `unbound_route2_clean_bg.png` e `unbound_route2_composite.png`. Elaborado o roteiro de perguntas para o ChatGPT sobre a conversão direta para o formato `map.bin` (32×64) e `palette.pal` da engine Emerald.
 
 ### 5. Regra de Modularidade e Escalabilidade (~500 linhas)
+Seguindo o princípio arquitetural do projeto, novos arquivos de sistema e scripts de mapas devem manter-se em módulos focados e desacoplados, evitando arquivos monolíticos e facilitando a rastreabilidade e testes automatizados.
+
+### 6. Caixa de Diálogo e Namebox Estilo FireRed / Éclat Pourpre e Correção de Quebras de Linha
+- **Gemini [Diagnóstico]**: A caixa de diálogo original do Emerald apresentava moldura ciano/esmeralda grossa e arredondada incompatível com a estética sóbria de Éclat Pourpre. Além disso, falas com mais de 34 caracteres por linha sem quebra manual sofriam corte do final de palavras na margem direita da tela do GBA.
+- **ChatGPT [Análise]**: A engine do Emerald renderiza o contorno da caixa via `WindowFunc_DrawDialogueFrame` usando os 14 tiles de `graphics/text_window/message_box.png` (56×16, 4bpp) e a paleta `sTextWindowPalettes[0]`. A Namebox utiliza os 6 tiles de `graphics/text_window/name_box.png` (24×16, 4bpp) na mesma paleta `DLG_WINDOW_PALETTE_NUM`. O compilador `gbagfx` requer que os arquivos PNG possuam chunk `PLTE` estritamente indexado em 16 cores (48 bytes), evitando erros de *excess elements in array initializer*. Para evitar cortes de texto na tela de 208 px (26 tiles), cada linha deve possuir no máximo 32–33 caracteres.
+- **Gemini [Implementação]**:
+  1. Extraídos e implementados os tiles oficiais da caixa de texto FireRed/Éclat Pourpre em `graphics/text_window/message_box.png` (56×16) e na aba da Namebox em `graphics/text_window/name_box.png` (24×16), com paleta elegante de ardósia/grafite e fundo azul-ardósia escuro para o nome do interlocutor.
+  2. Gerados os arquivos PNG com chunk PLTE estrito de 16 cores (32 bytes em `.gbapal` e 448/192 bytes em `.4bpp`), garantindo compilação limpa sem avisos.
+  3. Revisadas todas as falas de `LittlerootTown/scripts.inc` (Prof. Filão), `IviereRoute1Gate/scripts.inc` (Guarda), `Iviere_FilaosHouse/scripts.inc` (Mrs. Filão) e `EclatRoute1/scripts.inc` (Myst), reformatando todas as quebras de linha (`\n`, `\l`, `\p`) para o limite seguro de $\le$ 32 caracteres. Compilação concluída com sucesso em `eclat-intro-teste.gba`.
 - **Gemini [Diagnóstico]**: O código do port vinha acumulando rotinas extensas, arriscando perda de manutenibilidade conforme novas rotas forem adicionadas.
 - **ChatGPT [Análise]**: Fixar um teto de ~500 linhas por arquivo de código e roteiro é uma prática recomendada de arquitetura para decompilações, forçando divisão de scripts em sub-includes (`.inc`) e rotinas C em bibliotecas de suporte dedicadas.
 - **Gemini [Implementação]**: Registrada formalmente a diretriz na seção 10 da metodologia (`metodologia.md`), aplicando a regra a todos os novos desenvolvimentos do port.
@@ -131,6 +166,17 @@ Seguindo o protocolo da seção 11 da metodologia, as modificações e decisões
 - **Gemini [Processamento, Indexação e Validação Técnica].**
   - Converteu a arte final do usuário para o formato nativo 1x (128x32 e 128x64 4bpp indexado com 16 cores).
   - Atualizou a paleta de `ball_status_bar.png` com a cor ouro escuro do trilho (`#D69452` no índice 5).
+
+### Rota 3 e Correção de Conexões e Porymap
+
+- **Usuário [Reporte]**:
+  1. Ao sair de Peaceful Woods para a Rota 3, o jogador não conseguia retornar para Peaceful Woods pela conexão/warp.
+  2. No Porymap, ocorria erro ao abrir o mapa `Route3`.
+- **Gemini [Diagnóstico e Correções]**:
+  1. **Compatibilidade do Porymap**: O Porymap converte nomes camel-case de tilesets inserindo sublinhado antes de números (`gTileset_EclatRoute3Secondary` $\rightarrow$ `data/tilesets/secondary/eclat_route_3secondary/`). O script `tools/eclat/porymap_iviere_compat.py` foi atualizado para gerar os arquivos necessários (`tiles.png`, `metatiles.bin`, `metatile_attributes.bin` e `00.pal..12.pal`) tanto em `eclat_route_3secondary` quanto em `eclat_route3_secondary`, além de adicionar suporte a `petipres_houses_primary/secondary`.
+  2. **Comportamento do Warp (Metatile Attributes)**: Os metatiles de entrada 774 e 782 em `(12, 34)` e `(12, 35)` estavam com comportamento 0x0. A tabela de atributos original foi recuperada do endereço `0x8894d8` (apontado pelo cabeçalho `0x2cef2c` da ROM original), restaurando o comportamento direcional `MB_WESTWARD_WARP` (`0x63`).
+  3. **Elevação dos Warps**: Em `data/maps/Route3/map.json`, os Warps 0 e 1 estavam definidos com `elevation: 0`, enquanto o terreno está em `elevation: 3`. O campo foi ajustado para `elevation: 3`, restabelecendo o trânsito bidirecional perfeito entre Peaceful Woods e Rota 3.
+  4. **Compilação**: Compilado com sucesso com 0 erros via WSL, gerando `eclat-intro-teste.gba`.
   - Validou a conversão de todos os sprites com `tools/gbagfx/gbagfx` (0 erros, 0 avisos, tamanhos exatos de 2048 e 4096 bytes).
   - Compilou a ROM completa com `build-route1.sh` e entregou em `eclat-intro-teste.gba`.
 - **ChatGPT [Próxima Revisão].** Verificação em execução no mGBA durante uma batalha real na Route 1 para atestar o encaixe visual da fonte do Emerald e o preenchimento da barra de HP em tempo real.
@@ -203,6 +249,83 @@ Na ligação da ROM, dez IDs gráficos da Route 2 não tinham descritores: os tr
     ```
   - A aplicação direta em `calculatedExp` assegura que o aumento de 1.5x flui proporcionalmente para o cálculo com divisão de EXP (`B_SPLIT_EXP`), Exp. Share e bônus individuais de mon (Lucky Egg, mon trocado, Exp. Charm), mantendo as batalhas contra treinadores inalteradas. A captura de selvagens via `BattleScript_CaughtMon` também é contemplada automaticamente.
 - **Validação**: Integrado aos arquivos de compilação em `route-build-files.txt`, compilado via `work/build-route1.sh` (`make -j8 emerald`) com saída limpa, executado teste automatizado completo `test-route1.sh 0` (79/79 asserções aprovadas) e entregue em `eclat-intro-teste.gba`.
+
+### Reformulação Dramática e Cinematográfica do Prólogo (Quarto, Roubo e Prof. Filao) — 08/11/2026
+
+- **Solicitação do Usuário**: Recontar e amplificar a dramaticidade do início da jornada:
+  1. **Ato 1 (Quarto e TV)**: O protagonista inicia assistindo à notícia urgente na TV sobre a onda de roubos de Pokémon na região, expressando indignação e reflexão profunda sobre como alguém tem coragem de roubar parceiros de outros treinadores. Ao caminhar em direção à escada, escuta os gritos desesperados de socorro da mãe.
+  2. **Ato 2 (Roubo no 1F)**: O jogador desce correndo a escada e presencia o assalto. Por ainda não possuir nenhum Pokémon, os criminosos zombam da sua incapacidade de lutar de mãos vazias e fogem com o Pokémon do pai. A mãe desaba em pranto e o jogador promete recuperar o Pokémon.
+  3. **Ato 3 (Frustração e Prof. Filao)**: Ao sair de casa, o protagonista cerra os punhos lamentando sua impotência por não ter um Pokémon para proteger a mãe. O Prof. Filao ouve os gritos e chega correndo preocupado. Comovido pela determinação do jovem, entrega-lhe um Pokémon inicial (seleção personalizada de 27 iniciais entre 9 gerações) e faz um discurso inspirador para transformar a dor em força, vencer a Liga Pokémon e resgatar o Pokémon do pai.
+- **Implementação**:
+  - **Quarto (`LittlerootTown_BrendansHouse_2F`)**:
+    - Em `src/new_game.c`: O ponto de spawn de início de jogo foi ajustado para `(7, 7)`, posicionando o jogador diretamente sobre o tapete vermelho em frente à TV e de frente para ela (`DIR_NORTH` em `OnTransition`).
+    - Em `scripts.inc`: A cena abre diretamente com a transmissão do boletim urgente na TV, seguido pelo monólogo dramático de reflexão com `SP_NAME_PLAYER`. Toda a conversa e escolha antiga de taxa de shiny foi completamente removida (permitindo o uso futuro e nativo do Shiny Charm do Expansion). O controle é liberado imediatamente após a reflexão na TV, e o estado avança para `VAR_LITTLEROOT_INTRO_STATE = 1`.
+    - Em `map.json`: O gatilho de coordenadas da escada foi posicionado precisamente em `(10, 2)` (um tile acima do piso lateral, ficando exatamente sobre o tapete vermelho no topo do primeiro degrau da escada). Ao pisar, o protagonista vira imediatamente para a esquerda (`Common_Movement_FaceLeft`) olhando diretamente para o vão dos degraus que descem, ouve o grito da mãe (`SP_NAME_MOM`), expressa seu choque ainda virado para a esquerda (`SP_NAME_PLAYER`), avança o estado para `8` e é transportado diretamente para o 1F (`warp MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F, 10, 2`).
+  - **Térreo (`LittlerootTown_BrendansHouse_1F`)**:
+    - Ao descer a escada (`VAR_LITTLEROOT_INTRO_STATE == 8`), a câmera panorâmica exibe os ladrões intimidando a mãe. O jogador desce correndo e intervém bravamente. O capanga zomba com desdém (`"What are you gonna do, kid? Fight us with your bare hands? You don't even have a POKéMON!"`), agarra a Pokébola do pai e os vilões fogem pela porta.
+    - A mãe lamenta que era a última lembrança do pai, e o jogador jura recuperá-lo. O estado é definido como `VAR_LITTLEROOT_INTRO_STATE = 9`, mantendo o jogador sem Pokémon até encontrar o professor.
+  - **Exterior de Iviere (`LittlerootTown`)**:
+    - Em `include/constants/flags.h`, criado `#define FLAG_HIDE_IVIERE_FILAO_OUTSIDE 0x2F`, inicializado ativo em `src/new_game.c`.
+    - Em `map.json`, inserido o evento de objeto do Prof. Filao (`OBJ_EVENT_GFX_FILAO`) na posição `(15, 26)`.
+    - Em `scripts.inc`, ativado `MAP_SCRIPT_ON_FRAME_TABLE` com `VAR_LITTLEROOT_INTRO_STATE == 9`:
+      - O jogador para na porta, lamentando amargamente sua falta de Pokémon para defender a mãe.
+      - O Prof. Filao surge gritando pelo jogador, corre pela passarela de `x=15` até `x=21`, ficando face a face com o jogador.
+      - Após ouvir o relato do roubo, Filao oferece seu estojo de iniciais (`IviereTown_ChooseType` com 27 iniciais das 9 gerações).
+      - Ao receber o inicial, toca a fanfarra, ativa a Pokédex Nacional, oferece opção de apelido e o professor profere o discurso dramático motivacional, instruindo-o a buscar força na Liga Pokémon para derrotar os criminosos.
+      - O professor caminha de volta ao laboratório, e o estado é atualizado para `7` (permitindo a progressão natural da história).
+- **Validação**: Compilado via `./build.sh` no WSL sem erros e entregue na ROM `eclat-intro-teste.gba`.
+
+### Aproximação do Guarda na Portaria de Iviere (`IviereRoute1Gate`) — 08/11/2026
+
+- **Solicitação do Usuário**: Fazer com que o jogador, ao ser chamado pelo guarda na portaria entre Iviere Town e a Rota 1, caminhe até a bancada/balcão do guarda, ficando de frente para ele separado pelo balcão para transmitir a sensação autêntica de aproximação.
+- **Implementação**:
+  - Em `data/maps/IviereRoute1Gate/map.json`, os gatilhos de coordenadas foram reposicionados na entrada da portaria em `(3, 5)` e `(3, 6)`, apontando respectivamente para `IviereRoute1Gate_Trigger_DexNav_Top` e `IviereRoute1Gate_Trigger_DexNav_Bottom`.
+  - Em `data/maps/IviereRoute1Gate/scripts.inc`:
+    - Ao pisar nos gatilhos, o guarda avista o jogador com balão de exclamação (`playse SE_PIN`, `Common_Movement_ExclamationMark`) e chama a atenção: `"Guard: Wait a second, young trainer! Come over to the counter for a moment!"`.
+    - O jogador caminha suavemente até a bancada em `(6, 5)` (3 passos à direita pelo corredor superior, ou 3 passos à direita e 1 para cima pelo corredor inferior) e vira para cima.
+    - O guarda vira para baixo em `(6, 3)` de frente para o jogador através do balcão `(6, 4)`.
+    - Executado o diálogo com a entrega do DexNav, fanfarra, ativação de `FLAG_SYS_DEXNAV_GET` e explicação do funcionamento.
+
+### Sistema de Exibição e Animação de Obtenção de Itens (Opção B - Unbound / CFRU) — 08/11/2026
+
+- **Solicitação do Usuário**: Implementar a animação e destaque de item obtido no estilo do Pokémon Unbound (Opção B escolhida pelo usuário), com itens normais e importantes diferenciados na tela.
+- **Implementação**:
+  - Em `include/config/overworld.h`, ativado `#define OW_SHOW_ITEM_DESCRIPTIONS OW_ITEM_DESCRIPTIONS_ALWAYS`.
+  - Em `src/overworld.c`:
+    - Eliminada a criação de caixas de cabeçalho invasivas no topo da tela (`sHeaderBoxWindowId`), mantendo o visual limpo do overworld conforme o estilo Unbound / CFRU.
+    - Implementada a classificação de itens via `IsImportantItem` (`POCKET_KEY_ITEMS`, `POCKET_TM_HM` e `GetItemImportance`).
+    - **Itens Importantes**: O sprite surge no centro da tela (`x = 120, y = 62`) e executa a animação `SpriteCB_ObtainedItem_Center` (elevação suave de 12 px em 14 frames seguida de flutuação e levitação senoidal contínua enquanto durar a fanfarra e a mensagem).
+    - **Itens Normais**: O sprite surge no canto inferior direito da caixa de mensagens (`x = 213, y = 140`) com a animação `SpriteCB_ObtainedItem_Corner` (salto rápido para cima com overshoot de 4 px em 8 frames e amortecimento elástico de retorno em 4 frames).
+    - As rotinas `ScriptShowItemDescription` e `ScriptHideItemDescription` gerenciam o ciclo de vida do sprite de forma totalmente segura e assíncrona.
+  - **Animação Específica para Obtenção do DexNav**:
+    - Em `src/overworld.c`, implementada a função nativa `ScriptShowDexNav` e o sprite `sSpriteTemplate_DexnavObtain` utilizando o gráfico de alta resolução do DexNav (`graphics/unbound_start_menu/sprites/dexnav.4bpp.smol`) com a paleta oficial (`icons.gbapal`).
+    - Criada a macro de script `.macro showdexnav` em `asm/macros/event.inc`.
+    - No script `IviereRoute1Gate_Event_GiveDexNav` e na interação direta `IviereRoute1Gate_Guard`, acionado `showdexnav` durante a mensagem e a fanfarra, exibindo o DexNav levitando no centro da tela até o jogador pressionar o botão para avançar para a explicação do guarda.
+- **Validação**: Compilado via `./build.sh` no WSL sem erros e entregue na ROM `eclat-intro-teste.gba`.
+
+### Posicionamento e Animação do Sprite do Rival na Tela de Nomes — 08/11/2026
+
+- **Solicitação do Usuário**: Na tela de escolha de nome da rival na introdução, alinhar o mini sprite na mesma posição do treinador principal (à esquerda, sobre a base) e fazer com que ele anime (passos no lugar) em vez de ficar estático.
+- **Implementação**:
+  - Em `src/naming_screen.c`:
+    - Em `NamingScreen_CreateRivalIcon`, as coordenadas do sprite foram alteradas de `(176, 37)` (lado direito) para `(56, 37)` (exatamente a mesma posição do protagonista).
+    - A animação foi alterada de `ANIM_STD_FACE_SOUTH` (pose estática) para `ANIM_STD_GO_SOUTH` (passos ritmados no lugar, idêntico ao protagonista).
+    - Em `MainState_FadeIn`, foi removido o desvio que movia os tiles da plataforma de fundo para a coluna da direita, garantindo que a base permaneça perfeitamente alinhada sob o sprite em `x = 56`.
+- **Validação**: Compilado via `./build.sh` no WSL com 0 avisos/erros e entregue na ROM `eclat-intro-teste.gba`.
+
+### Integração do Sistema de Namebox (Caixa de Nome do Locutor) — 08/11/2026
+
+- **Solicitação do Usuário**: Adicionar caixas com o nome de quem está falando nos diálogos (Namebox) para modernizar o visual narrativo.
+- **Implementação**:
+  - Em `include/constants/speaker_names.h` e `src/data/speaker_names.h`, configuradas as constantes e strings oficiais de locutores: `MOM`, `{PLAYER}`, `{RIVAL}`, `PROF. FILAO`, `MRS. FILAO`, `GUARD`, `MYST`, `???` e `ROCKET`.
+  - Integrado o comando `setspeaker <NAME>` nos scripts principais do início da campanha:
+    - **Quarto (2F)**: Grito da mãe no andar inferior com `SP_NAME_MOM`.
+    - **Cena do Roubo (1F)**: Diálogo de ameaça e fuga dos capangas com `SP_NAME_MYSTERIOUS`, desabafo da mãe com `SP_NAME_MOM`, e promessa do protagonista com `SP_NAME_PLAYER`.
+    - **Casa do Prof. Filao**: Entrega do Town Map pela esposa do professor com `SP_NAME_FILAO_WIFE`.
+    - **Laboratório do Prof. Filao**: Conversa de cura e suporte do professor com `SP_NAME_FILAO`.
+    - **Portaria de Iviere (`IviereRoute1Gate`)**: Chamado, entrega do DexNav e explicação do guarda com `SP_NAME_GUARD`.
+  - Removidos os prefixos textuais brutos (ex: `"Mom: "`, `"Guard: "`, `"FILAO: "`, `"???: "`), deixando os textos das caixas de mensagens completamente limpos com o nome destacado na janela flutuante da Namebox.
+- **Validação**: Compilado via `./build.sh` no WSL com 0 erros e entregue na ROM `eclat-intro-teste.gba`.
 
 ### Multiplicador de 1.7x de experiência em batalhas contra treinadores — 07/11/2026
 
@@ -371,5 +494,416 @@ Na ligação da ROM, dez IDs gráficos da Route 2 não tinham descritores: os tr
   - Compilação concluída com sucesso via `./build.sh` (0 erros, 0 avisos).
   - ROM atualizada: `eclat-intro-teste.gba`.
   - SHA-256: `C5E2BB497020D97B79BF5C34481C8A01DF603A2E115ED2E4AB82276E0A673F38`.
+
+### Humanização de Iviere Town: Mãe, Dona Alda e Guarda da Portaria — 08/11/2026
+
+- **Objetivo**:
+  Enriquecer o prólogo dramático com laços comunitários e familiares profundos após o falecimento do pai e o roubo de seu Pokémon:
+  1. A mãe acolhe o filho de volta após ele receber o Pokémon inicial de Filão, tornando a casa um porto seguro de descanso/cura.
+  2. Dona Alda (a idosa na margem do rio) conforta o protagonista pela perda do pai e o presenteia com o `EXP_SHARE`.
+  3. O guarda na guarita para a Rota 1 impede a partida prematura caso o jogador tente sair sem se despedir da mãe.
+
+- **Arquivos modificados**:
+  - `include/constants/speaker_names.h` & `src/data/speaker_names.h`:
+    - Adicionado `SP_NAME_ALDA` com string `"ALDA"` para uso de Namebox nativa.
+  - `include/constants/flags.h`:
+    - `#define FLAG_TALKED_TO_MOM_AFTER_STARTER 0x21`: Marca que o jogador retornou para falar com a mãe após receber o inicial.
+    - `#define FLAG_GOT_EXP_SHARE_FROM_ALDA 0x46`: Registra a entrega do Exp. Share por Dona Alda.
+  - `data/maps/LittlerootTown_BrendansHouse_1F/scripts.inc`:
+    - `LittlerootTown_BrendansHouse_1F_EventScript_EclatMom`:
+      - Primeira interação pós-inicial (`VAR_LITTLEROOT_INTRO_STATE >= 7` e flag desligada): O jogador apresenta o parceiro e promete recuperar o Pokémon do pai. A mãe se emociona vendo a chama do falecido marido nos olhos do filho, cura a equipe via `Common_EventScript_OutOfCenterPartyHeal`, e ativa `FLAG_TALKED_TO_MOM_AFTER_STARTER`.
+      - Interações subsequentes: Caixa com prompt de descanso (`MSGBOX_YESNO`), curando o time a qualquer momento.
+  - `data/maps/LittlerootTown/scripts.inc`:
+    - `IviereTown_EventScript_RiverNpc`:
+      - Identificada como Dona Alda (`setspeaker SP_NAME_ALDA`).
+      - Reconhece o tumulto na casa, lembra com respeito do falecido pai, incentiva o jovem com sábias palavras e entrega o `ITEM_EXP_SHARE`.
+  - `data/maps/IviereRoute1Gate/scripts.inc`:
+    - `IviereRoute1Gate_Trigger_DexNav_Top` & `Bottom`:
+      - Interrompe com `!` caso `FLAG_TALKED_TO_MOM_AFTER_STARTER` não esteja definida.
+      - Guarda repreende moralmente o jogador por tentar partir sem consolar a mãe e o empurra um passo para trás em direção à cidade.
+      - Se falado diretamente no balcão antes da mãe, reforça o pedido para ir falar com ela.
+      - Após falar com a mãe, elogia a atitude de bom filho, relembra os velhos tempos batalhando junto com o falecido pai, entrega o `DexNav` para honrar a memória dele e o abençoa para a jornada.
+  - `data/maps/Iviere_FilaosHouse/map.json` & `scripts.inc`:
+    - Alterado movimento de Mrs. Filao de `MOVEMENT_TYPE_LOOK_AROUND` para `MOVEMENT_TYPE_FACE_DOWN` (fica calma e parada na sala).
+    - `Iviere_FilaosHouse_EventScript_TownMap`: Caso o jogador tente pegar o mapa da mesa antes de falar com ela, Mrs. Filao reage com `!` e dá uma bronca bem-humorada ("Tire as mãos daí! Eu sei que a sua mãe não te criou para pegar coisas sem pedir!").
+    - `Iviere_FilaosHouse_EventScript_Wife`: Ao falar com ela diretamente, ela expressa sua revolta com os bandidos, apoia a determinação do protagonista, brinca com o acúmulo de tralhas do marido e entrega o `ITEM_TOWN_MAP`, sumindo com o sprite do mapa na mesa.
+
+- **Validação**:
+  - Compilação limpa via WSL (`./build.sh`).
+  - ROM gerada: `eclat-intro-teste.gba`.
+
+### Revamp do Diálogo com Myst na Rota 1 — 08/11/2026
+
+- **Objetivo**:
+  Humanizar e tornar mais natural o primeiro encontro da Rota 1 com o agente dos G-Men, Myst:
+  1. Myst aborda o jogador surpreso ao ver um garoto sozinho em uma rota selvagem com Mightyenas perigosos.
+  2. Integração com Namebox dinâmica: inicia como `???` (`SP_NAME_MYSTERIOUS`) e muda para `MYST` (`SP_NAME_MYST`) ao se apresentar formalmente.
+  3. O jogador expressa desconfiança natural após o assalto recente.
+  4. Revelação dramática de que o Pokémon roubado do pai falecido era uma Clefable, selando a determinação do protagonista em recuperá-la.
+  5. Myst reconhece a bravura do jovem, oferece cooperação nas investigações futuras e o alerta sobre os perigos da Team Rocket.
+
+- **Arquivos modificados**:
+  - `data/maps/EclatRoute1/scripts.inc`:
+    - `EclatRoute1_MeetMyst`: Adicionados comandos `setspeaker SP_NAME_MYSTERIOUS`, `setspeaker SP_NAME_PLAYER` e `setspeaker SP_NAME_MYST`.
+    - Diálogos reescritos com tom familiar, dinâmico e dramático.
+
+- **Validação**:
+  - Compilação limpa via WSL (`./build.sh`).
+  - ROM gerada: `eclat-intro-teste.gba`.
+
+### Cena da Carta em Petipres e Maturação do Protagonista — 08/11/2026
+
+- **Objetivo**:
+  Dar profundidade e alma à cidade de Petipres através do evento do homem em fuga e da carta:
+  1. Integração com a nova Namebox (`SP_NAME_PLAYER`) e estética visual FireRed/Éclat Pourpre.
+  2. Substituição da reação impulsiva original por um momento maduro de introspecção: o protagonista percebe o terror nos olhos do estranho e o reconhece como outra vítima da Team Rocket cujo espírito foi quebrado.
+  3. O protagonista agradece mentalmente pelo aviso, mas recusa o conformismo e reafirma sua fé inabalável em si mesmo, em seu parceiro inicial e na promessa de recuperar a Clefable do pai falecido.
+  4. Tradução dos diálogos do caçador de shinies (Poké Radar) e da pista de tesouro do francês para o inglês.
+  5. Formatação rigorosa de quebras de linha com $\le 32$ caracteres por linha, prevenindo qualquer corte visual na tela do GBA.
+
+- **Arquivos modificados**:
+  - `data/maps/Petipres/scripts.inc`:
+    - `Petipres_StrangerScene`: Inclusão de `setspeaker SP_NAME_PLAYER`, `setspeaker SP_NAME_NONE` e `waitmovement 0`.
+    - Diálogos reescritos: `Petipres_ExcuseMe_Text`, `Petipres_Wait_Text`, `Petipres_LetterFound_Text`, `Petipres_Letter_Text`, `Petipres_LetterReaction_Text`.
+    - Textos de NPCs de apoio traduzidos e reformatados (`Petipres_Boy_Text`, `Petipres_RocketGrunt_Text`, `Petipres_Radar_Text`, `Petipres_Clue_Text`).
+
+- **Validação**:
+  - Compilação com 100% de sucesso via `./build.sh` no WSL.
+  - ROM gerada: `eclat-intro-teste.gba`.
+
+### Centralização do Ícone do Item na Bag — 08/11/2026
+
+- **Objetivo**:
+  Corrigir o alinhamento pixel-perfect do ícone 24x24 do item na janela branca de descrição da Bag (Mochila / Cube estilo Unbound):
+  1. A janela branca de descrição possui altura de 27 pixels ($Y \in [123..149]$), com centro geométrico vertical em $Y = 136.0$.
+  2. O sprite alocado para os ícones possui tamanho $32 \times 32$ pixels, porém a arte útil do ícone ocupa a região central $24 \times 24$ pixels.
+  3. Com a âncora vertical anterior em $y2 = 136$, a área visível do ícone ficava deslocada para cima ($Y \in [120..143]$), ultrapassando a borda superior da moldura branca em 3 pixels e deixando 6 pixels livres na parte inferior.
+  4. Ajuste da âncora vertical para $y2 = 140$, posicionando o ícone exatamente em $Y \in [124..147]$ com margem equilibrada (1 pixel no topo e 2 pixels na base).
+
+- **Arquivos modificados**:
+  - `src/item_menu_icons.c`:
+    - Ajustado `gSprites[iconSpriteId].y2 = 140;` na função de carregamento do ícone.
+  - `eclat docs/bag-icon-centering.md`: Documentação técnica detalhada do cálculo geométrico e visual.
+
+- **Validação**:
+  - Compilação limpa com `./build.sh` (código de saída 0).
+  - ROM gerada: `eclat-intro-teste.gba`.
+  - Verificação visual em emulador confirmando centralização estética e pixel-perfect.
+
+### Sistema de Indicadores de Missão (Quest Indicators) — 08/11/2026
+
+- **Objetivo**:
+  Criar um sistema modular, escalável e de baixo custo de processamento para exibir balões visuais flutuantes (ícone de exclamação `!`) sobre a cabeça de NPCs que possuem eventos, itens ou missões pendentes, desativando-se automaticamente assim que a flag do evento for definida:
+  1. Criação do módulo `quest_indicator` com tabela central `sQuestIndicators[]` contendo `mapGroup`, `mapNum`, `localId` do NPC e `flagId` associada.
+  2. Implementação de callback por frame com levitação harmônica senoidal suave ($\pm 2$ pixels via `gSineTable`) ancorada na cabeça do evento do overworld ($Y - 20$ px).
+  3. Destruição dinâmica do sprite em tempo de execução (`DestroySprite`) assim que o jogador recebe o item e a flag de evento é acionada, sem necessidade de recarregar o mapa.
+  4. Suporte inicial implementado para:
+     - Dona Alda (`FLAG_GOT_EXP_SHARE_FROM_ALDA`, Local ID 14 em `MAP_LITTLEROOT_TOWN` / Iviere Town).
+     - Mrs. Filão (`FLAG_IVIERE_TOWN_MAP_TAKEN`, Local ID 1 em `MAP_IVIERE_FILAOS_HOUSE`).
+  5. Integração direta e sem overhead no ciclo principal do overworld (`OverworldBasic`).
+
+- **Arquivos modificados**:
+  - `include/quest_indicator.h`: Declaração pública de `UpdateQuestIndicators()`.
+  - `src/quest_indicator.c`: Implementação completa da lógica de ciclo de vida, template de sprite, animação senoidal e tabela de NPCs.
+  - `src/overworld.c`: Inclusão da chamada `UpdateQuestIndicators();` em `OverworldBasic()`.
+  - `eclat docs/quest-indicators.md`: Documentação técnica com diagrama Mermaid e instruções passo a passo para cadastrar novos NPCs.
+
+- **Validação**:
+  - Compilação sem avisos ou erros via `./build.sh` (código de saída 0).
+  - ROM gerada: `eclat-intro-teste.gba`.
+  - Teste em jogo validado pelo usuário: balão flutua sobre Alda e Mrs. Filão e desaparece imediatamente após a entrega dos itens (Exp Share e Town Map).
+
+### Mecânica de Pontes e Elevação Multinível — 08/11/2026
+
+- **Objetivo**:
+  Documentar e consolidar as correções de elevação de pontes (`ELEVATION_MULTI_LEVEL = 15`) para garantir movimentação tridimensional correta no overworld:
+  1. Garantir que o jogador e o Pokémon seguidor (*Follower Pokémon*) possam transitar sobre a ponte sem clipping da cabeça nas rampas de entrada/saída.
+  2. Permitir a passagem livre e desimpedida por baixo das estruturas de pontes sem colisão indevida ou sobreposição incorreta de camadas de metatiles.
+
+- **Arquivos modificados**:
+  - `eclat docs/bridge-elevation.md`: Documentação técnica detalhada das regras de metatile e camadas.
+
+- **Validação**:
+  - Validação de movimentação e renderização gráfica em mapas com pontes e elevações.
+
+### Refinamento da Interação com a Mãe Pós-Inicial — 08/11/2026
+
+- **Objetivo**:
+  Ajustar a coerência narrativa e a lógica de gameplay no primeiro diálogo com a mãe após receber o Pokémon inicial:
+  1. Remoção da rotina de cura (`Common_EventScript_OutOfCenterPartyHeal`) e do jingle musical no primeiro diálogo, pois o inicial acabou de ser entregue pelo Prof. Filão com 100% de HP e PP intactos.
+  2. Foco exclusivo no momento dramático e emocional: o protagonista promete recuperar o Pokémon do falecido pai, a mãe se emociona vendo a chama nos olhos do filho e lhe dá sua bênção.
+  3. A mãe reforça que as portas de casa estarão sempre abertas com um refúgio seguro e uma cama quente quando a jornada ficar pesada.
+  4. A função de cura e descanso (`MSGBOX_YESNO`) passa a ser oferecida exclusivamente nas interações seguintes (`LittlerootTown_BrendansHouse_1F_EventScript_MomHealPrompt`), quando o jogador realmente retorna de batalhas pelo mundo.
+
+- **Arquivos modificados**:
+  - `data/maps/LittlerootTown_BrendansHouse_1F/scripts.inc`:
+    - `LittlerootTown_BrendansHouse_1F_EventScript_MomShowStarter`: Removidas as chamadas de cura e de fala pós-cura no 1º encontro.
+    - `EclatHouse_Text_MomProudReaction`: Texto refinado com quebras estritas $\le 32$ caracteres, reforçando o acolhimento para visitas futuras.
+
+- **Validação**:
+  - Compilação limpa com 100% de sucesso via `./build.sh` (código de saída 0).
+  - ROM gerada: `eclat-intro-teste.gba`.
+
+### Reação de Coração no Pokémon Seguidor ao Curar — 08/11/2026
+
+- **Objetivo**:
+  Adicionar a clássica e adorada mecânica de afeto estilo *Pokémon HGSS*, fazendo com que o Pokémon seguidor (*Follower Pokémon*) reaja com um balão de coração (`FOLLOWER_EMOTION_LOVE`) e efeito sonoro de carinho (`SE_CONTEST_HEART`) ao recuperar as energias em qualquer evento de cura:
+  1. Criação da função segura `ShowFollowerHeartEmote()` no subsistema de movimento de eventos do overworld.
+  2. Implementação de checagens estritas para garantir que o efeito só ocorra se o seguidor estiver ativo, visível no mapa e desimpedido (ignora se estiver dentro da Pokébola, na bicicleta, surfando ou fainted).
+  3. Integração com `Common_EventScript_OutOfCenterPartyHeal` para ativar ao descansar na cama da mãe, em casas de descanso e camas do mapa.
+  4. Integração com `EventScript_PkmnCenterNurse_TakeAndHealPkmn` para ativar em todos os balcões de Centros Pokémon com a Enfermeira Joy.
+
+- **Arquivos modificados**:
+  - `include/event_object_movement.h`: Declaração de `ShowFollowerHeartEmote(void)`.
+  - `src/event_object_movement.c`: Implementação de `ShowFollowerHeartEmote()` acionando `ObjectEventEmote` e `PlaySE(SE_CONTEST_HEART)`.
+  - `data/event_scripts.s`: Chamada `callnative ShowFollowerHeartEmote` em `Common_EventScript_OutOfCenterPartyHeal`.
+  - `data/scripts/pkmn_center_nurse.inc`: Chamada `callnative ShowFollowerHeartEmote` em `EventScript_PkmnCenterNurse_TakeAndHealPkmn`.
+  - `data/scripts/pkmn_center_nurse_frlg.inc`: Chamada `callnative ShowFollowerHeartEmote` em `EventScript_PkmnCenterNurse_TakeAndHealPkmn_Frlg`.
+  - `eclat docs/follower-heal-heart.md`: Documentação técnica detalhada das regras de ativação e segurança.
+
+- **Validação**:
+  - Compilação limpa com 100% de sucesso via `./build.sh` (código de saída 0).
+  - ROM gerada: `eclat-intro-teste.gba`.
+
+### Correção do Altar de Celebi em Peaceful Woods (Opção 2) — 08/11/2026
+
+- **Objetivo**:
+  Restaurar a integridade estética e narrativa do Altar de Celebi (*Autel des Bois Paisibles*) em `PeacefulWoods` (`LAYOUT_PEACEFUL_WOODS` em `57, 38`):
+  1. Eliminação do sprite de Rayquaza gigante no telhado da cabana do altar (artefato de colisão de ID de sprite do FRLG ID 184 para o Emerald com flag 0).
+  2. Remoção dos 3 Bug Catchers fantasmas que ficavam bloqueando o portal do santuário com textos placeholders.
+  3. Desbloqueio e ativação do script oficial de interação do altar em `(57, 37)` com o texto canônico de homenagem ao Guardião da Floresta Celebi (`“This altar is in homage to the guardian of the forest.”`).
+  4. Substituição das 3 placas artificiais de terra roxa/lilás (metatiles de Paleta 9 descalibrada) por grama verde limpa (`652`) com toques de flores campestres cor-de-rosa (`752`), harmonizando a clareira com o estilo natural de floresta.
+
+- **Arquivos modificados**:
+  - `data/maps/PeacefulWoods/map.json`: Removidos os 4 objetos de evento fantasmas (`OBJ_EVENT_GFX_BUG_CATCHER` e `OBJ_EVENT_GFX_RAYQUAZA_STILL`).
+  - `data/maps/PeacefulWoods/scripts.inc`: Removidos os scripts de placeholder não utilizados `PeacefulWoods_Npc12`, `13`, `14` e `15`.
+  - `data/layouts/peaceful_woods/map.bin`: Atualizados os metatiles das 3 clareiras ao redor do altar para grama verde viva (`0x328C` / `652`) e flores (`0x32F0` / `752`).
+  - `eclat docs/peaceful-woods.md`: Documentação técnica com histórico de investigação e antes/depois do mapa.
+
+- **Validação**:
+  - Compilação limpa com 100% de sucesso via `./build.sh` (código de saída 0).
+  - ROM gerada: `eclat-intro-teste.gba`.
+
+### Implementação da Rota 3 (substituindo Rota 103) — 08/11/2026
+
+- **Objetivo**:
+  Implementar a **Rota 3** em substituição ao slot da Rota 103 (`MAP_ROUTE103` em `gMapGroup_TownsAndRoutes`), conectando a saída leste de **Peaceful Woods** em direção a **Percharbre**:
+  1. Extração fiel da geometria $66 \times 56$ (3696 blocos) e do tileset secundário da ROM original de Éclat Pourpre (`data/layouts/eclat_route3/` e `data/tilesets/secondary/eclat_route3/`).
+  2. Geração dos assets editoriais 512/512 para o Porymap (`data/tilesets/secondary/eclat_route3_secondary/`).
+  3. Registro do layout `LAYOUT_ECLAT_ROUTE3` e do tileset `gTileset_EclatRoute3Secondary`.
+  4. Criação do mapa `data/maps/Route3/` (`map.json`, `scripts.inc`, `header.inc`, `events.inc`, `connections.inc`) associado ao slot `MAP_ROUTE103`.
+  5. Portabilidade de todos os 6 treinadores de campo (Calvin, Meg, Elijah, Colton, Lana, Cedric) com suas equipes e diálogos em inglês.
+  6. Portabilidade dos itens de campo (Super Potion, Awakening, Rare Candy), item oculto (Oran Berry), NPC secreto da Loteria (Eon Ticket), placas e Pokémon de ambiente (Rattata e aquáticos).
+  7. Conexão bidirecional perfeita com os Warps 2 e 3 de `PeacefulWoods`.
+  8. Encontros selvagens originais configurados em `src/data/wild_encounters.json` (grama, surfe e pesca).
+  9. Suporte a efeito de grama em `ShouldUseEclatGrass()` em `src/field_effect_helpers.c` e nome da seção como `"ROUTE 3"` em `MAPSEC_ROUTE_103`.
+
+- **Arquivos modificados / criados**:
+  - `data/layouts/eclat_route3/border.bin` e `map.bin`
+  - `data/tilesets/secondary/eclat_route3/` (tiles, palettes, metatiles, attributes)
+  - `data/tilesets/secondary/eclat_route3_secondary/` (tiles.png, palettes/, metatiles.bin, metatile_attributes.bin)
+  - `data/layouts/layouts.json`, `data/layouts/layouts.inc`, `data/layouts/layouts_table.inc`, `include/constants/layouts.h`
+  - `src/data/tilesets/headers.h`
+  - `data/maps/map_groups.json`
+  - `data/maps/Route3/` (`map.json`, `scripts.inc`, `header.inc`, `events.inc`, `connections.inc`)
+  - `data/event_scripts.s`
+  - `data/maps/PeacefulWoods/map.json`
+  - `include/constants/opponents.h`, `src/data/trainers.party`
+  - `include/constants/flags.h`
+  - `src/field_effect_helpers.c`
+  - `src/data/region_map/region_map_sections.json`
+  - `src/data/wild_encounters.json`
+  - `eclat docs/route3.md`
+
+- **Validação**:
+  - Compilação limpa com 100% de sucesso via `./build.sh` (0 erros).
+  - ROM gerada: `eclat-intro-teste.gba` (33.554.432 bytes).
+
+### Recriação de Peaceful Woods com Tileset de Grim Woods (Unbound) e Gramas Altas — 09/11/2026
+
+- **Objetivo**:
+  Recriar todo o visual de **Peaceful Woods** (`MAP_PEACEFUL_WOODS`, $78 \times 78$) utilizando os tiles e paletas de **Grim Woods** (*Pokémon Unbound*), preservando integralmente a história, colisões, eventos, treinadores, itens e o Altar de Celebi de *Éclat Pourpre*, além de adicionar manchas naturais da grama alta 9-slice de Grim Woods para ativar encontros selvagens e DexNav:
+  1. Criação de par dedicado de tilesets `gTileset_PeacefulWoodsGrimPrimary` + `gTileset_PeacefulWoodsGrimSecondary` via `tools/eclat/build_peaceful_woods_grim.py` (440 tiles livres restantes no primário), mantendo o tileset antigo `peaceful_woods` intacto.
+  2. Portabilidade 1:1 das árvores místicas, solo nebuloso, clareiras orgânicas de musgo, cogumelos vermelhos, arbustos $2 \times 2$, placas, troncos ocos e poças de Grim Woods (`Pal 7..11`), além da harmonização cromática dos barrancos, entradas de caverna, escadarias de madeira e Altar de Celebi (`Pal 3, 4, 5, 12`).
+  3. Unificação da grama alta 9-slice com o solo nebuloso em camada única na `Pal 6` livre (`L0`), liberando `L1` (`Pal 8`) para renderizar bordas de copas de árvores sobre a grama alta (`MT 840..887`) em hardware GBA padrão de 2 camadas.
+  4. Adição de 205 blocos de grama alta (`MB_TALL_GRASS = 0x02`) distribuídos em 22 clareiras nas 5 regiões da floresta (mantendo trilhas de musgo e o Altar de Celebi livres), ajuste de `land_mons.encounter_rate` de `5` para `15` em `src/data/wild_encounters.json` e criação da paleta de animação `gSpritePalette_GrimWoodsTallGrass` (`0x1016`).
+  5. Espelhamento 512/512 para edição direta no Porymap (`peaceful_woods_grim_primary` e `peaceful_woods_grim_secondary`) via `tools/eclat/porymap_iviere_compat.py`, com carimbo $3 \times 3$ organizado em `792..811`.
+
+- **Arquivos modificados / criados**:
+  - `tools/eclat/build_peaceful_woods_grim.py`
+  - `tools/eclat/porymap_iviere_compat.py`
+  - `data/tilesets/primary/peaceful_woods_grim/` e `data/tilesets/primary/peaceful_woods_grim_primary/`
+  - `data/tilesets/secondary/peaceful_woods_grim/` e `data/tilesets/secondary/peaceful_woods_grim_secondary/`
+  - `data/layouts/peaceful_woods/map.bin` e `data/layouts/layouts.json`
+  - `src/data/tilesets/headers.h`
+  - `graphics/eclat_intro/grim_woods_tall_grass_palette.bin`
+  - `include/constants/field_effects.h`, `src/data/field_effects/field_effect_objects.h`, `src/field_effect_helpers.c`
+  - `src/data/wild_encounters.json`
+  - `eclat docs/peaceful-woods.md`
+
+- **Validação**:
+  - Compilação limpa com 100% de sucesso via `wsl ./build.sh` (`Exit Code: 0`, uso de ROM: 81,96%).
+  - ROM atualizada: `eclat-intro-teste.gba`.
+
+### Animação de Grama Alta 1:1 do Unbound e Balanço das Árvores em Peaceful Woods — 09/11/2026
+
+- **Objetivo**:
+  Substituir o efeito de caminhar na grama alta de **Peaceful Woods** pela animação exata do *Pokémon Unbound* e adicionar uma animação suave de vento nas copas das árvores de Grim Woods (no estilo da Rota 2):
+  1. **Animação 1:1 de Grama Alta do Unbound**:
+     - Extração direta dos 5 frames $16 \times 16$ 4bpp de lâminas balançando (`graphics/eclat_intro/unbound_tall_grass.bin` em `0x39A008`, `640` bytes) e da paleta oficial de sprite (`graphics/eclat_intro/grim_woods_tall_grass_palette.bin` em `0x398FC8`, `32` bytes) a partir do `SpriteTemplate` `FLDEFFOBJ_TALL_GRASS` (`0x3A5420`) do *Pokémon Unbound*.
+     - Vinculação de `sPicTable_UnboundTallGrass` em `gFieldEffectObjectTemplate_GrimWoodsTallGrass` (`src/data/field_effects/field_effect_objects.h`) e redirecionamento de saltos sobre grama em `FldEff_JumpTallGrass()` (`src/field_effect_helpers.c`) para `LAYOUT_PEACEFUL_WOODS`, eliminando o antigo arbusto opaco de Éclat.
+  2. **Animação de Vento nas Árvores de Grim Woods (`tree_anim.bin`)**:
+     - Criação do gerador modular `tools/eclat/grim_woods_anim.py` (`143` linhas) produzindo `data/tilesets/secondary/peaceful_woods_grim/tree_anim.bin` (`9.728` bytes: `8` estágios de onda de vento $\times$ `38` tiles 4bpp).
+     - Onda suave de brisa (`8` passos $\times$ `14` ticks = `112` frames) com defasagem natural entre o topo e a base da copa, preservando os troncos fixos no solo e atualizando via DMA tanto os `20` tiles puros de copa (`VRAM 713..716, 729..732, 744..749, 760..765`) quanto os `18` tiles mesclados de junções horizontais/verticais (`VRAM 1..13, 15..19`).
+     - Registro de `InitTilesetAnim_PeacefulWoodsGrim` em `include/tileset_anims.h`, `src/tileset_anims.c` e no `.callback` de `gTileset_PeacefulWoodsGrimSecondary` (`src/data/tilesets/headers.h`).
+
+- **Arquivos modificados / criados**:
+  - `tools/eclat/grim_woods_anim.py`, `tools/eclat/build_peaceful_woods_grim.py`
+  - `graphics/eclat_intro/unbound_tall_grass.bin`, `graphics/eclat_intro/grim_woods_tall_grass_palette.bin`
+  - `data/tilesets/secondary/peaceful_woods_grim/tree_anim.bin`
+  - `src/data/field_effects/field_effect_objects.h`, `src/field_effect_helpers.c`
+  - `include/tileset_anims.h`, `src/tileset_anims.c`, `src/data/tilesets/headers.h`
+  - `eclat docs/peaceful-woods.md`, `eclat docs/historico.md`
+
+- **Validação**:
+  - Recompilação forçada de `field_effect.o` e `tileset_anims.o` via `wsl ./build.sh` concluída com 0 erros (`ROM: 82,00%`).
+  - Verificação binária direta na ROM confirmando `unbound_tall_grass.bin` (`0x49CD58`), `grim_woods_tall_grass_palette.bin` (`0x49CD38`) e `tree_anim.bin` (`0xCEDCD0`) integrados em `eclat-intro-teste.gba`.
+
+### Saídas Iluminadas Concêntricas, Correção de Copas e Fundo de Batalha de Grim Woods em Peaceful Woods — 09/11/2026
+
+- **Objetivo**:
+  Refinar as duas saídas da floresta de **Peaceful Woods** (NE rumo à Rota 3 em `68..69, 8..9` e SO rumo à Rota 2 em `12..13, 56..57`) com um degradê concêntrico iluminado, corrigir o recorte da copa lateral + traço animado flutuante na saída e integrar o fundo de batalha oficial de **Grim Woods** (*Pokémon Unbound*):
+  1. **Correção da Copa Cortada e do Traço Animado nas Saídas (`MT 768` e `MT 772`)**:
+     - Identificada inversão entre `gw_ovh_l` e `gw_ovh_r` na camada `L1` de `MT 768` e `MT 772`, que deixava pixels transparentes encostados nas árvores vizinhas `(70, 8)` / `(11, 56)` e projetava uma coluna externa animada solta no ar, além de `layerType = COVERED` ocultando as copas sob o jogador.
+     - Corrigidos `MT 772` (`L1 = gw_ovh_l`, `0x00000062` `NORMAL` + `MB_EAST_ARROW_WARP`) e `MT 768` (`L1 = gw_ovh_r`, `0x00000063` `NORMAL` + `MB_WEST_ARROW_WARP`), restaurando integralmente as copas das árvores e eliminando o artefato vertical.
+  2. **Degradê Oval Iluminado de 5 Faixas (`Pal 2`, `MT 768..775`)**:
+     - Criação do módulo `tools/eclat/grim_woods_exits_and_bg.py` (`249` linhas) gerando um semi-oval concêntrico $32 \times 32\text{ px}$ ($2 \times 2$ metatiles) na `Pal 2` primária livre, preservando as pedrinhas exatas do solo de Grim Woods na parte externa e clareando suavemente em 5 faixas até luz solar quente `(189, 222, 148)` nas aberturas para a Rota 3 e Rota 2 (compatível com a iluminação dinâmica de Dia/Noite).
+  3. **Fundo de Batalha Oficial de Grim Woods (*Pokémon Unbound*)**:
+     - Extração 1:1 dos cenários de batalha de Grim Woods em `graphics/battle_environment/grim_woods/`: **Grama Alta** (`Entry 25`: `0xED4738` / `0xED54B8`) e **Solo da Floresta / Treinadores** (`Entry 34`: `0xED5B4C` / `0xED64B8`), cada um com suas 3 paletas oficiais de **Dia**, **Entardecer** e **Noite**.
+     - Integração via `src/data/grim_woods_battle.h` e seleção automática por `LAYOUT_PEACEFUL_WOODS` + `GetTimeOfDay()` em `GetBattleEnvironmentGraphics()` (`src/battle_bg.c`) para batalhas selvagens e contra treinadores.
+
+- **Arquivos modificados / criados**:
+  - `tools/eclat/grim_woods_exits_and_bg.py`, `tools/eclat/build_peaceful_woods_grim.py`
+  - `data/tilesets/primary/peaceful_woods_grim/` e `data/tilesets/primary/peaceful_woods_grim_primary/`
+  - `data/tilesets/secondary/peaceful_woods_grim/` e `data/tilesets/secondary/peaceful_woods_grim_secondary/`
+  - `data/layouts/peaceful_woods/map.bin`
+  - `graphics/battle_environment/grim_woods/` (`grass_*` e `plain_*` `.lz.bin` + `.gbapal.bin`)
+  - `src/data/grim_woods_battle.h`, `src/battle_bg.c`
+  - `eclat docs/peaceful-woods.md`, `eclat docs/historico.md`
+
+- **Validação**:
+  - Recompilação limpa de `battle_bg.o`, `tilesets.o`, `tileset_anims.o` e `maps.o` via `wsl ./build.sh` (`Exit Code: 0`, `ROM: 82,04%`).
+  - Verificação binária exata na ROM confirmando `map.bin` (`0xF63A98`), `metatiles.bin` (`0xD10F30`), `grass_tiles.lz.bin` (`0x411DB0`) e `plain_tiles.lz.bin` (`0x4100D8`) em `eclat-intro-teste.gba`.
+
+### Refinamento de Peaceful Woods: Preservação do Bosque Contínuo e Troncos Caídos em Terra Seca — 09/11/2026
+
+- **Decisão e Diretriz do Usuário**:
+  Após avaliação dos testes visuais com rios e cursos d'água, o usuário optou por retirar todos os rios para preservar a serenidade, continuidade e essência original da caminhada por **Peaceful Woods**, mantendo exclusivamente os troncos ocos caídos em terra seca:
+  1. **Remoção de Rios, Lagos, Pontes e Piscinas**:
+     - Eliminados todos os metatiles aquáticos e pontes de madeira de `data/layouts/peaceful_woods/map.bin` (`0 metatiles de rio em map.bin`). O mapa voltou a contar com 100% de terreno florestal contínuo de terra e musgo.
+  2. **Preservação dos Troncos Ocos Caídos em Terra Seca (`MT 816, 817`)**:
+     - Mantidos os 3 troncos caídos de Grim Woods $2 \times 1$ posicionados estrategicamente em clareiras amplas sem bloquear caminhos:
+       1. Clareira Oeste: `(6, 30)`
+       2. Corredor Central Norte: `(19, 23)`
+       3. Clareira Sul de Entrada: `(42, 62)`
+  3. **Encontros Selvagens Exclusivamente Terrestres**:
+     - Em `src/data/wild_encounters.json`, as seções `water_mons` e `fishing_mons` foram retiradas de `MAP_PEACEFUL_WOODS`, preservando apenas `land_mons` com taxa de encontro 15.
+  4. **Animação Pura das Copas ao Vento (38 Tiles)**:
+     - `src/tileset_anims.c` opera com `GRIM_WOODS_TREE_STEP_STRIDE = 38 * 16`, animando em 8 passos via DMA a brisa suave nas árvores com `tree_anim.bin` de `9.728` bytes gerado por `tools/eclat/grim_woods_anim.py`.
+  5. **Cenários Oficiais de Batalha de Grim Woods**:
+     - `src/battle_bg.c` mapeia as batalhas de Peaceful Woods dinamicamente para os fundos oficiais de Grim Woods (Grama Alta e Solo Florestal para Dia, Entardecer e Noite).
+
+- **Arquivos modificados**:
+  - `tools/eclat/grim_woods_river.py`: Reduzido para `138` linhas, contendo registro de metatiles, carimbo dos troncos caídos (`stamp_dry_hollow_logs`), validação BFS de 100% de acessibilidade e configuração de encontros terrestres (`configure_peaceful_woods_encounters`).
+  - `tools/eclat/build_peaceful_woods_grim.py`: Reduzido para `499` linhas, integrando todo o pipeline da floresta.
+  - `tools/eclat/grim_woods_anim.py`: `136` linhas, gerando animação pura de árvores (9.728 bytes).
+  - `src/tileset_anims.c`: Retornado para stride 38 e animação pura de folhagem.
+  - `src/battle_bg.c`: Retornado para mapeamento direto de Grama e Solo de Grim Woods.
+  - `src/data/wild_encounters.json`: Apenas `land_mons` em Peaceful Woods.
+  - `data/layouts/peaceful_woods/map.bin`: 0 rios, 6 metatiles de troncos secos, 196 gramas altas.
+  - `eclat docs/peaceful-woods.md`, `eclat docs/historico.md`.
+
+- **Validação**:
+  - Compilado via `wsl ./build.sh` com 100% de sucesso (código de saída 0, uso de ROM: `82,04%`).
+  - ROM atualizada: `eclat-intro-teste.gba`.
+  - Verificação de metatiles em `map.bin`: `River mts: 0, Log mts: 6, Grass mts: 196`.
+  - Todos os scripts Python mantidos $\le 500$ linhas.
+
+### Restauração da Geografia Original de Peaceful Woods e Correção de Contornos — 09/11/2026
+
+- **Solicitação do Usuário**:
+  Extrair o mapa original autêntico de **Peaceful Woods** diretamente da ROM de *Pokémon Éclat Pourpre* e corrigir a forma dos tiles de contorno (desníveis, curvas de barranco, platôs e bordas rochosas), revertendo alterações acidentais prévias onde parte da geografia havia sido aplainada com chão comum:
+  1. **Extração 1:1 da Matriz da ROM Original**:
+     - Localizado o ponteiro de layout em `0x87EB90` e extraída a matriz binária original completa de $78 \times 78$ metatiles (12.168 bytes) do offset `0x87BC08` da ROM de *Éclat Pourpre*.
+     - Substituído `data/tilesets/secondary/peaceful_woods_grim/base_map.bin`, revertendo todas as 358 discrepâncias em que desníveis rochosos, cantos curvos de platôs e árvores sobre barrancos haviam sido substituídos por chão plano (`MT 652`).
+  2. **Reconstrução Limpa dos Contornos e Desníveis**:
+     - Cantos arredondados de desnível (`MT 712` à esquerda e `MT 714` à direita) e borda reta horizontal de salto (`MT 713` com atributo `0x00000032`, `MB_JUMP_SOUTH`) mapeados nas paletas harmonizadas de Grim Woods (`Pal 3`), eliminando recortes pretos e quebras secas.
+     - Sobreposição orgânica de copas e troncos de árvores sobre desníveis (`MT 707` e `MT 708`), mantendo a camada inferior de rocha/terra sob a folhagem da árvore para que a silhueta do barranco continue ininterrupta sem criar vazios quadrados.
+     - Paredões e curvas de platôs rochosos (`MT 715, 716, 720, 722, 723, 728, 729`) e escadas de madeira (`MT 744..746`) restaurados com transições suaves.
+  3. **Preservação dos Recursos Validados**:
+     - Mantidos os 3 troncos ocos secos, os carimbos de grama alta com encontros selvagens e as saídas solares concêntricas para as Rotas 2 e 3.
+  4. **Eliminação de Dependência Externa**:
+     - Em `tools/eclat/grim_woods_exits_and_bg.py`, eliminada a dependência da biblioteca externa `PIL`/`pillow`, implementando leitor/decodificador puro em Python com `zlib` e `struct` para execução autônoma em qualquer ambiente.
+     - Em `tools/eclat/grim_woods_river.py`, ajustada a verificação BFS de acessibilidade para aceitar elevações 0, 3, 4 e 15, validando 100% de conectividade de warps, placas e objetos.
+
+- **Arquivos modificados**:
+  - `data/tilesets/secondary/peaceful_woods_grim/base_map.bin` (12.168 bytes extraídos da ROM)
+  - `tools/eclat/grim_woods_exits_and_bg.py` (SimpleImage puro sem PIL)
+  - `tools/eclat/grim_woods_river.py` (validação BFS com elevação 4)
+  - `tools/eclat/build_peaceful_woods_grim.py`
+  - `tools/eclat/porymap_iviere_compat.py`
+  - `data/layouts/peaceful_woods/map.bin`
+  - `data/tilesets/primary/peaceful_woods_grim/` e `data/tilesets/secondary/peaceful_woods_grim/`
+  - `eclat docs/peaceful-woods.md`, `eclat docs/historico.md`
+
+- **Validação**:
+  - Compilação via `wsl ./build.sh` executada com sucesso (`Exit Code: 0`, ROM: `82,04%`).
+  - ROM atualizada: `eclat-intro-teste.gba`.
+  - Sincronização 512/512 para o Porymap executada com sucesso.
+
+### Ativação do Sistema de EXP da Gen 6 e Exp. Share de Equipe — 09/11/2026
+
+- **Contexto e Solicitação**:
+  - Usuário solicitou a ativação do sistema de experiência da 6ª Geração (Pokémon X & Y) com recebimento do item através de Dona Alda em Iviere Town.
+
+- **Implementação**:
+  1. **Configuração de Item e Flag**:
+     - Em `include/constants/flags.h`, definido `#define FLAG_SYS_EXP_SHARE 0x268` utilizando slot não utilizado.
+     - Em `include/config/item.h`, definido `I_EXP_SHARE_ITEM GEN_6` e `I_EXP_SHARE_FLAG FLAG_SYS_EXP_SHARE`.
+     - Isso converte o *Exp. Share* em **Item Chave** (*Key Item*) com suporte nativo a ligar e desligar (`ON`/`OFF`) pela mochila.
+  2. **Configuração de Batalha (Gen 6)**:
+     - Em `include/config/battle.h`, ajustado `B_SCALED_EXP GEN_6` para cálculo de experiência plano da 6ª geração (sem escalonamento por diferença de nível da Gen 5/7).
+     - Mantidos `B_EXP_CATCH GEN_LATEST` (EXP ao capturar Pokémon) e `B_SPLIT_EXP GEN_LATEST` (100% da EXP para todos os participantes da batalha sem divisão; 50% para os demais membros quando ligado).
+  3. **Script de Dona Alda em Iviere Town**:
+     - Em `data/maps/LittlerootTown/scripts.inc` (`IviereTown_EventScript_RiverNpc`), adicionado `setflag FLAG_SYS_EXP_SHARE` logo após a entrega do item, garantindo que o Exp. Share já entre ativado (`ON`) assim que recebido.
+     - Em `IviereTown_EventScript_AldaAfterGift`, adicionada checagem retrocompatível para saves em andamento onde a flag de diálogo já foi ativada.
+
+- **Validação**:
+  - Compilação via `wsl ./build.sh` executada com sucesso (`Exit Code: 0`, ROM: `82,04%`).
+  - ROM atualizada: `eclat-intro-teste.gba`.
+
+### Entrega de 5 Pokébolas por Prof. Filão — 09/11/2026
+
+- **Contexto e Solicitação**:
+  - Solicitação do usuário para que o Prof. Filão entregue 5 Pokébolas juntamente com o Pokémon inicial para o início da jornada.
+
+- **Implementação**:
+  1. **Flag de Controle**:
+     - Em `include/constants/flags.h`, definido `#define FLAG_RECEIVED_POKE_BALLS_FROM_FILAO 0x269`.
+  2. **Script de Entrega Inicial**:
+     - Em `data/maps/LittlerootTown/scripts.inc` (`IviereTown_EventScript_FilaoInspire`), adicionada fala temática de incentivo e comando `giveitem ITEM_POKE_BALL, 5`, ativando a flag.
+  3. **Retrocompatibilidade no Laboratório**:
+     - Em `data/maps/Iviere_FilaosLab/scripts.inc` (`Iviere_FilaosLab_EventScript_Filao`), adicionada checagem para saves em andamento: caso o jogador já tenha passado da cena de abertura, interagir com o Filão no laboratório entrega as 5 Pokébolas.
+  4. **Documentação**:
+     - Atualizada a bíblia da história em `eclat docs/historia.md`.
+
+
+
+
+
+
+
+
+
 
 

@@ -1,6 +1,7 @@
 Common_EventScript_PkmnCenterNurse::
 	lock
 	faceplayer
+	setspeaker SP_NAME_JOY
 	setvar VAR_0x8004, 0
 .if !IS_FRLG
 	specialvar VAR_RESULT, CountPlayerTrainerStars
@@ -49,6 +50,7 @@ EventScript_PkmnCenterNurse_TakeAndHealPkmn::
 	waitmovement 0
 	special HealPlayerParty
 	callnative UpdateFollowingPokemon
+	callnative ShowFollowerHeartEmote
 	return
 
 EventScript_PkmnCenterNurse_CheckTrainerHillAndUnionRoom::

@@ -434,18 +434,21 @@ void UpdateShadowFieldEffect(struct Sprite *sprite)
 
 extern const struct SpritePalette gSpritePalette_GeneralFieldEffect1;
 extern const struct SpritePalette gSpritePalette_EclatTallGrass;
+extern const struct SpritePalette gSpritePalette_GrimWoodsTallGrass;
 extern const struct SpriteTemplate gFieldEffectObjectTemplate_EclatTallGrass;
+extern const struct SpriteTemplate gFieldEffectObjectTemplate_GrimWoodsTallGrass;
 extern const struct Tileset gTileset_EclatIvierePrimary;
 
 static bool32 ShouldUseEclatGrass(void)
 {
     if ((gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE101) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE101))
      || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE102) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE102))
+     || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ROUTE103) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE103))
      || (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MAP_ECLAT_ROUTE1) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ECLAT_ROUTE1))
      || gMapHeader.mapLayoutId == LAYOUT_ECLAT_ROUTE1
      || gMapHeader.mapLayoutId == LAYOUT_ECLAT_ROUTE2
      || gMapHeader.mapLayoutId == LAYOUT_ECLAT_ROCKY_PATH
-     || gMapHeader.mapLayoutId == LAYOUT_PEACEFUL_WOODS
+     || gMapHeader.mapLayoutId == LAYOUT_ECLAT_ROUTE3
      || (gMapHeader.mapLayout != NULL && gMapHeader.mapLayout->primaryTileset == &gTileset_EclatIvierePrimary))
         return TRUE;
 
@@ -454,10 +457,13 @@ static bool32 ShouldUseEclatGrass(void)
 
 u32 FldEff_TallGrass(void)
 {
-    bool32 useEclatGraphics = ShouldUseEclatGrass();
-    const struct SpritePalette *palette = useEclatGraphics ? &gSpritePalette_EclatTallGrass : &gSpritePalette_GeneralFieldEffect1;
-    const struct SpriteTemplate *template = useEclatGraphics ? &gFieldEffectObjectTemplate_EclatTallGrass
-                                          : gFieldEffectObjectTemplatePointers[FLDEFFOBJ_TALL_GRASS];
+    bool32 useGrimWoodsGraphics = (gMapHeader.mapLayoutId == LAYOUT_PEACEFUL_WOODS);
+    bool32 useEclatGraphics = !useGrimWoodsGraphics && ShouldUseEclatGrass();
+    const struct SpritePalette *palette = useGrimWoodsGraphics ? &gSpritePalette_GrimWoodsTallGrass
+                                        : (useEclatGraphics ? &gSpritePalette_EclatTallGrass : &gSpritePalette_GeneralFieldEffect1);
+    const struct SpriteTemplate *template = useGrimWoodsGraphics ? &gFieldEffectObjectTemplate_GrimWoodsTallGrass
+                                          : (useEclatGraphics ? &gFieldEffectObjectTemplate_EclatTallGrass
+                                                              : gFieldEffectObjectTemplatePointers[FLDEFFOBJ_TALL_GRASS]);
     u8 paletteSlot = LoadSpritePalette(palette);
     if (paletteSlot == 0xFF)
     {
@@ -540,7 +546,7 @@ void UpdateTallGrassFieldEffect(struct Sprite *sprite)
 
 u32 FldEff_JumpTallGrass(void)
 {
-    if (ShouldUseEclatGrass())
+    if (gMapHeader.mapLayoutId == LAYOUT_PEACEFUL_WOODS || ShouldUseEclatGrass())
         return FldEff_TallGrass();
 
     u8 spriteId;

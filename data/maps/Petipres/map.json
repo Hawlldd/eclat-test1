@@ -3,7 +3,6 @@
   "name": "Petipres",
   "layout": "LAYOUT_PETIPRES",
   "music": "MUS_RG_PEWTER",
-  "region": "REGION_HOENN",
   "region_map_section": "MAPSEC_PETIPRES",
   "requires_flash": false,
   "weather": "WEATHER_SUNNY",
@@ -424,5 +423,6 @@
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "Petipres_TreasureClue"
     }
-  ]
+  ],
+  "region": "REGION_HOENN"
 }

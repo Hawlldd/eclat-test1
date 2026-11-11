@@ -8,6 +8,7 @@
 #include "cable_club.h"
 #include "credits_frlg.h"
 #include "clock.h"
+#include "decompress.h"
 #include "dexnav.h"
 #include "event_data.h"
 #include "event_object_movement.h"
@@ -48,6 +49,7 @@
 #include "money.h"
 #include "new_game.h"
 #include "oras_dowse.h"
+#include "quest_indicator.h"
 #include "palette.h"
 #include "play_time.h"
 #include "random.h"
@@ -69,6 +71,7 @@
 #include "time_events.h"
 #include "trainer_hill.h"
 #include "trainer_pokemon_sprites.h"
+#include "trig.h"
 #include "tv.h"
 #include "scanline_effect.h"
 #include "unbound_start_menu.h"
@@ -571,15 +574,40 @@ void LoadSaveblockObjEventScripts(void)
     s32 i;
 
     for (i = 0; i < OBJECT_EVENT_TEMPLATES_COUNT; i++)
-        savObjTemplates[i].script = mapHeaderObjTemplates[i].script;
+    {
+        if (gMapHeader.events != NULL && i < gMapHeader.events->objectEventCount && savObjTemplates[i].localId == 0)
+            savObjTemplates[i] = mapHeaderObjTemplates[i];
+        else
+            savObjTemplates[i].script = mapHeaderObjTemplates[i].script;
+    }
 }
 
 static struct ObjectEventTemplate *GetObjectEventTemplate(u8 localId)
 {
+    u32 emptySlot = OBJECT_EVENT_TEMPLATES_COUNT;
+
     for (u32 i = 0; i < OBJECT_EVENT_TEMPLATES_COUNT; i++)
     {
         if (gSaveBlock1Ptr->objectEventTemplates[i].localId == localId)
             return &gSaveBlock1Ptr->objectEventTemplates[i];
+        if (emptySlot == OBJECT_EVENT_TEMPLATES_COUNT && gSaveBlock1Ptr->objectEventTemplates[i].localId == 0)
+            emptySlot = i;
+    }
+
+    if (gMapHeader.events != NULL)
+    {
+        for (u32 i = 0; i < gMapHeader.events->objectEventCount; i++)
+        {
+            if (gMapHeader.events->objectEvents[i].localId == localId)
+            {
+                if (emptySlot < OBJECT_EVENT_TEMPLATES_COUNT)
+                {
+                    gSaveBlock1Ptr->objectEventTemplates[emptySlot] = gMapHeader.events->objectEvents[i];
+                    return &gSaveBlock1Ptr->objectEventTemplates[emptySlot];
+                }
+                return (struct ObjectEventTemplate *)&gMapHeader.events->objectEvents[i];
+            }
+        }
     }
 
     errorf("no object event template for localId %d", localId);
@@ -1851,6 +1879,7 @@ static void OverworldBasic(void)
 {
     ScriptContext_RunScript();
     RunTasks();
+    UpdateQuestIndicators();
     AnimateSprites();
     CameraUpdate();
     UpdateCameraPanning();
@@ -3699,18 +3728,72 @@ bool8 GetSetItemObtained(enum Item item, enum ItemObtainFlags caseId)
     return FALSE;
 }
 
-EWRAM_DATA static u8 sHeaderBoxWindowId = 0;
-EWRAM_DATA u8 sItemIconSpriteId = 0;
+EWRAM_DATA static u8 sItemIconSpriteId = 0;
+EWRAM_DATA static bool8 sItemIconSpriteActive = FALSE;
 
-static void ShowItemIconSprite(enum Item item, bool8 firstTime, bool8 flash);
+static void ShowItemIconSprite(enum Item item, bool8 isImportant, bool8 flash);
 static void DestroyItemIconSprite(void);
 
-static u8 ReformatItemDescription(enum Item item, u8 *dest)
+static bool8 IsImportantItem(enum Item item)
 {
-    StringCopy(dest, GetItemDescription(item));
-    StripLineBreaks(dest);
-    BreakStringAutomatic(dest, 196, 2, FONT_SMALL, HIDE_SCROLL_PROMPT);
-    return CountLineBreaks(dest) + 1;
+    if (item == ITEM_NONE)
+        return FALSE;
+    return (GetItemPocket(item) == POCKET_KEY_ITEMS
+         || GetItemPocket(item) == POCKET_TM_HM
+         || GetItemImportance(item));
+}
+
+static void SpriteCB_ObtainedItem_Center(struct Sprite *sprite)
+{
+    // data[0]: phase (0 = rising, 1 = hovering)
+    // data[1]: timer
+    if (sprite->data[0] == 0)
+    {
+        // Smoothly float up by 12 pixels over 14 frames
+        sprite->data[1]++;
+        sprite->y2 = 12 - (sprite->data[1] * 12) / 14;
+        if (sprite->data[1] >= 14)
+        {
+            sprite->y2 = 0;
+            sprite->data[0] = 1;
+            sprite->data[1] = 0;
+        }
+    }
+    else
+    {
+        // Gentle hover: amplitude 2 pixels
+        sprite->data[1] = (sprite->data[1] + 4) & 0xFF;
+        sprite->y2 = Sin(sprite->data[1], 2);
+    }
+}
+
+static void SpriteCB_ObtainedItem_Corner(struct Sprite *sprite)
+{
+    // data[0]: phase (0 = pop up with overshoot, 1 = settle bounce, 2 = idle)
+    // data[1]: timer
+    if (sprite->data[0] == 0)
+    {
+        // Quick upward pop over 8 frames, overshooting by 4 pixels (from +14 to -4)
+        sprite->data[1]++;
+        sprite->y2 = 14 - (sprite->data[1] * 18) / 8;
+        if (sprite->data[1] >= 8)
+        {
+            sprite->y2 = -4;
+            sprite->data[0] = 1;
+            sprite->data[1] = 0;
+        }
+    }
+    else if (sprite->data[0] == 1)
+    {
+        // Settle from -4 back to 0 over 4 frames
+        sprite->data[1]++;
+        sprite->y2 = -4 + (sprite->data[1] * 4) / 4;
+        if (sprite->data[1] >= 4)
+        {
+            sprite->y2 = 0;
+            sprite->data[0] = 2;
+        }
+    }
 }
 
 void ScriptShowItemDescription(struct ScriptContext *ctx)
@@ -3721,36 +3804,13 @@ void ScriptShowItemDescription(struct ScriptContext *ctx)
 
     Script_RequestEffects(SCREFF_V1 | SCREFF_HARDWARE);
 
-    struct WindowTemplate template;
     enum Item item = gSpecialVar_0x8006;
-    u8 textY;
-    u8 dst[0x100];
     bool8 handleFlash = FALSE;
 
     if (GetFlashLevel() > 0 || InBattlePyramid())
         handleFlash = TRUE;
 
-    if (GetSetItemObtained(item, FLAG_GET_ITEM_OBTAINED))
-    {
-        ShowItemIconSprite(item, FALSE, handleFlash);
-        return; //no box if item obtained previously
-    }
-
-    SetWindowTemplateFields(&template, 0, 1, 1, 28, 3, 15, 8);
-    sHeaderBoxWindowId = AddWindow(&template);
-    FillWindowPixelBuffer(sHeaderBoxWindowId, PIXEL_FILL(0));
-    PutWindowTilemap(sHeaderBoxWindowId);
-    CopyWindowToVram(sHeaderBoxWindowId, 3);
-    SetStandardWindowBorderStyle(sHeaderBoxWindowId, FALSE);
-    DrawStdFrameWithCustomTileAndPalette(sHeaderBoxWindowId, FALSE, 0x214, 14);
-
-    if (ReformatItemDescription(item, dst) == 1)
-        textY = 4;
-    else
-        textY = 0;
-
-    ShowItemIconSprite(item, TRUE, handleFlash);
-    AddTextPrinterParameterized(sHeaderBoxWindowId, 0, dst, ITEM_ICON_X + 2, textY, 0, NULL);
+    ShowItemIconSprite(item, IsImportantItem(item), handleFlash);
 }
 
 void ScriptHideItemDescription(struct ScriptContext *ctx)
@@ -3761,21 +3821,13 @@ void ScriptHideItemDescription(struct ScriptContext *ctx)
     Script_RequestEffects(SCREFF_V1 | SCREFF_SAVE | SCREFF_HARDWARE);
 
     DestroyItemIconSprite();
-
-    if (!GetSetItemObtained(gSpecialVar_0x8006, FLAG_GET_ITEM_OBTAINED))
-    {
-        //header box only exists if haven't seen item before
-        GetSetItemObtained(gSpecialVar_0x8006, FLAG_SET_ITEM_OBTAINED);
-        ClearStdWindowAndFrameToTransparent(sHeaderBoxWindowId, FALSE);
-        CopyWindowToVram(sHeaderBoxWindowId, 3);
-        RemoveWindow(sHeaderBoxWindowId);
-    }
 }
 
-static void ShowItemIconSprite(enum Item item, bool8 firstTime, bool8 flash)
+static void ShowItemIconSprite(enum Item item, bool8 isImportant, bool8 flash)
 {
-    s16 x = 0, y = 0;
     u8 iconSpriteId;
+
+    DestroyItemIconSprite();
 
     if (flash)
     {
@@ -3785,38 +3837,135 @@ static void ShowItemIconSprite(enum Item item, bool8 firstTime, bool8 flash)
 
     iconSpriteId = AddItemIconSprite(ITEM_TAG, ITEM_TAG, item);
 
-    if (flash)
-        gSprites[iconSpriteId].copyToObjWin = TRUE;
-
     if (iconSpriteId != MAX_SPRITES)
     {
-        if (!firstTime)
+        if (flash)
+            gSprites[iconSpriteId].copyToObjWin = TRUE;
+
+        if (isImportant)
         {
-            //show in message box
-            x = 213;
-            y = 140;
+            gSprites[iconSpriteId].x = 120;
+            gSprites[iconSpriteId].y = 62;
+            gSprites[iconSpriteId].y2 = 12;
+            gSprites[iconSpriteId].callback = SpriteCB_ObtainedItem_Center;
         }
         else
         {
-            // show in header box
-            x = ITEM_ICON_X;
-            y = ITEM_ICON_Y;
+            gSprites[iconSpriteId].x = 213;
+            gSprites[iconSpriteId].y = 140;
+            gSprites[iconSpriteId].y2 = 14;
+            gSprites[iconSpriteId].callback = SpriteCB_ObtainedItem_Corner;
         }
 
-        gSprites[iconSpriteId].x2 = x;
-        gSprites[iconSpriteId].y2 = y;
         gSprites[iconSpriteId].oam.priority = 0;
-    }
+        gSprites[iconSpriteId].subpriority = 0;
 
-    sItemIconSpriteId = iconSpriteId;
+        sItemIconSpriteId = iconSpriteId;
+        sItemIconSpriteActive = TRUE;
+    }
 }
 
 static void DestroyItemIconSprite(void)
 {
-    FreeSpriteTilesByTag(ITEM_TAG);
-    FreeSpritePaletteByTag(ITEM_TAG);
-    FreeSpriteOamMatrix(&gSprites[sItemIconSpriteId]);
-    DestroySprite(&gSprites[sItemIconSpriteId]);
+    if (sItemIconSpriteActive)
+    {
+        FreeSpriteTilesByTag(ITEM_TAG);
+        FreeSpritePaletteByTag(ITEM_TAG);
+        FreeSpriteOamMatrix(&gSprites[sItemIconSpriteId]);
+        DestroySprite(&gSprites[sItemIconSpriteId]);
+        sItemIconSpriteActive = FALSE;
+    }
+}
+
+static const u32 sDexnavObtainGfx[] = INCBIN_U32("graphics/unbound_start_menu/sprites/dexnav.4bpp.smol");
+static const u16 sDexnavObtainPal[] = INCBIN_U16("graphics/unbound_start_menu/sprites/icons.gbapal");
+
+static const struct CompressedSpriteSheet sDexnavSpriteSheet = {
+    .data = sDexnavObtainGfx,
+    .size = 0x400,
+    .tag = ITEM_TAG
+};
+
+static const struct SpritePalette sDexnavSpritePalette = {
+    .data = sDexnavObtainPal,
+    .tag = ITEM_TAG
+};
+
+static const struct OamData sOamData_DexnavObtain = {
+    .y = 0,
+    .affineMode = ST_OAM_AFFINE_OFF,
+    .objMode = ST_OAM_OBJ_NORMAL,
+    .mosaic = FALSE,
+    .bpp = ST_OAM_4BPP,
+    .shape = SPRITE_SHAPE(32x32),
+    .x = 0,
+    .matrixNum = 0,
+    .size = SPRITE_SIZE(32x32),
+    .tileNum = 0,
+    .priority = 0,
+    .paletteNum = 0,
+    .affineParam = 0
+};
+
+static const union AnimCmd sAnim_DexnavObtain[] = {
+    ANIMCMD_FRAME(0, 0),
+    ANIMCMD_END
+};
+
+static const union AnimCmd *const sAnimTable_DexnavObtain[] = {
+    sAnim_DexnavObtain
+};
+
+static const struct SpriteTemplate sSpriteTemplate_DexnavObtain = {
+    .tileTag = ITEM_TAG,
+    .paletteTag = ITEM_TAG,
+    .oam = &sOamData_DexnavObtain,
+    .anims = sAnimTable_DexnavObtain,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallbackDummy,
+};
+
+static void ShowDexNavIconSprite(bool8 flash)
+{
+    u8 iconSpriteId;
+
+    DestroyItemIconSprite();
+
+    if (flash)
+    {
+        SetGpuRegBits(REG_OFFSET_DISPCNT, DISPCNT_OBJWIN_ON);
+        SetGpuRegBits(REG_OFFSET_WINOUT, WINOUT_WINOBJ_OBJ);
+    }
+
+    LoadCompressedSpriteSheet(&sDexnavSpriteSheet);
+    LoadSpritePalette(&sDexnavSpritePalette);
+
+    iconSpriteId = CreateSpriteUnchecked(&sSpriteTemplate_DexnavObtain, 120, 62, 0);
+
+    if (iconSpriteId != MAX_SPRITES)
+    {
+        if (flash)
+            gSprites[iconSpriteId].copyToObjWin = TRUE;
+
+        gSprites[iconSpriteId].x = 120;
+        gSprites[iconSpriteId].y = 62;
+        gSprites[iconSpriteId].y2 = 12;
+        gSprites[iconSpriteId].callback = SpriteCB_ObtainedItem_Center;
+        gSprites[iconSpriteId].oam.priority = 0;
+        gSprites[iconSpriteId].subpriority = 0;
+
+        sItemIconSpriteId = iconSpriteId;
+        sItemIconSpriteActive = TRUE;
+    }
+}
+
+void ScriptShowDexNav(struct ScriptContext *ctx)
+{
+    bool8 handleFlash = FALSE;
+    if (GetFlashLevel() > 0 || InBattlePyramid())
+        handleFlash = TRUE;
+    ShowDexNavIconSprite(handleFlash);
 }
 
 // returns old sHoursOverride

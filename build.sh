@@ -2,6 +2,10 @@
 set -e
 
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Importa edição do Desktop se existir e sincroniza com a ROM
+python3 "$SRC_DIR/tools/eclat/import_entrance.py"
+python3 "$SRC_DIR/tools/eclat/sync_petipres.py"
 BUILD_DIR=$(cat /var/tmp/eclat-intro-build-path 2>/dev/null || echo "")
 
 if [ -z "$BUILD_DIR" ] || [ ! -d "$BUILD_DIR" ]; then

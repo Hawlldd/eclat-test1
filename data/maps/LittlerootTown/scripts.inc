@@ -1,7 +1,12 @@
 LittlerootTown_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, IviereTown_OnTransition
 	map_script MAP_SCRIPT_ON_RESUME, IviereTown_OnResume
+	map_script MAP_SCRIPT_ON_FRAME_TABLE, IviereTown_OnFrame
 	.byte 0
+
+IviereTown_OnFrame:
+	map_script_2 VAR_LITTLEROOT_INTRO_STATE, 9, IviereTown_EventScript_FilaoStarterScene
+	.2byte 0
 
 	@ State descriptions for VAR_LITTLEROOT_TOWN_STATE
 	@ 1: Met Rival
@@ -1016,6 +1021,7 @@ LittlerootTown_Text_BirchSomethingToShowYouAtLab:
 
 IviereTown_OnTransition:
 	setflag FLAG_VISITED_LITTLEROOT_TOWN
+	special StartIviereFlyby
 	end
 
 IviereTown_OnResume:
@@ -1065,7 +1071,30 @@ IviereTown_EventScript_Child::
 	end
 
 IviereTown_EventScript_RiverNpc::
-	msgbox IviereTown_Text_RiverNpc, MSGBOX_NPC
+	lock
+	faceplayer
+	goto_if_set FLAG_GOT_EXP_SHARE_FROM_ALDA, IviereTown_EventScript_AldaAfterGift
+	setspeaker SP_NAME_ALDA
+	msgbox IviereTown_Text_AldaStoryGift, MSGBOX_DEFAULT
+	giveitem ITEM_EXP_SHARE
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_ShowBagIsFull
+	setflag FLAG_GOT_EXP_SHARE_FROM_ALDA
+	setflag FLAG_SYS_EXP_SHARE
+	setspeaker SP_NAME_ALDA
+	msgbox IviereTown_Text_AldaExplainExpShare, MSGBOX_DEFAULT
+	release
+	end
+
+IviereTown_EventScript_AldaAfterGift::
+	goto_if_set FLAG_SYS_EXP_SHARE, IviereTown_EventScript_AldaAfterGiftNormal
+	checkitem ITEM_EXP_SHARE
+	goto_if_eq VAR_RESULT, TRUE, IviereTown_EventScript_AldaTurnOnExpShare
+	giveitem ITEM_EXP_SHARE
+IviereTown_EventScript_AldaTurnOnExpShare:
+	setflag FLAG_SYS_EXP_SHARE
+IviereTown_EventScript_AldaAfterGiftNormal:
+	setspeaker SP_NAME_ALDA
+	msgbox IviereTown_Text_AldaAfter, MSGBOX_NPC
 	end
 
 IviereTown_EventScript_PlayerSign::
@@ -1093,10 +1122,34 @@ IviereTown_Text_Child:
 	.string "I'm totally bored! I have no friends\n"
 	.string "to play with. If only I had a POKéMON.$"
 
-IviereTown_Text_RiverNpc:
-	.string "Oh hello. At my age, my only joy is\n"
-	.string "looking at the clear river.\l"
-	.string "So enjoy your youth.$"
+IviereTown_Text_AldaStoryGift:
+	.string "Oh, hello, child…\p"
+	.string "I heard that terrible commotion\n"
+	.string "from your home earlier.\p"
+	.string "At my age, seeing such cruelty\n"
+	.string "truly breaks my heart.\p"
+	.string "I knew your father so well…\n"
+	.string "He was a kind, honorable man.\p"
+	.string "Seeing the fiery determination\n"
+	.string "in your eyes moves me deeply.\p"
+	.string "Even when things do not turn out\n"
+	.string "the way we wish, we can still\l"
+	.string "stand tall and do what's right.\p"
+	.string "Please, take this with you on\n"
+	.string "your journey.$"
+
+IviereTown_Text_AldaExplainExpShare:
+	.string "That EXP. SHARE will allow all\n"
+	.string "the POKéMON in your party to\l"
+	.string "grow together as one.\p"
+	.string "May your steps be guided by\n"
+	.string "wisdom and strength, dear.$"
+
+IviereTown_Text_AldaAfter:
+	.string "May the road treat you kindly.\p"
+	.string "Whenever doubts arise, remember:\n"
+	.string "your father's legacy lives on\l"
+	.string "within your heart.$"
 
 IviereTown_Text_PlayerSign:
 	.string "{PLAYER}'s House$"
@@ -1112,3 +1165,339 @@ IviereTown_Text_TownSign:
 IviereTown_Text_MenuSign:
 	.string "TIP\p"
 	.string "Use START to open the menu.$"
+
+IviereTown_EventScript_FilaoStarterScene::
+	lockall
+	delay 20
+	applymovement LOCALID_PLAYER, Common_Movement_FaceDown
+	waitmovement 0
+	delay 10
+	setspeaker SP_NAME_PLAYER
+	msgbox IviereTown_Text_PlayerFrustrated, MSGBOX_DEFAULT
+	closemessage
+	playse SE_PIN
+	applymovement LOCALID_PLAYER, Common_Movement_ExclamationMark
+	waitmovement 0
+	delay 10
+	setspeaker SP_NAME_FILAO
+	msgbox IviereTown_Text_FilaoCallOut, MSGBOX_DEFAULT
+	closemessage
+	clearflag FLAG_HIDE_IVIERE_FILAO_OUTSIDE
+	addobject LOCALID_IVIERE_FILAO
+	applymovement LOCALID_IVIERE_FILAO, IviereTown_Movement_FilaoApproachPlayer
+	applymovement LOCALID_PLAYER, Common_Movement_FaceLeft
+	waitmovement LOCALID_IVIERE_FILAO
+	applymovement LOCALID_IVIERE_FILAO, Common_Movement_FaceRight
+	waitmovement LOCALID_IVIERE_FILAO
+	setspeaker SP_NAME_FILAO
+	msgbox IviereTown_Text_FilaoAsks, MSGBOX_DEFAULT
+	closemessage
+	setspeaker SP_NAME_PLAYER
+	msgbox IviereTown_Text_PlayerExplains, MSGBOX_DEFAULT
+	closemessage
+	setspeaker SP_NAME_FILAO
+	msgbox IviereTown_Text_FilaoComforts, MSGBOX_DEFAULT
+	closemessage
+	goto IviereTown_ChooseType
+
+IviereTown_Movement_FilaoApproachPlayer:
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	walk_fast_right
+	step_end
+
+IviereTown_Movement_FilaoLeaves:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+IviereTown_ChooseType:
+	message IviereTown_Text_ChooseType
+	waitmessage
+	dynmultichoice 20, 1, TRUE, 3, 0, DYN_MULTICHOICE_CB_NONE, IviereTown_Text_Fire, IviereTown_Text_Water, IviereTown_Text_Grass
+	closemessage
+	goto_if_eq VAR_RESULT, 1, IviereTown_WaterStarters
+	goto_if_eq VAR_RESULT, 2, IviereTown_GrassStarters
+
+	dynmultipush IviereTown_Text_Charmander, SPECIES_CHARMANDER
+	dynmultipush IviereTown_Text_Cyndaquil, SPECIES_CYNDAQUIL
+	dynmultipush IviereTown_Text_Torchic, SPECIES_TORCHIC
+	dynmultipush IviereTown_Text_Chimchar, SPECIES_CHIMCHAR
+	dynmultipush IviereTown_Text_Tepig, SPECIES_TEPIG
+	dynmultipush IviereTown_Text_Fennekin, SPECIES_FENNEKIN
+	dynmultipush IviereTown_Text_Litten, SPECIES_LITTEN
+	dynmultipush IviereTown_Text_Scorbunny, SPECIES_SCORBUNNY
+	dynmultipush IviereTown_Text_Fuecoco, SPECIES_FUECOCO
+	goto IviereTown_ChooseStarter
+
+IviereTown_WaterStarters:
+	dynmultipush IviereTown_Text_Squirtle, SPECIES_SQUIRTLE
+	dynmultipush IviereTown_Text_Totodile, SPECIES_TOTODILE
+	dynmultipush IviereTown_Text_Mudkip, SPECIES_MUDKIP
+	dynmultipush IviereTown_Text_Piplup, SPECIES_PIPLUP
+	dynmultipush IviereTown_Text_Oshawott, SPECIES_OSHAWOTT
+	dynmultipush IviereTown_Text_Froakie, SPECIES_FROAKIE
+	dynmultipush IviereTown_Text_Popplio, SPECIES_POPPLIO
+	dynmultipush IviereTown_Text_Sobble, SPECIES_SOBBLE
+	dynmultipush IviereTown_Text_Quaxly, SPECIES_QUAXLY
+	goto IviereTown_ChooseStarter
+
+IviereTown_GrassStarters:
+	dynmultipush IviereTown_Text_Bulbasaur, SPECIES_BULBASAUR
+	dynmultipush IviereTown_Text_Chikorita, SPECIES_CHIKORITA
+	dynmultipush IviereTown_Text_Treecko, SPECIES_TREECKO
+	dynmultipush IviereTown_Text_Turtwig, SPECIES_TURTWIG
+	dynmultipush IviereTown_Text_Snivy, SPECIES_SNIVY
+	dynmultipush IviereTown_Text_Chespin, SPECIES_CHESPIN
+	dynmultipush IviereTown_Text_Rowlet, SPECIES_ROWLET
+	dynmultipush IviereTown_Text_Grookey, SPECIES_GROOKEY
+	dynmultipush IviereTown_Text_Sprigatito, SPECIES_SPRIGATITO
+
+IviereTown_ChooseStarter:
+	dynmultistack 18, 0, FALSE, 6, FALSE, 0, DYN_MULTICHOICE_CB_NONE
+	goto_if_eq VAR_RESULT, MULTI_B_PRESSED, IviereTown_ChooseType
+	copyvar VAR_TEMP_1, VAR_RESULT
+	bufferspeciesname STR_VAR_1, VAR_TEMP_1
+	showmonpic VAR_TEMP_1, 10, 3
+	msgbox IviereTown_Text_ConfirmStarter, MSGBOX_YESNO
+	hidemonpic
+	goto_if_eq VAR_RESULT, NO, IviereTown_ChooseType
+	givemon VAR_TEMP_1, 5, ITEM_NONE
+	setseenmon VAR_TEMP_1
+	setcaughtmon VAR_TEMP_1
+	setflag FLAG_SYS_POKEMON_GET
+	setflag FLAG_SYS_POKEDEX_GET
+	special EnableNationalPokedex
+	playfanfare MUS_OBTAIN_ITEM
+	message IviereTown_Text_ReceivedStarter
+	waitfanfare
+	waitmessage
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, IviereTown_EventScript_FilaoInspire
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+
+IviereTown_EventScript_FilaoInspire:
+	setspeaker SP_NAME_FILAO
+	msgbox IviereTown_Text_FilaoGivePokeBalls, MSGBOX_DEFAULT
+	giveitem ITEM_POKE_BALL, 5
+	setflag FLAG_RECEIVED_POKE_BALLS_FROM_FILAO
+	setspeaker SP_NAME_FILAO
+	msgbox IviereTown_Text_FilaoInspire, MSGBOX_DEFAULT
+	closemessage
+	setspeaker SP_NAME_PLAYER
+	msgbox IviereTown_Text_PlayerResolve, MSGBOX_DEFAULT
+	closemessage
+	setspeaker SP_NAME_FILAO
+	msgbox IviereTown_Text_FilaoFarewell, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_IVIERE_FILAO, IviereTown_Movement_FilaoLeaves
+	waitmovement LOCALID_IVIERE_FILAO
+	removeobject LOCALID_IVIERE_FILAO
+	setflag FLAG_HIDE_IVIERE_FILAO_OUTSIDE
+	setvar VAR_LITTLEROOT_INTRO_STATE, 7
+	releaseall
+	end
+
+IviereTown_Text_PlayerFrustrated:
+	.string "…Damn it!\p"
+	.string "If only I had a POKéMON…\n"
+	.string "I could have protected Mom…\l"
+	.string "I could have stopped them!\p"
+	.string "I was completely powerless…$"
+
+IviereTown_Text_FilaoCallOut:
+	.string "Hey! {PLAYER}!\n"
+	.string "Are you alright?!$"
+
+IviereTown_Text_FilaoAsks:
+	.string "I was walking nearby and heard\n"
+	.string "terrible screaming from your\l"
+	.string "house!\p"
+	.string "What in the world happened?!$"
+
+IviereTown_Text_PlayerExplains:
+	.string "PROF. FILAO… two masked thieves\n"
+	.string "broke into our house and\l"
+	.string "attacked Mom!\p"
+	.string "They stole my father's POKéMON…\n"
+	.string "the only keepsake we had left\l"
+	.string "of him!\p"
+	.string "I wanted to fight back, but…\n"
+	.string "I didn't have a POKéMON to\l"
+	.string "battle with…$"
+
+IviereTown_Text_FilaoComforts:
+	.string "Thieves in IVIERE TOWN?!\n"
+	.string "And they took your father's\l"
+	.string "POKéMON?!\p"
+	.string "How despicable… Those cowards\n"
+	.string "will pay for this!\p"
+	.string "{PLAYER}, look at me.\p"
+	.string "Do not blame yourself for what\n"
+	.string "happened.\p"
+	.string "You stood up to criminals\n"
+	.string "without hesitation to defend\l"
+	.string "your family.\p"
+	.string "I see the fire and\n"
+	.string "determination in your eyes.\l"
+	.string "You have the true soul of a\l"
+	.string "POKéMON trainer.\p"
+	.string "As it happens, I was just\n"
+	.string "transporting these POKéMON to\l"
+	.string "my lab…\p"
+	.string "I want you to choose one to be\n"
+	.string "your partner on this journey!$"
+
+IviereTown_Text_ChooseType:
+	.string "Which type of POKéMON do\n"
+	.string "you choose?$"
+
+IviereTown_Text_ConfirmStarter:
+	.string "Do you choose {STR_VAR_1}?$"
+
+IviereTown_Text_ReceivedStarter:
+	.string "{PLAYER} received {STR_VAR_1}\n"
+	.string "from PROF. FILAO!$"
+
+IviereTown_Text_FilaoGivePokeBalls:
+	.string "Take these POKé BALLS with\n"
+	.string "you as well.\p"
+	.string "You will need loyal companions\n"
+	.string "by your side to face the trials\l"
+	.string "that lie ahead.$"
+
+IviereTown_Text_FilaoInspire:
+	.string "{PLAYER}, treat that POKéMON\n"
+	.string "with love and trust, and it\l"
+	.string "will stand by you through any\l"
+	.string "trial.\p"
+	.string "Listen to me carefully:\n"
+	.string "This tragedy is not where your\l"
+	.string "story ends.\l"
+	.string "It is where your journey begins!\p"
+	.string "Channel your sorrow and anger\n"
+	.string "into strength!\p"
+	.string "Challenge the Gym Leaders, grow\n"
+	.string "stronger, and aim for the\l"
+	.string "POKéMON LEAGUE!\p"
+	.string "Become strong enough that no one\n"
+	.string "can ever hurt your loved ones\l"
+	.string "again.\p"
+	.string "Track down those villains,\n"
+	.string "defeat them, and bring your\l"
+	.string "father's POKéMON back home!$"
+
+IviereTown_Text_PlayerResolve:
+	.string "Thank you, PROF. FILAO!\p"
+	.string "We'll train together every\n"
+	.string "single day…\p"
+	.string "We will conquer the Gyms, reach\n"
+	.string "the POKéMON LEAGUE… and I WILL\l"
+	.string "get Dad's POKéMON back!$"
+
+IviereTown_Text_FilaoFarewell:
+	.string "That's the spirit! I have\n"
+	.string "complete faith in you.\p"
+	.string "Whenever your POKéMON need rest,\n"
+	.string "come visit my lab on the west\l"
+	.string "side of town.\p"
+	.string "Now go, {PLAYER}!\n"
+	.string "Your destiny begins!$"
+
+IviereTown_Text_Fire:
+	.string "Fire$"
+
+IviereTown_Text_Water:
+	.string "Water$"
+
+IviereTown_Text_Grass:
+	.string "Grass$"
+
+IviereTown_Text_Charmander:
+	.string "Charmander$"
+
+IviereTown_Text_Cyndaquil:
+	.string "Cyndaquil$"
+
+IviereTown_Text_Torchic:
+	.string "Torchic$"
+
+IviereTown_Text_Chimchar:
+	.string "Chimchar$"
+
+IviereTown_Text_Tepig:
+	.string "Tepig$"
+
+IviereTown_Text_Fennekin:
+	.string "Fennekin$"
+
+IviereTown_Text_Litten:
+	.string "Litten$"
+
+IviereTown_Text_Scorbunny:
+	.string "Scorbunny$"
+
+IviereTown_Text_Fuecoco:
+	.string "Fuecoco$"
+
+IviereTown_Text_Squirtle:
+	.string "Squirtle$"
+
+IviereTown_Text_Totodile:
+	.string "Totodile$"
+
+IviereTown_Text_Mudkip:
+	.string "Mudkip$"
+
+IviereTown_Text_Piplup:
+	.string "Piplup$"
+
+IviereTown_Text_Oshawott:
+	.string "Oshawott$"
+
+IviereTown_Text_Froakie:
+	.string "Froakie$"
+
+IviereTown_Text_Popplio:
+	.string "Popplio$"
+
+IviereTown_Text_Sobble:
+	.string "Sobble$"
+
+IviereTown_Text_Quaxly:
+	.string "Quaxly$"
+
+IviereTown_Text_Bulbasaur:
+	.string "Bulbasaur$"
+
+IviereTown_Text_Chikorita:
+	.string "Chikorita$"
+
+IviereTown_Text_Treecko:
+	.string "Treecko$"
+
+IviereTown_Text_Turtwig:
+	.string "Turtwig$"
+
+IviereTown_Text_Snivy:
+	.string "Snivy$"
+
+IviereTown_Text_Chespin:
+	.string "Chespin$"
+
+IviereTown_Text_Rowlet:
+	.string "Rowlet$"
+
+IviereTown_Text_Grookey:
+	.string "Grookey$"
+
+IviereTown_Text_Sprigatito:
+	.string "Sprigatito$"

@@ -17,7 +17,7 @@
 #define B_TRAINER_EXP_PERCENTAGE    170        // Multiplier percentage for total experience gained in Trainer battles (170 = 1.7x). Set to 100 for 1.0x (standard).
 #define B_WILD_EXP_MULTIPLIER       1000       // Multiplier percentage for total experience gained in wild Pokémon battles (1000 = 10.0x). Set to 100 for 1.0x (standard).
 #define B_SPLIT_EXP                 GEN_LATEST // In Gen6+, all Pokémon that participate in a battle gain full experience. In Gen5 and earlier, the total experience would be evenly split across them.
-#define B_SCALED_EXP                GEN_LATEST // In Gen5 and Gen7+, experience gain is weighted by the difference between the levels of the player's Pokémon and the target.
+#define B_SCALED_EXP                GEN_6      // In Gen6, experience gain is not weighted by level difference (flat Gen 6 formula). In Gen5 and Gen7+, it is weighted.
 #define B_UNEVOLVED_EXP_MULTIPLIER  GEN_LATEST // In Gen6+, if a Pokémon is at or past the level where it would be able to evolve, but it has not, it gains ~1.2x experience. This only applies to species with the EVO_LEVEL method.
 #define B_LEVEL_UP_NOTIFICATION     GEN_LATEST // In Gen9+, if a Pokémon gains enough experience to level up multiple times, a message is only displayed once.
 

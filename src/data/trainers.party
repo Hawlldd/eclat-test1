@@ -17238,4 +17238,154 @@ IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
 - String Shot
 - Razor Leaf
 
+=== TRAINER_ROUTE3_CALVIN ===
+Name: CALVIN
+Class: Youngster
+Pic: Youngster FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Mankey
+Level: 11
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Low Kick
+- Fury Swipes
+- Leer
+- Karate Chop
+
+=== TRAINER_ROUTE3_COLTON ===
+Name: COLTON
+Class: Bug Catcher
+Pic: Bug Catcher FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Caterpie
+Level: 9
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- String Shot
+
+Weedle
+Level: 9
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Poison Sting
+- String Shot
+
+Caterpie
+Level: 10
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- String Shot
+
+=== TRAINER_ROUTE3_ELIJAH ===
+Name: ELIJAH
+Class: Youngster
+Pic: Youngster FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Rattata
+Level: 11
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- Tail Whip
+- Quick Attack
+
+Ekans
+Level: 11
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Wrap
+- Leer
+- Poison Sting
+
+=== TRAINER_ROUTE3_LANA ===
+Name: LANA
+Class: Lass
+Pic: Lass FRLG
+Gender: Female
+Music: Female
+Double Battle: No
+AI: Check Bad Move
+
+Nidoran M
+Level: 16
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Peck
+- Focus Energy
+- Double Kick
+
+Nidoran F
+Level: 16
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Scratch
+- Tail Whip
+- Double Kick
+
+=== TRAINER_ROUTE3_MEG ===
+Name: MEG
+Class: Lass
+Pic: Lass FRLG
+Gender: Female
+Music: Female
+Double Battle: No
+AI: Check Bad Move
+
+Pidgey
+Level: 12
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- Sand Attack
+- Gust
+
+Oddish
+Level: 12
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Absorb
+- Sweet Scent
+
+Bellsprout
+Level: 12
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Vine Whip
+- Growth
+
+=== TRAINER_ROUTE3_CEDRIC ===
+Name: CEDRIC
+Class: Bug Catcher
+Pic: Bug Catcher FRLG
+Gender: Male
+Music: Male
+Double Battle: No
+AI: Check Bad Move
+
+Weedle
+Level: 9
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Poison Sting
+- String Shot
+
+Kakuna
+Level: 9
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Harden
+
+Caterpie
+Level: 10
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Tackle
+- String Shot
+
+Metapod
+Level: 10
+IVs: 0 HP / 0 Atk / 0 Def / 0 SpA / 0 SpD / 0 Spe
+- Harden
+
+
 

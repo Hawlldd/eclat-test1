@@ -46,6 +46,7 @@
 #include "script.h"
 #include "script_menu.h"
 #include "sound.h"
+#include "sprite.h"
 #include "starter_choose.h"
 #include "string_util.h"
 #include "strings.h"
@@ -57,6 +58,7 @@
 #include "wallclock.h"
 #include "window.h"
 #include "constants/battle_frontier.h"
+#include "constants/maps.h"
 #include "constants/battle_pyramid.h"
 #include "constants/battle_tower.h"
 #include "constants/decorations.h"
@@ -5778,29 +5780,31 @@ static const struct OamData sIviereFlybyOam =
     .priority = 1,
 };
 
-static const struct SpriteFrameImage sIviereFlybyImages[] =
+static const struct SpriteSheet sIviereFlybySheet =
 {
-    {sIviereFlybyTiles, 512},
-    {sIviereFlybyTiles + 128, 512},
+    .data = sIviereFlybyTiles,
+    .size = sizeof(sIviereFlybyTiles),
+    .tag = GFXTAG_ECLAT_FLYER_IVIERE,
 };
 
-static const struct SpriteFrameImage sEclatRoute1FlybyImages[] =
+static const struct SpriteSheet sRoute1FlybySheet =
 {
-    {sEclatRoute1FlybyTiles, 512},
-    {sEclatRoute1FlybyTiles + 128, 512},
+    .data = sEclatRoute1FlybyTiles,
+    .size = sizeof(sEclatRoute1FlybyTiles),
+    .tag = GFXTAG_ECLAT_FLYER_ROUTE1,
 };
 
 static const union AnimCmd sIviereFlybyAnim[] =
 {
     ANIMCMD_FRAME(0, 8),
-    ANIMCMD_FRAME(1, 8),
+    ANIMCMD_FRAME(16, 8),
     ANIMCMD_JUMP(0),
 };
 
 static const union AnimCmd sIviereFlybyAnimMirrored[] =
 {
     ANIMCMD_FRAME(0, 8, .hFlip = TRUE),
-    ANIMCMD_FRAME(1, 8, .hFlip = TRUE),
+    ANIMCMD_FRAME(16, 8, .hFlip = TRUE),
     ANIMCMD_JUMP(0),
 };
 
@@ -5838,13 +5842,48 @@ enum { IVIERE_FLYBY_ROUTE_COUNT = 6 };
 static void SpriteCB_IviereFlyby(struct Sprite *sprite)
 {
     u8 route = sprite->data[0];
+    u8 currentMap = gSaveBlock1Ptr->location.mapNum;
+    u8 currentGroup = gSaveBlock1Ptr->location.mapGroup;
+    bool32 onMap = FALSE;
+
+    if (route < IVIERE_FLYBY_ROUTE_COUNT)
+    {
+        if (currentGroup == MAP_GROUP(MAP_LITTLEROOT_TOWN) && currentMap == MAP_NUM(MAP_LITTLEROOT_TOWN))
+            onMap = TRUE;
+    }
+    else
+    {
+        if (currentGroup == MAP_GROUP(MAP_ECLAT_ROUTE1) && currentMap == MAP_NUM(MAP_ECLAT_ROUTE1))
+            onMap = TRUE;
+    }
+
+    if (!onMap)
+    {
+        DestroySprite(sprite);
+        return;
+    }
+
     s16 distance = sEclatFlybyRoutes[route].range * 16;
 
-    sprite->data[2] += sprite->data[1] ? -1 : 1;
-    if (sprite->data[2] == 0 || sprite->data[2] == distance)
+    if (sprite->data[1])
     {
-        sprite->data[1] ^= 1;
-        StartSpriteAnim(sprite, sprite->data[1]);
+        sprite->data[2]--;
+        if (sprite->data[2] <= 0)
+        {
+            sprite->data[2] = 0;
+            sprite->data[1] = 0;
+            StartSpriteAnim(sprite, 0);
+        }
+    }
+    else
+    {
+        sprite->data[2]++;
+        if (sprite->data[2] >= distance)
+        {
+            sprite->data[2] = distance;
+            sprite->data[1] = 1;
+            StartSpriteAnim(sprite, 1);
+        }
     }
 
     GetMapCoordsFromSpritePos(sEclatFlybyRoutes[route].x + MAP_OFFSET - sEclatFlybyRoutes[route].range,
@@ -5859,22 +5898,22 @@ static void SpriteCB_IviereFlyby(struct Sprite *sprite)
 
 static const struct SpriteTemplate sIviereFlybyTemplate =
 {
-    .tileTag = TAG_NONE,
+    .tileTag = GFXTAG_ECLAT_FLYER_IVIERE,
     .paletteTag = OBJ_EVENT_PAL_TAG_ECLAT_MOTHER,
     .oam = &sIviereFlybyOam,
     .anims = sIviereFlybyAnims,
-    .images = sIviereFlybyImages,
+    .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCB_IviereFlyby,
 };
 
 static const struct SpriteTemplate sRoute1FlybyTemplate =
 {
-    .tileTag = TAG_NONE,
+    .tileTag = GFXTAG_ECLAT_FLYER_ROUTE1,
     .paletteTag = OBJ_EVENT_PAL_TAG_ECLAT_STOLEN_MON,
     .oam = &sIviereFlybyOam,
     .anims = sIviereFlybyAnims,
-    .images = sEclatRoute1FlybyImages,
+    .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCB_IviereFlyby,
 };
@@ -5883,6 +5922,14 @@ static void StartEclatFlybys(u32 firstRoute, u32 endRoute, const struct SpriteTe
 {
     if (LoadObjectEventPalette(template->paletteTag) == 0xFF)
         return;
+
+    if (GetSpriteTileStartByTag(template->tileTag) == 0xFFFF)
+    {
+        if (template->tileTag == GFXTAG_ECLAT_FLYER_IVIERE)
+            LoadSpriteSheet(&sIviereFlybySheet);
+        else if (template->tileTag == GFXTAG_ECLAT_FLYER_ROUTE1)
+            LoadSpriteSheet(&sRoute1FlybySheet);
+    }
 
     u32 activeRoutes = 0;
     for (u32 i = 0; i < MAX_SPRITES; i++)

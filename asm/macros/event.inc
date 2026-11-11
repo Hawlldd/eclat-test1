@@ -2480,6 +2480,10 @@
 	callnative ScriptHideItemDescription, requests_effects=1
 	.endm
 
+	.macro showdexnav
+	callnative ScriptShowDexNav, requests_effects=1
+	.endm
+
 	@ Remove all of specified item from the player's bag and return the number of removed items to VAR_RESULT
 	.macro removeallitem itemId:req
 	callnative ScrCmd_removeallitem, requests_effects=1

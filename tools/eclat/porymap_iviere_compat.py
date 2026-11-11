@@ -153,7 +153,7 @@ for index in range(13):
 print('petipres secondary', len(petipres_editor_tiles) // 32, 'tiles',
       len(petipres_editor_metatiles) // 16, 'metatiles')
 
-for name in ('peaceful_woods', 'eclat_rocky_path'):
+for name in ('peaceful_woods', 'eclat_rocky_path', 'eclat_route3'):
     sec_source = ROOT / 'data' / 'tilesets' / 'secondary' / name
     sec_tiles = (sec_source / 'tiles.bin').read_bytes()
     sec_metatiles = (sec_source / 'metatiles.bin').read_bytes()
@@ -164,28 +164,120 @@ for name in ('peaceful_woods', 'eclat_rocky_path'):
     assert len(sec_attributes) == 384 * 4
     assert len(sec_palettes) >= 13 * 32
 
-    sec_target = ROOT / 'data' / 'tilesets' / 'secondary' / f'{name}_secondary'
-    sec_target.mkdir(parents=True, exist_ok=True)
-    sec_editor_tiles = tiles['primary'][512 * 32:] + sec_tiles
-    sec_editor_metatiles = metatiles['primary'][512 * 16:] + sec_metatiles
-    sec_editor_attributes = convert_attributes(attributes['primary'][512 * 4:] + sec_attributes)
-    assert len(sec_editor_tiles) == 512 * 32
-    assert len(sec_editor_metatiles) == 512 * 16
-    assert len(sec_editor_attributes) == 512 * 2
-    (sec_target / 'tiles.png').write_bytes(png_from_4bpp(sec_editor_tiles, sec_palettes))
-    (sec_target / 'metatiles.bin').write_bytes(sec_editor_metatiles)
-    (sec_target / 'metatile_attributes.bin').write_bytes(sec_editor_attributes)
-    sec_palette_dir = sec_target / 'palettes'
-    sec_palette_dir.mkdir(exist_ok=True)
-    for index in range(13):
-        palette_source = palettes['primary'] if index == 6 else sec_palettes
-        colors = []
-        for value, in struct.iter_unpack('<H', palette_source[index * 32:(index + 1) * 32]):
-            colors.append(f'{(value & 31) * 255 // 31} {((value >> 5) & 31) * 255 // 31} {((value >> 10) & 31) * 255 // 31}')
-        (sec_palette_dir / f'{index:02}.pal').write_text(
-            'JASC-PAL\n0100\n16\n' + '\n'.join(colors) + '\n', encoding='ascii')
+    targets = [ROOT / 'data' / 'tilesets' / 'secondary' / f'{name}_secondary']
+    if name == 'eclat_route3':
+        targets.append(ROOT / 'data' / 'tilesets' / 'secondary' / 'eclat_route_3secondary')
+
+    for sec_target in targets:
+        sec_target.mkdir(parents=True, exist_ok=True)
+        sec_editor_tiles = tiles['primary'][512 * 32:] + sec_tiles
+        sec_editor_metatiles = metatiles['primary'][512 * 16:] + sec_metatiles
+        sec_editor_attributes = convert_attributes(attributes['primary'][512 * 4:] + sec_attributes)
+        assert len(sec_editor_tiles) == 512 * 32
+        assert len(sec_editor_metatiles) == 512 * 16
+        assert len(sec_editor_attributes) == 512 * 2
+        (sec_target / 'tiles.png').write_bytes(png_from_4bpp(sec_editor_tiles, sec_palettes))
+        (sec_target / 'metatiles.bin').write_bytes(sec_editor_metatiles)
+        (sec_target / 'metatile_attributes.bin').write_bytes(sec_editor_attributes)
+        sec_palette_dir = sec_target / 'palettes'
+        sec_palette_dir.mkdir(exist_ok=True)
+        for index in range(13):
+            palette_source = palettes['primary'] if index == 6 else sec_palettes
+            colors = []
+            for value, in struct.iter_unpack('<H', palette_source[index * 32:(index + 1) * 32]):
+                colors.append(f'{(value & 31) * 255 // 31} {((value >> 5) & 31) * 255 // 31} {((value >> 10) & 31) * 255 // 31}')
+            (sec_palette_dir / f'{index:02}.pal').write_text(
+                'JASC-PAL\n0100\n16\n' + '\n'.join(colors) + '\n', encoding='ascii')
     print(f'{name} secondary', len(sec_editor_tiles) // 32, 'tiles',
           len(sec_editor_metatiles) // 16, 'metatiles')
+
+# petipres_houses primary & secondary for Porymap
+ph_prim_src = ROOT / 'data' / 'tilesets' / 'primary' / 'petipres_houses'
+ph_sec_src = ROOT / 'data' / 'tilesets' / 'secondary' / 'petipres_houses'
+if ph_prim_src.exists() and ph_sec_src.exists():
+    ph_p_tiles = (ph_prim_src / 'tiles.bin').read_bytes()
+    ph_p_meta = (ph_prim_src / 'metatiles.bin').read_bytes()
+    ph_p_attr = (ph_prim_src / 'metatile_attributes.bin').read_bytes()
+    ph_p_pal = (ph_prim_src / 'palettes.bin').read_bytes()
+
+    ph_s_tiles = (ph_sec_src / 'tiles.bin').read_bytes()
+    ph_s_meta = (ph_sec_src / 'metatiles.bin').read_bytes()
+    ph_s_attr = (ph_sec_src / 'metatile_attributes.bin').read_bytes()
+    ph_s_pal = (ph_sec_src / 'palettes.bin').read_bytes()
+
+    ph_p_target = ROOT / 'data' / 'tilesets' / 'primary' / 'petipres_houses_primary'
+    ph_p_target.mkdir(parents=True, exist_ok=True)
+    (ph_p_target / 'tiles.png').write_bytes(png_from_4bpp(ph_p_tiles[:512 * 32], ph_p_pal))
+    (ph_p_target / 'metatiles.bin').write_bytes(ph_p_meta[:512 * 16])
+    (ph_p_target / 'metatile_attributes.bin').write_bytes(convert_attributes(ph_p_attr[:512 * 4]))
+    ph_p_pal_dir = ph_p_target / 'palettes'
+    ph_p_pal_dir.mkdir(exist_ok=True)
+    for idx in range(13):
+        colors = []
+        for val, in struct.iter_unpack('<H', ph_p_pal[idx * 32:(idx + 1) * 32]):
+            colors.append(f'{(val & 31) * 255 // 31} {((val >> 5) & 31) * 255 // 31} {((val >> 10) & 31) * 255 // 31}')
+        (ph_p_pal_dir / f'{idx:02}.pal').write_text('JASC-PAL\n0100\n16\n' + '\n'.join(colors) + '\n', encoding='ascii')
+
+    ph_s_target = ROOT / 'data' / 'tilesets' / 'secondary' / 'petipres_houses_secondary'
+    ph_s_target.mkdir(parents=True, exist_ok=True)
+    ph_s_ed_tiles = ph_p_tiles[512 * 32:] + ph_s_tiles
+    ph_s_ed_meta = ph_p_meta[512 * 16:] + ph_s_meta
+    ph_s_ed_attr = convert_attributes(ph_p_attr[512 * 4:] + ph_s_attr)
+    (ph_s_target / 'tiles.png').write_bytes(png_from_4bpp(ph_s_ed_tiles, ph_s_pal))
+    (ph_s_target / 'metatiles.bin').write_bytes(ph_s_ed_meta)
+    (ph_s_target / 'metatile_attributes.bin').write_bytes(ph_s_ed_attr)
+    ph_s_pal_dir = ph_s_target / 'palettes'
+    ph_s_pal_dir.mkdir(exist_ok=True)
+    for idx in range(13):
+        colors = []
+        for val, in struct.iter_unpack('<H', ph_s_pal[idx * 32:(idx + 1) * 32]):
+            colors.append(f'{(val & 31) * 255 // 31} {((val >> 5) & 31) * 255 // 31} {((val >> 10) & 31) * 255 // 31}')
+        (ph_s_pal_dir / f'{idx:02}.pal').write_text('JASC-PAL\n0100\n16\n' + '\n'.join(colors) + '\n', encoding='ascii')
+    print('petipres_houses primary & secondary converted')
+
+# peaceful_woods_grim primary & secondary for Porymap
+pwg_prim_src = ROOT / 'data' / 'tilesets' / 'primary' / 'peaceful_woods_grim'
+pwg_sec_src = ROOT / 'data' / 'tilesets' / 'secondary' / 'peaceful_woods_grim'
+if pwg_prim_src.exists() and pwg_sec_src.exists():
+    pwg_p_tiles = (pwg_prim_src / 'tiles.bin').read_bytes()
+    pwg_p_meta = (pwg_prim_src / 'metatiles.bin').read_bytes()
+    pwg_p_attr = (pwg_prim_src / 'metatile_attributes.bin').read_bytes()
+    pwg_p_pal = (pwg_prim_src / 'palettes.bin').read_bytes()
+
+    pwg_s_tiles = (pwg_sec_src / 'tiles.bin').read_bytes()
+    pwg_s_meta = (pwg_sec_src / 'metatiles.bin').read_bytes()
+    pwg_s_attr = (pwg_sec_src / 'metatile_attributes.bin').read_bytes()
+    pwg_s_pal = (pwg_sec_src / 'palettes.bin').read_bytes()
+
+    pwg_p_target = ROOT / 'data' / 'tilesets' / 'primary' / 'peaceful_woods_grim_primary'
+    pwg_p_target.mkdir(parents=True, exist_ok=True)
+    (pwg_p_target / 'tiles.png').write_bytes(png_from_4bpp(pwg_p_tiles[:512 * 32], pwg_p_pal))
+    (pwg_p_target / 'metatiles.bin').write_bytes(pwg_p_meta[:512 * 16])
+    (pwg_p_target / 'metatile_attributes.bin').write_bytes(convert_attributes(pwg_p_attr[:512 * 4]))
+    pwg_p_pal_dir = pwg_p_target / 'palettes'
+    pwg_p_pal_dir.mkdir(exist_ok=True)
+    for idx in range(13):
+        colors = []
+        for val, in struct.iter_unpack('<H', pwg_p_pal[idx * 32:(idx + 1) * 32]):
+            colors.append(f'{(val & 31) * 255 // 31} {((val >> 5) & 31) * 255 // 31} {((val >> 10) & 31) * 255 // 31}')
+        (pwg_p_pal_dir / f'{idx:02}.pal').write_text('JASC-PAL\n0100\n16\n' + '\n'.join(colors) + '\n', encoding='ascii')
+
+    pwg_s_target = ROOT / 'data' / 'tilesets' / 'secondary' / 'peaceful_woods_grim_secondary'
+    pwg_s_target.mkdir(parents=True, exist_ok=True)
+    pwg_s_ed_tiles = pwg_p_tiles[512 * 32:] + pwg_s_tiles
+    pwg_s_ed_meta = pwg_p_meta[512 * 16:] + pwg_s_meta
+    pwg_s_ed_attr = convert_attributes(pwg_p_attr[512 * 4:] + pwg_s_attr)
+    (pwg_s_target / 'tiles.png').write_bytes(png_from_4bpp(pwg_s_ed_tiles, pwg_s_pal))
+    (pwg_s_target / 'metatiles.bin').write_bytes(pwg_s_ed_meta)
+    (pwg_s_target / 'metatile_attributes.bin').write_bytes(pwg_s_ed_attr)
+    pwg_s_pal_dir = pwg_s_target / 'palettes'
+    pwg_s_pal_dir.mkdir(exist_ok=True)
+    for idx in range(13):
+        colors = []
+        for val, in struct.iter_unpack('<H', pwg_s_pal[idx * 32:(idx + 1) * 32]):
+            colors.append(f'{(val & 31) * 255 // 31} {((val >> 5) & 31) * 255 // 31} {((val >> 10) & 31) * 255 // 31}')
+        (pwg_s_pal_dir / f'{idx:02}.pal').write_text('JASC-PAL\n0100\n16\n' + '\n'.join(colors) + '\n', encoding='ascii')
+    print('peaceful_woods_grim primary & secondary converted')
 
 
 def sprite_png(raw, width, height, palette):

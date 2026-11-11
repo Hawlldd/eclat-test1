@@ -189,13 +189,30 @@ Quando o jogador pressiona o botão **A** na aba de golpes para ver detalhes/reo
 
 ### 2. Card de Detalhes do Golpe (`x: 2..118, y: 52..157`):
 - **Tilemap Dedicado (`page_move_details.bin`)**: Substitui o BG1 instantaneamente ao entrar no modo de seleção.
-- **Pílulas POWER e ACCURACY**:
-  - Valores numéricos impressos via `PSS_LABEL_WINDOW_MOVES_POWER_ACC` (`tilemapLeft = 6, tilemapTop = 7, width = 5, height = 4`).
-  - Alinhados à direita com `GetStringRightAlignXOffset(FONT_SHORT, text, 33)` em `y = 2` (Poder) e `y = 16` (Precisão).
-- **Ícone de Categoria de Dano**: Ícone Físico (explosão laranja), Especial (anéis roxos) ou Status (cinza) centralizado em `(100, 62)`.
+- **Pílulas POWER e ACCURACY (Calibração Milimétrica)**:
+  - As caixas brancas de valor no fundo estão localizadas em `X = 51..81` (31 pixels de largura útil):
+    - Linha de **POWER**: `Y = 58..68` (interior útil `Y = 59..67`).
+    - Linha de **ACCURACY**: `Y = 72..82` (interior útil `Y = 73..81`).
+  - A função `PrintTextOnWindow` com a fonte `FONT_SHORT` adiciona automaticamente 2 pixels de margem ascender interna.
+  - Para centralizar perfeitamente os números sem cortar a borda inferior cinza das células, as chamadas em `PrintMovePowerAndAccuracy()` utilizam:
+    ```c
+    // Power (centralizado horizontalmente no box de 31px, Y=1 resulta em Y=59..67 na tela)
+    PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, 3 + GetStringCenterAlignXOffset(FONT_SHORT, text, 31), 1, 0, 0);
+
+    // Accuracy (centralizado horizontalmente no box de 31px, Y=15 resulta em Y=73..81 na tela)
+    PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, 3 + GetStringCenterAlignXOffset(FONT_SHORT, text, 31), 15, 0, 0);
+    ```
+- **Ícones de Categoria de Dano (Physical / Special / Status)**:
+  - Arquivo: `graphics/interface/category_icons.png` (32x48 px, indexado 4bpp / 16 cores, contendo 3 frames verticais de 32x16 px).
+  - Cada frame contém a pílula arredondada autêntica de 24x13 pixels com uma linha de sombra inferior de 1px de espessura (`RGB(66, 65, 66)`) em `local_y = 14`:
+    - **Physical (Frame 0)**: Pílula laranja-avermelhada com explosão estelar estilizada Saffron rip.
+    - **Special (Frame 1)**: Pílula azul royal (`#2161CE`) com anéis concêntricos autênticos de Gen 4.
+    - **Status (Frame 2)**: Pílula cinza chumbo (`#636163`) com símbolo espiral/yin-yang clássico de Gen 4.
+  - O sprite OAM é centralizado em `(100, 63)` com tamanho 32x16, pousando exatamente em `X = 88..111` e `Y = 57..69` na tela, com a sombra coincidindo milimetricamente com a linha divisória do card.
 - **Pílula EFFECT e Descrição**:
   - `PSS_DATA_WINDOW_MOVE_DESCRIPTION` em `tilemapLeft = 1, tilemapTop = 12, width = 14, height = 7` (`x: 8..119, y: 96..151`).
-  - 4 linhas de texto de descrição formatadas com `FONT_SHORT` e `lineSpacing = 3`. Cada linha repousa perfeitamente acima das 3 linhas divisórias horizontais do card.
+  - 4 linhas de texto de descrição formatadas com `FONT_SHORT` e `lineSpacing = 3` (entrelinha vertical exata de 14 pixels).
+  - Cada uma das linhas de texto repousa perfeitamente sobre as 3 linhas divisórias horizontais do card, garantindo legibilidade máxima e diagramação profissional.
 
 ### 3. Painel Direito e Seletor:
 - 4 golpes normais + 5º slot (`Cancel` ou novo golpe a aprender).
@@ -255,9 +272,27 @@ Caso deseje implementar este mesmo sistema em outra hackrom baseada em pokeemera
    - Execute o script Python para compilar os `.bin` e o `tiles.png`.
 4. **Ajustar `src/pokemon_summary_screen.c`**:
    - **Remover abas excedentes**: Altere `maxPageIndex` para `PSS_PAGE_BATTLE_MOVES`.
-   - **Aplicar Transição Atômica**: Substitua o corpo de `ChangePage` pelo modelo sem tarefas de scroll.
+   - **Aplicar Transição Atômica**: Substitua o corpo de `ChangePage` pelo modelo sem tarefas de scroll assíncronas.
    - **Ajustar Janelas de Texto**: Atualize as structs `sPageInfoTemplate`, `sPageSkillsTemplate` e `sPageMovesTemplate` para as posições X/Y correspondentes às suas caixas gráficas.
+   - **Calibrar Power e Accuracy**: Utilize `y = 1` para Power e `y = 15` para Accuracy com alinhamento centralizado.
    - **Atualizar Coordenadas dos Golpes**: Defina `yName = 5 + i * 28` e `yPP = 16 + i * 28`.
    - **Carregar Paleta de Texto Nitida**: Certifique-se de que `sSkillsTextPalette` seja carregada no `BG_PLTT_ID(6)`.
-5. **Compilar e Testar**:
-   - Execute `./build.sh` (ou `make -j$(nproc)`).
+5. **Atualizar `graphics/interface/category_icons.png`**:
+   - Utilizar a folha 32x48 indexada em 4bpp com as 3 pílulas arredondadas 24x13 e sombra em `y = 14`.
+
+---
+
+## 🚀 7. Guia Rápido de Compilação da ROM
+
+O compilador do projeto gera a ROM com o nome padrão `pokeemerald.gba`. Para atualizar o arquivo final do jogo com o nome desejado:
+
+### Pelo Terminal do WSL (Ubuntu):
+```bash
+cd /home/raulr/zEmerald/eclat-intro-teste && make -j$(nproc) && cp pokeemerald.gba eclat-intro-teste.gba && cp pokeemerald.gba /mnt/c/Users/raulr/OneDrive/Desktop/zEmerald/eclat-intro-teste/eclat-intro-teste.gba
+```
+
+### Pelo PowerShell (Windows):
+```powershell
+wsl bash -c "cd /home/raulr/zEmerald/eclat-intro-teste && make -j\$(nproc) && cp pokeemerald.gba eclat-intro-teste.gba && cp pokeemerald.gba /mnt/c/Users/raulr/OneDrive/Desktop/zEmerald/eclat-intro-teste/eclat-intro-teste.gba"
+```
+

@@ -819,15 +819,15 @@ static const u8 sMovesPPLayout[] = _("{PP}{DYNAMIC 0}/{DYNAMIC 1}");
 
 static const struct OamData sOamData_CategoryIcons =
 {
-    .size = SPRITE_SIZE(16x16),
-    .shape = SPRITE_SHAPE(16x16),
+    .size = SPRITE_SIZE(32x16),
+    .shape = SPRITE_SHAPE(32x16),
     .priority = 0,
 };
 
 const struct CompressedSpriteSheet gSpriteSheet_CategoryIcons =
 {
     .data = gCategoryIcons_Gfx,
-    .size = 16*16*3/2,
+    .size = 32*16*3/2,
     .tag = TAG_CATEGORY_ICONS,
 };
 
@@ -845,13 +845,13 @@ static const union AnimCmd sSpriteAnim_CategoryIcon0[] =
 
 static const union AnimCmd sSpriteAnim_CategoryIcon1[] =
 {
-    ANIMCMD_FRAME(4, 0),
+    ANIMCMD_FRAME(8, 0),
     ANIMCMD_END
 };
 
 static const union AnimCmd sSpriteAnim_CategoryIcon2[] =
 {
-    ANIMCMD_FRAME(8, 0),
+    ANIMCMD_FRAME(16, 0),
     ANIMCMD_END
 };
 
@@ -1203,10 +1203,10 @@ static const u16 sMarkings_Pal[] = INCGFX_U16("graphics/summary_screen/markings.
 static u8 ShowCategoryIcon(enum DamageCategory category)
 {
     if (sMonSummaryScreen->categoryIconSpriteId == 0xFF)
-        sMonSummaryScreen->categoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, 100, 62, 0);
+        sMonSummaryScreen->categoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, 100, 63, 0);
 
     gSprites[sMonSummaryScreen->categoryIconSpriteId].x = 100;
-    gSprites[sMonSummaryScreen->categoryIconSpriteId].y = 62;
+    gSprites[sMonSummaryScreen->categoryIconSpriteId].y = 63;
     gSprites[sMonSummaryScreen->categoryIconSpriteId].invisible = FALSE;
     StartSpriteAnim(&gSprites[sMonSummaryScreen->categoryIconSpriteId], category);
     return sMonSummaryScreen->categoryIconSpriteId;
@@ -2249,19 +2249,35 @@ static void ShowMoveDetailMonSprites(void)
     type1 = GetSpeciesType(summary->species, 1);
     if (type0 != type1)
     {
-        SetTypeSpritePosAndPal(type0, 46, 25, SPRITE_ARR_ID_MON_TYPE1);
-        SetTypeSpritePosAndPal(type1, 84, 25, SPRITE_ARR_ID_MON_TYPE2);
+        SetTypeSpritePosAndPal(type0, 49, 36, SPRITE_ARR_ID_MON_TYPE1);
+        SetTypeSpritePosAndPal(type1, 83, 36, SPRITE_ARR_ID_MON_TYPE2);
     }
     else
     {
-        SetTypeSpritePosAndPal(type0, 65, 25, SPRITE_ARR_ID_MON_TYPE1);
+        SetTypeSpritePosAndPal(type0, 49, 36, SPRITE_ARR_ID_MON_TYPE1);
         SetSpriteInvisibility(SPRITE_ARR_ID_MON_TYPE2, TRUE);
     }
 
     FillWindowPixelBuffer(PSS_LABEL_WINDOW_PORTRAIT_NICKNAME, PIXEL_FILL(0));
     GetMonNickname(&sMonSummaryScreen->currentMon, gStringVar1);
     PrintTextOnWindowWithFont(PSS_LABEL_WINDOW_PORTRAIT_NICKNAME, gStringVar1, 38, 1, 0, 1, FONT_SHORT);
-    PrintGenderSymbol(&sMonSummaryScreen->currentMon, summary->species2);
+    {
+        u32 genderX = 38 + GetStringWidth(FONT_SHORT, gStringVar1, 0) + 4;
+        if (genderX > 102)
+            genderX = 102;
+        if (summary->species2 != SPECIES_NIDORAN_M && summary->species2 != SPECIES_NIDORAN_F)
+        {
+            switch (GetMonGender(&sMonSummaryScreen->currentMon))
+            {
+            case MON_MALE:
+                PrintTextOnWindow(PSS_LABEL_WINDOW_PORTRAIT_NICKNAME, gText_MaleSymbol, genderX, 1, 0, 3);
+                break;
+            case MON_FEMALE:
+                PrintTextOnWindow(PSS_LABEL_WINDOW_PORTRAIT_NICKNAME, gText_FemaleSymbol, genderX, 1, 0, 4);
+                break;
+            }
+        }
+    }
     PutWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_NICKNAME);
     ClearWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_SPECIES);
     ClearWindowTilemap(PSS_LABEL_WINDOW_PORTRAIT_DEX_NUMBER);
@@ -3919,10 +3935,10 @@ static void PrintMovePowerAndAccuracy(enum Move moveIndex)
         }
         else
         {
-            ConvertIntToDecimalStringN(gStringVar1, power, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            ConvertIntToDecimalStringN(gStringVar1, power, STR_CONV_MODE_LEFT_ALIGN, 3);
             text = gStringVar1;
         }
-        PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, GetStringRightAlignXOffset(FONT_SHORT, text, 33), 2, 0, 0);
+        PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, 3 + GetStringCenterAlignXOffset(FONT_SHORT, text, 31), 1, 0, 0);
 
         u32 accuracy = GetMoveAccuracy(moveIndex);
         if (accuracy == 0)
@@ -3931,10 +3947,10 @@ static void PrintMovePowerAndAccuracy(enum Move moveIndex)
         }
         else
         {
-            ConvertIntToDecimalStringN(gStringVar1, accuracy, STR_CONV_MODE_RIGHT_ALIGN, 3);
+            ConvertIntToDecimalStringN(gStringVar1, accuracy, STR_CONV_MODE_LEFT_ALIGN, 3);
             text = gStringVar1;
         }
-        PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, GetStringRightAlignXOffset(FONT_SHORT, text, 33), 16, 0, 0);
+        PrintTextOnWindow(PSS_LABEL_WINDOW_MOVES_POWER_ACC, text, 3 + GetStringCenterAlignXOffset(FONT_SHORT, text, 31), 15, 0, 0);
         PutWindowTilemap(PSS_LABEL_WINDOW_MOVES_POWER_ACC);
     }
     else
@@ -4009,6 +4025,48 @@ static void PrintContestMoveDescription(u8 moveSlot)
     }
 }
 
+static void PrintMoveDescriptionFormatted(u8 windowId, const u8 *src)
+{
+    u8 buffer[256];
+    u32 i = 0, lineStart = 0;
+    s32 lastSpace = -1;
+    u8 savedChar;
+
+    if (src == NULL)
+        return;
+
+    while (src[i] != EOS && i < sizeof(buffer) - 1)
+    {
+        if (src[i] == CHAR_NEWLINE)
+            buffer[i] = CHAR_SPACE;
+        else
+            buffer[i] = src[i];
+        i++;
+    }
+    buffer[i] = EOS;
+
+    for (i = 0; buffer[i] != EOS; i++)
+    {
+        if (buffer[i] == CHAR_SPACE)
+            lastSpace = i;
+
+        savedChar = buffer[i + 1];
+        buffer[i + 1] = EOS;
+        if (GetStringWidth(FONT_SMALL, &buffer[lineStart], 0) > 100)
+        {
+            if (lastSpace > (s32)lineStart)
+            {
+                buffer[lastSpace] = CHAR_NEWLINE;
+                lineStart = lastSpace + 1;
+                lastSpace = -1;
+            }
+        }
+        buffer[i + 1] = savedChar;
+    }
+
+    AddTextPrinterParameterized4(windowId, FONT_SMALL, 2, 1, 0, 2, sTextColors[0], 0, buffer);
+}
+
 static void PrintMoveDetails(enum Move move)
 {
     u8 windowId = AddWindowFromTemplateList(sPageMovesTemplate, PSS_DATA_WINDOW_MOVE_DESCRIPTION);
@@ -4020,11 +4078,11 @@ static void PrintMoveDetails(enum Move move)
             if (B_SHOW_CATEGORY_ICON == TRUE)
                 ShowCategoryIcon(GetBattleMoveCategory(move));
             PrintMovePowerAndAccuracy(move);
-            PrintTextOnWindowWithFont(windowId, GetMoveDescription(move), 0, 1, 3, 0, FONT_SHORT);
+            PrintMoveDescriptionFormatted(windowId, GetMoveDescription(move));
         }
         else
         {
-            PrintTextOnWindowWithFont(windowId, gContestEffects[GetMoveContestEffect(move)].description, 0, 1, 3, 0, FONT_SHORT);
+            PrintMoveDescriptionFormatted(windowId, gContestEffects[GetMoveContestEffect(move)].description);
         }
         PutWindowTilemap(windowId);
     }

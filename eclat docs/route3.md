@@ -30,8 +30,8 @@ A **Rota 3** é a estrada que conecta a saída oriental de **Peaceful Woods** em
   - Em `MAP_PEACEFUL_WOODS`, os Warps 2 e 3 em `(69, 9)` e `(69, 8)` conectam de volta com perfeição aos Warps 1 e 0 da Rota 3.
 
 - **Conexão Direta de Fronteira com Percharbre (Petalburg City)**:
-  - Rota 3 conecta à direita com `MAP_PETALBURG_CITY` com `offset: 0`.
-  - A estrada de saída da Rota 3 em `x=65, y=16..18` alinha perfeitamente com a entrada ocidental de Percharbre em `x=0, y=16..18`, permitindo travessia contínua e sem colisões.
+  - Rota 3 conecta à direita com `MAP_PETALBURG_CITY` com `offset: +8`.
+  - A estrada de saída da Rota 3 em `x=64..65, y=24..27` alinha com precisão matemática com a entrada ocidental de Percharbre em `x=0..1, y=16..19` ($Y_{\text{Route3}} - 8 = Y_{\text{Perchabae}}$), permitindo travessia contínua, sem degraus visuais ou colisões.
 
 ---
 

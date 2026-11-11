@@ -565,7 +565,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .width = 10,
         .height = 4,
         .paletteNum = 6,
-        .baseBlock = 38,
+        .baseBlock = 69,
     },
     [PSS_LABEL_WINDOW_MOVES_APPEAL_JAM] = {
         .bg = 0,
@@ -574,7 +574,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .width = 10,
         .height = 4,
         .paletteNum = 6,
-        .baseBlock = 58,
+        .baseBlock = 109,
     },
     [PSS_LABEL_WINDOW_PROMPT_RELEARN] = {
         .bg = 0,
@@ -583,7 +583,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .width = 0,
         .height = 2,
         .paletteNum = 7,
-        .baseBlock = 78,
+        .baseBlock = 149,
     },
     [PSS_LABEL_WINDOW_PORTRAIT_NICKNAME] = {
         .bg = 0,
@@ -592,7 +592,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .width = 14,
         .height = 2,
         .paletteNum = 6,
-        .baseBlock = 90,
+        .baseBlock = 1,
     },
     [PSS_LABEL_WINDOW_PORTRAIT_DEX_NUMBER] = {
         .bg = 0,
@@ -601,7 +601,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .width = 10,
         .height = 2,
         .paletteNum = 6,
-        .baseBlock = 118,
+        .baseBlock = 29,
     },
     [PSS_LABEL_WINDOW_PORTRAIT_SPECIES] = {
         .bg = 0,
@@ -610,7 +610,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .width = 10,
         .height = 2,
         .paletteNum = 6,
-        .baseBlock = 138,
+        .baseBlock = 49,
     },
     [PSS_LABEL_WINDOW_END] = DUMMY_WIN_TEMPLATE
 };

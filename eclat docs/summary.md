@@ -92,6 +92,17 @@ O design é inspirado na interface elegante e moderna da **Gen 4 (Diamond / Pear
 - **Correção da Área sob o Pokémon (Blue Background Fix)**:
   - Na aba de golpes não há caixa de habilidades nem notas embaixo do Pokémon.
   - O quadrante inferior esquerdo (`X: 0..120, Y: 96..160`) foi uniformizado com a cor azul de fundo oficial (`#528ED6`), garantindo que nenhum fragmento da caixa de habilidades apareça ao trocar para esta aba.
+- **Tela de Aprendizado e Seleção de Golpes (`SUMMARY_MODE_SELECT_MOVE`)**:
+  - **Eliminação da Barra Glitchada Central**: O Emerald vanilla invocava `TilemapFiveMovesDisplay` sobrescrevendo o tilemap no offset `0x56A` com índices de tiles obsoletos (gerando o bloco com Pokébola e listras pretas/roxas no meio da tela). A função foi neutralizada para manter o fundo limpo.
+  - **5º Slot de Golpe / Golpe Novo a Aprender**:
+    - O badge de tipo Saffron do novo golpe agora é posicionado em `(123, 133)` (`Y = 21 + 4 * 28`), perfeitamente alinhado com o nome e PP do 5º slot.
+  - **Caixa de Seleção OAM 16x32 Ajustada**:
+    - Sprites redesenhados de 16x16 para 16x32 (`SPRITE_SHAPE(16x32)` / `SPRITE_SIZE(16x32)`), garantindo que a borda vermelha e amarela envolva perfeitamente os 24px de altura de cada card (`Y = 21..46`, `49..74`, etc.).
+    - Composta por 8 segmentos horizontais com cantos arredondados cobrindo `X = 121..237`, sem invadir os números de PP.
+  - **Painel de Detalhes Inferior Esquerdo**:
+    - `PSS_LABEL_WINDOW_MOVES_POWER_ACC`: Janela expandida para altura 4 (32px), exibindo `POWER` (linha 1, Y=97) e `ACCURACY` (linha 2, Y=113) de forma nítida e sem cortes.
+    - Ícone de Categoria (Físico / Especial / Status): Reposicionado para `(98, 112)` ao lado de Poder e Acurácia, sem mais sobrepor o texto de descrição do golpe.
+    - `PSS_DATA_WINDOW_MOVE_DESCRIPTION`: Alocada em `tilemapTop = 16` (`Y = 128..160`), reservando as linhas inferiores inteiramente para a descrição do golpe.
 
 ---
 

@@ -563,7 +563,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .tilemapLeft = 1,
         .tilemapTop = 12,
         .width = 10,
-        .height = 2,
+        .height = 4,
         .paletteNum = 6,
         .baseBlock = 38,
     },
@@ -572,7 +572,7 @@ static const struct WindowTemplate sSummaryTemplate[] =
         .tilemapLeft = 1,
         .tilemapTop = 12,
         .width = 10,
-        .height = 2,
+        .height = 4,
         .paletteNum = 6,
         .baseBlock = 58,
     },
@@ -744,9 +744,9 @@ static const struct WindowTemplate sPageMovesTemplate[] = // This is used for bo
     [PSS_DATA_WINDOW_MOVE_DESCRIPTION] = {
         .bg = 0,
         .tilemapLeft = 1,
-        .tilemapTop = 14,
-        .width = 13,
-        .height = 6,
+        .tilemapTop = 16,
+        .width = 14,
+        .height = 4,
         .paletteNum = 6,
         .baseBlock = 380,
     },
@@ -1033,10 +1033,10 @@ static const struct OamData sOamData_MoveSelector =
     .objMode = ST_OAM_OBJ_NORMAL,
     .mosaic = FALSE,
     .bpp = ST_OAM_4BPP,
-    .shape = SPRITE_SHAPE(16x16),
+    .shape = SPRITE_SHAPE(16x32),
     .x = 0,
     .matrixNum = 0,
-    .size = SPRITE_SIZE(16x16),
+    .size = SPRITE_SIZE(16x32),
     .tileNum = 0,
     .priority = 1,
     .paletteNum = 0,
@@ -1047,39 +1047,39 @@ static const union AnimCmd sSpriteAnim_MoveSelector0[] = {
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelector1[] = {
-    ANIMCMD_FRAME(4, 0, FALSE, FALSE),
+    ANIMCMD_FRAME(0, 0, FALSE, FALSE),
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelector2[] = {
-    ANIMCMD_FRAME(8, 0, FALSE, FALSE),
+    ANIMCMD_FRAME(0, 0, FALSE, FALSE),
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelector3[] = {
-    ANIMCMD_FRAME(12, 0, FALSE, FALSE),
+    ANIMCMD_FRAME(0, 0, FALSE, FALSE),
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelectorLeft[] = {
-    ANIMCMD_FRAME(16, 0, FALSE, FALSE),
+    ANIMCMD_FRAME(0, 0, FALSE, FALSE),
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelectorRight[] = {
-    ANIMCMD_FRAME(16, 0, TRUE, FALSE),
+    ANIMCMD_FRAME(0, 0, TRUE, FALSE),
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelectorMiddle[] = {
-    ANIMCMD_FRAME(20, 0, FALSE, FALSE),
+    ANIMCMD_FRAME(8, 0, FALSE, FALSE),
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelector7[] = {
-    ANIMCMD_FRAME(24, 0, FALSE, FALSE),
+    ANIMCMD_FRAME(16, 0, FALSE, FALSE),
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelector8[] = {
-    ANIMCMD_FRAME(24, 0, TRUE, FALSE),
+    ANIMCMD_FRAME(16, 0, TRUE, FALSE),
     ANIMCMD_END
 };
 static const union AnimCmd sSpriteAnim_MoveSelector9[] = {
-    ANIMCMD_FRAME(28, 0, FALSE, FALSE),
+    ANIMCMD_FRAME(24, 0, FALSE, FALSE),
     ANIMCMD_END
 };
 // All except left, middle and right are unused
@@ -1195,7 +1195,7 @@ static const u16 sMarkings_Pal[] = INCGFX_U16("graphics/summary_screen/markings.
 static u8 ShowCategoryIcon(enum DamageCategory category)
 {
     if (sMonSummaryScreen->categoryIconSpriteId == 0xFF)
-        sMonSummaryScreen->categoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, 48, 128, 0);
+        sMonSummaryScreen->categoryIconSpriteId = CreateSprite(&gSpriteTemplate_CategoryIcons, 98, 112, 0);
 
     gSprites[sMonSummaryScreen->categoryIconSpriteId].invisible = FALSE;
     StartSpriteAnim(&gSprites[sMonSummaryScreen->categoryIconSpriteId], category);
@@ -2766,28 +2766,10 @@ static void Task_SlideStatusWindow(u8 taskId)
 // Toggles the "Cancel" window that appears when selecting a move
 static void TilemapFiveMovesDisplay(u16 *dst, u16 palette, bool8 remove)
 {
-    u16 i, id;
-
-    palette *= 0x1000;
-    id = 0x56A;
-    if (!remove)
-    {
-        for (i = 0; i < 20; i++)
-        {
-            dst[id + i] = gSummaryScreen_MoveEffect_Cancel_Tilemap[i] + palette;
-            dst[id + i + 0x20] = gSummaryScreen_MoveEffect_Cancel_Tilemap[i] + palette;
-            dst[id + i + 0x40] = gSummaryScreen_MoveEffect_Cancel_Tilemap[i + 20] + palette;
-        }
-    }
-    else // Remove
-    {
-        for (i = 0; i < 20; i++)
-        {
-            dst[id + i] = gSummaryScreen_MoveEffect_Cancel_Tilemap[i + 20] + palette;
-            dst[id + i + 0x20] = gSummaryScreen_MoveEffect_Cancel_Tilemap[i + 40] + palette;
-            dst[id + i + 0x40] = gSummaryScreen_MoveEffect_Cancel_Tilemap[i + 40] + palette;
-        }
-    }
+    // Saffron / Gen 4 summary screen does not use the Emerald cancel banner tilemap
+    (void)dst;
+    (void)palette;
+    (void)remove;
 }
 
 static void DrawPokerusCuredSymbol(struct Pokemon *mon) // This checks if the mon has been cured of pokerus
@@ -3992,6 +3974,7 @@ static void PrintNewMoveDetailsOrCancelText(void)
     u8 yName = 5 + MAX_MON_MOVES * 28;
     u8 yPP   = 16 + MAX_MON_MOVES * 28;
 
+    LoadPalette(sSkillsTextPalette, BG_PLTT_ID(6), sizeof(sSkillsTextPalette));
     FillWindowPixelRect(windowId1, PIXEL_FILL(0), 0, MAX_MON_MOVES * 28 + 4, 80, 24);
 
     if (sMonSummaryScreen->newMove == MOVE_NONE)
@@ -4068,6 +4051,9 @@ static void HidePageSpecificSprites(void)
         if (sMonSummaryScreen->spriteIds[i] != SPRITE_NONE)
             SetSpriteInvisibility(i, TRUE);
     }
+
+    if (sMonSummaryScreen->categoryIconSpriteId != 0xFF)
+        gSprites[sMonSummaryScreen->categoryIconSpriteId].invisible = TRUE;
 }
 
 static void SetTypeIcons(void)
@@ -4222,11 +4208,11 @@ static void SetNewMoveTypeIcon(void)
     {
         if (sMonSummaryScreen->currPageIndex == PSS_PAGE_BATTLE_MOVES)
         {
-            SetTypeSpritePosAndPal(type, 85, 96, SPRITE_ARR_ID_TYPE + 4);
+            SetTypeSpritePosAndPal(type, 123, 21 + (4 * 28), SPRITE_ARR_ID_TYPE + 4);
         }
         else
         {
-            SetTypeSpritePosAndPal(NUMBER_OF_MON_TYPES + GetMoveContestCategory(sMonSummaryScreen->newMove), 85, 96, SPRITE_ARR_ID_TYPE + 4);
+            SetTypeSpritePosAndPal(NUMBER_OF_MON_TYPES + GetMoveContestCategory(sMonSummaryScreen->newMove), 123, 21 + (4 * 28), SPRITE_ARR_ID_TYPE + 4);
         }
     }
 }
@@ -4433,6 +4419,8 @@ static void CreateSetStatusSprite(void)
     }
 }
 
+static const s16 sMoveSelectorXOffsets[8] = {128, 144, 160, 176, 192, 208, 222, 231};
+
 static void CreateMoveSelectorSprites(u8 idArrayStart)
 {
     u8 i;
@@ -4444,12 +4432,12 @@ static void CreateMoveSelectorSprites(u8 idArrayStart)
         if (idArrayStart == SPRITE_ARR_ID_MOVE_SELECTOR1)
             subpriority = 1;
 
-        for (i = 0; i < 7; i++)
+        for (i = 0; i < 8; i++)
         {
-            spriteIds[i] = CreateSprite(&sMoveSelectorSpriteTemplate, i * 16 + 130, 32, subpriority);
+            spriteIds[i] = CreateSprite(&sMoveSelectorSpriteTemplate, sMoveSelectorXOffsets[i], 33, subpriority);
             if (i == 0)
                 StartSpriteAnim(&gSprites[spriteIds[i]], 4); // left
-            else if (i == 6)
+            else if (i == 7)
                 StartSpriteAnim(&gSprites[spriteIds[i]], 5); // right
             else
                 StartSpriteAnim(&gSprites[spriteIds[i]], 6); // middle
@@ -4458,7 +4446,7 @@ static void CreateMoveSelectorSprites(u8 idArrayStart)
             gSprites[spriteIds[i]].data[0] = idArrayStart;
             gSprites[spriteIds[i]].data[1] = 0;
         }
-        for (i = 7; i < MOVE_SELECTOR_SPRITES_COUNT; i++)
+        for (i = 8; i < MOVE_SELECTOR_SPRITES_COUNT; i++)
             spriteIds[i] = SPRITE_NONE;
     }
 }
@@ -4501,13 +4489,13 @@ static void SetMainMoveSelectorColor(u8 which)
     u8 *spriteIds = &sMonSummaryScreen->spriteIds[SPRITE_ARR_ID_MOVE_SELECTOR1];
 
     which *= 3;
-    for (i = 0; i < 7; i++)
+    for (i = 0; i < 8; i++)
     {
         if (spriteIds[i] == SPRITE_NONE)
             continue;
         if (i == 0)
             StartSpriteAnim(&gSprites[spriteIds[i]], which + 4);
-        else if (i == 6)
+        else if (i == 7)
             StartSpriteAnim(&gSprites[spriteIds[i]], which + 5);
         else
             StartSpriteAnim(&gSprites[spriteIds[i]], which + 6);

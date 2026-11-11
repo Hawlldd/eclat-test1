@@ -761,14 +761,14 @@
     {
       "x": 69,
       "y": 9,
-      "elevation": 3,
+      "elevation": 0,
       "dest_map": "MAP_ROUTE103",
       "dest_warp_id": "1"
     },
     {
       "x": 69,
       "y": 8,
-      "elevation": 3,
+      "elevation": 0,
       "dest_map": "MAP_ROUTE103",
       "dest_warp_id": "0"
     },

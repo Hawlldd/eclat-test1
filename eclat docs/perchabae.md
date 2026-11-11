@@ -32,12 +32,12 @@ As conexões espaciais respeitam o sistema de coordenadas de borda de pokeemeral
 - **Conexão Oeste (Esquerda)**:
   - Destino: `MAP_ROUTE103` (Rota 3)
   - Direção: `left`
-  - Offset: `-8`
+  - Offset: `0` (alinhando perfeitamente a pista de terra batida em $y=16..18$ de Percharbre com $y=16..18$ da Rota 3).
 - **Conexão Leste da Rota 3 (Direita)**:
   - No arquivo `data/maps/Route3/map.json`:
   - Destino: `MAP_PETALBURG_CITY`
   - Direção: `right`
-  - Offset: `+8` (recíproca exata: $56 - 8 = 48 \ge 40$, alinhando perfeitamente a pista de terra batida entre os dois mapas).
+  - Offset: `0`
 - **Conexão Leste (Direita)**:
   - Rota 4 (bloqueada temporariamente pelo guarda local).
 

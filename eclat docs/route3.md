@@ -24,10 +24,14 @@ A **Rota 3** é a estrada que conecta a saída oriental de **Peaceful Woods** em
 ## 3. Conexões e Warps
 
 - **Warps com Peaceful Woods**:
-  - `Warp 0` em `(12, 34)`, elevation 3 $\rightarrow$ `MAP_PEACEFUL_WOODS`, `dest_warp_id: 3`
-  - `Warp 1` em `(12, 35)`, elevation 3 $\rightarrow$ `MAP_PEACEFUL_WOODS`, `dest_warp_id: 2`
-  - Os metatiles 774 e 782 da Rota 3 possuem comportamento `MB_WESTWARD_WARP` (`0x63`), acionando o retorno para Peaceful Woods ao andar para a esquerda.
+  - `Warp 0` em `(10, 35)`, elevation 0 $\rightarrow$ `MAP_PEACEFUL_WOODS`, `dest_warp_id: 3`
+  - `Warp 1` em `(10, 36)`, elevation 0 $\rightarrow$ `MAP_PEACEFUL_WOODS`, `dest_warp_id: 2`
+  - Os metatiles 774 (`0x306`) e 782 (`0x30E`) da Rota 3 estão posicionados exatamente na abertura em `(10, 35)` e `(10, 36)` e possuem comportamento `MB_WEST_ARROW_WARP` (`0x63`), acionando o retorno para Peaceful Woods ao andar para a esquerda.
   - Em `MAP_PEACEFUL_WOODS`, os Warps 2 e 3 em `(69, 9)` e `(69, 8)` conectam de volta com perfeição aos Warps 1 e 0 da Rota 3.
+
+- **Conexão Direta de Fronteira com Percharbre (Petalburg City)**:
+  - Rota 3 conecta à direita com `MAP_PETALBURG_CITY` com `offset: 0`.
+  - A estrada de saída da Rota 3 em `x=65, y=16..18` alinha perfeitamente com a entrada ocidental de Percharbre em `x=0, y=16..18`, permitindo travessia contínua e sem colisões.
 
 ---
 

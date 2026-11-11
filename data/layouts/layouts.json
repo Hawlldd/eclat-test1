@@ -9556,6 +9556,20 @@
       "border_width": 2,
       "layout_version": "emerald",
       "tile_format": "frlg"
+    },
+    {
+      "id": "LAYOUT_ECLAT_PERCHABAE",
+      "name": "Perchabae_Layout",
+      "width": 70,
+      "height": 40,
+      "primary_tileset": "gTileset_EclatIvierePrimary",
+      "secondary_tileset": "gTileset_EclatRoute3Secondary",
+      "border_filepath": "data/layouts/eclat_perchabae/border.bin",
+      "blockdata_filepath": "data/layouts/eclat_perchabae/map.bin",
+      "border_height": 2,
+      "border_width": 2,
+      "layout_version": "emerald",
+      "tile_format": "frlg"
     }
   ]
 }

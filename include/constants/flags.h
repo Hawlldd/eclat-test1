@@ -91,8 +91,8 @@
 #define FLAG_PEACEFUL_WOODS_CUT_TREE_3 0x45
 #define FLAG_GOT_EXP_SHARE_FROM_ALDA 0x46
 #define FLAG_PETIPRES_NURSE_INTRO 0x47
-#define FLAG_UNUSED_0x048    0x48 // Unused Flag
-#define FLAG_UNUSED_0x049    0x49 // Unused Flag
+#define FLAG_PERCHABAE_TICKET 0x48
+#define FLAG_PERCHABAE_CUT_TREE 0x49
 #define FLAG_UNUSED_0x04A    0x4A // Unused Flag
 #define FLAG_UNUSED_0x04B    0x4B // Unused Flag
 #define FLAG_UNUSED_0x04C    0x4C // Unused Flag

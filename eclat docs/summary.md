@@ -177,6 +177,33 @@ Isso impede que a navegação com o direcional direito ultrapasse a tela de golp
 
 ---
 
+## 🎯 4. Modo de Detalhes e Seleção de Golpes (Move Details / Move Select & Replace)
+
+Quando o jogador pressiona o botão **A** na aba de golpes para ver detalhes/reordenar (`SwitchToMoveSelection`), ou quando um Pokémon sobe de nível e aprende um novo golpe (`SUMMARY_MODE_SELECT_MOVE` / `Task_SetHandleReplaceMoveInput`), a interface transita para a tela de **Detalhes do Golpe** idêntica a Pokémon Saffron:
+
+### 1. Painel Superior Esquerdo (`x: 0..120, y: 16..51`):
+- **Ocultação dos Sprites Grandes**: O sprite frontal do Pokémon (`SPRITE_ARR_ID_MON`), a Pokébola (`SPRITE_ARR_ID_BALL`), o status e o quadro branco de scanlines são ocultados.
+- **Mini Ícone 32x32**: O ícone do Pokémon (`CreateMonIcon`) é desenhado em `(24, 28)`.
+- **Nome & Gênero**: Apelido ou nome da espécie em fonte nítida `FONT_SHORT` impresso em `(38, 1)` com símbolo de gênero em `(96, 1)` dentro de `PSS_LABEL_WINDOW_PORTRAIT_NICKNAME`.
+- **Badges de Tipos do Pokémon**: Duas badges de tipo lado a lado em `(46, 25)` e `(84, 25)` (ou centralizada em `(65, 25)` caso monótipo).
+
+### 2. Card de Detalhes do Golpe (`x: 2..118, y: 52..157`):
+- **Tilemap Dedicado (`page_move_details.bin`)**: Substitui o BG1 instantaneamente ao entrar no modo de seleção.
+- **Pílulas POWER e ACCURACY**:
+  - Valores numéricos impressos via `PSS_LABEL_WINDOW_MOVES_POWER_ACC` (`tilemapLeft = 6, tilemapTop = 7, width = 5, height = 4`).
+  - Alinhados à direita com `GetStringRightAlignXOffset(FONT_SHORT, text, 33)` em `y = 2` (Poder) e `y = 16` (Precisão).
+- **Ícone de Categoria de Dano**: Ícone Físico (explosão laranja), Especial (anéis roxos) ou Status (cinza) centralizado em `(100, 62)`.
+- **Pílula EFFECT e Descrição**:
+  - `PSS_DATA_WINDOW_MOVE_DESCRIPTION` em `tilemapLeft = 1, tilemapTop = 12, width = 14, height = 7` (`x: 8..119, y: 96..151`).
+  - 4 linhas de texto de descrição formatadas com `FONT_SHORT` e `lineSpacing = 3`. Cada linha repousa perfeitamente acima das 3 linhas divisórias horizontais do card.
+
+### 3. Painel Direito e Seletor:
+- 4 golpes normais + 5º slot (`Cancel` ou novo golpe a aprender).
+- Cursor retangular vermelho de seleção animado (`sMoveSelectorSpriteTemplate`) acompanhando o golpe selecionado.
+- Ao pressionar **B** ou confirmar a troca, a tela retorna perfeitamente para o modo padrão restaurando o sprite frontal e as informações de nível e apelido sem piscar.
+
+---
+
 ## 🎨 5. Pipeline Gráfico & Script de Automação
 
 O script [`tools/eclat/import_summary_screen.py`](file:///C:/Users/raulr/OneDrive/Desktop/zEmerald/eclat-intro-teste/tools/eclat/import_summary_screen.py) automatiza a conversão dos PNGs para o hardware do GBA.

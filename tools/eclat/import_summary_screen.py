@@ -155,8 +155,9 @@ def build_summary_screen():
     info_path = SOURCES_DIR / "page_info.png"
     skills_path = SOURCES_DIR / "page_skills.png"
     moves_path = SOURCES_DIR / "page_battle_moves.png"
+    details_path = SOURCES_DIR / "page_move_details.png"
 
-    for p in [info_path, skills_path, moves_path]:
+    for p in [info_path, skills_path, moves_path, details_path]:
         if not p.exists():
             print(f"Erro: Arquivo fonte não encontrado: {p}")
             sys.exit(1)
@@ -164,6 +165,7 @@ def build_summary_screen():
     im_info = Image.open(info_path).convert("RGB")
     im_skills = Image.open(skills_path).convert("RGB")
     im_moves = Image.open(moves_path).convert("RGB")
+    im_details = Image.open(details_path).convert("RGB")
 
     master_tiles = []
     # Tile 0 vazio
@@ -196,6 +198,7 @@ def build_summary_screen():
     tm_info = process_image(im_info)
     tm_skills = process_image(im_skills)
     tm_moves = process_image(im_moves)
+    tm_details = process_image(im_details)
 
     print(f"Total de tiles únicos combinados: {len(master_tiles)} (limite VRAM: 576)")
     if len(master_tiles) > 576:
@@ -234,6 +237,8 @@ def build_summary_screen():
     save_tilemap(tm_info, "page_info_egg.bin")
     save_tilemap(tm_skills, "page_skills.bin")
     save_tilemap(tm_moves, "page_battle_moves.bin")
+    save_tilemap(tm_details, "page_move_details.bin")
+    save_tilemap(tm_details, "page_contest_moves.bin")
     print("=== Concluído com sucesso! ===")
 
 if __name__ == "__main__":
